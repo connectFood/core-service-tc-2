@@ -26,13 +26,6 @@
     <springdoc.version>2.8.13</springdoc.version>
     <jjwt.version>0.12.5</jjwt.version>
     <lombok.version>1.18.34</lombok.version>
-    <openapi.generator.version>7.8.0</openapi.generator.version>
-
-    <openapi.inputSpec>src/main/resources/openapi/connectfood.yml</openapi.inputSpec>
-    <openapi.package.base>com.connectfood</openapi.package.base>
-    <openapi.package.api>${openapi.package.base}.api</openapi.package.api>
-    <openapi.package.model>${openapi.package.base}.model</openapi.package.model>
-    <openapi.output.dir>${project.build.directory}/generated-sources/openapi</openapi.output.dir>
   </properties>
 
   <dependencies>
@@ -91,13 +84,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
-    </dependency>
-
-    <!-- Suporte a JsonNullable usado pelo generator -->
-    <dependency>
-      <groupId>org.openapitools</groupId>
-      <artifactId>jackson-databind-nullable</artifactId>
-      <version>0.2.6</version>
     </dependency>
 
     <!-- DB/Flyway -->
@@ -173,73 +159,6 @@
             </exclude>
           </excludes>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.openapitools</groupId>
-        <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>${openapi.generator.version}</version>
-        <executions>
-          <execution>
-            <id>generate-spring-server</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <inputSpec>${openapi.inputSpec}</inputSpec>
-              <generatorName>spring</generatorName>
-              <output>${openapi.output.dir}</output>
-
-              <apiPackage>${openapi.package.api}</apiPackage>
-              <modelPackage>${openapi.package.model}</modelPackage>
-              <invokerPackage>${openapi.package.base}.api.invoker</invokerPackage>
-
-              <configOptions>
-                <interfaceOnly>true</interfaceOnly>
-                <delegatePattern>false</delegatePattern>
-                <useSpringBoot3>true</useSpringBoot3>
-
-                <dateLibrary>java8</dateLibrary>
-                <java8LocalDateTime>true</java8LocalDateTime>
-
-                <useJakartaEe>true</useJakartaEe>
-                <performBeanValidation>true</performBeanValidation>
-                <useTags>true</useTags>
-                <hideGenerationTimestamp>true</hideGenerationTimestamp>
-
-              </configOptions>
-
-              <skipOverwrite>true</skipOverwrite>
-              <additionalProperties>serializableModel=true</additionalProperties>
-              <generateApiTests>false</generateApiTests>
-              <generateModelTests>false</generateModelTests>
-              <generateApiDocumentation>false</generateApiDocumentation>
-              <generateModelDocumentation>false</generateModelDocumentation>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.6.0</version>
-        <executions>
-          <execution>
-            <id>add-openapi-sources</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>${openapi.output.dir}/src/main/java</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
