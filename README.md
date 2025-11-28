@@ -95,8 +95,6 @@ src/
 
 **Scripts:**
 - `V1__init_core_schema.sql` — Criação do schema e tabelas
-- `V2__insert_data.sql` — Usuários e endereços de exemplo
-- `V3__insert_teacher_user.sql` — Usuário “Professor FIAP” (role OWNER)
 
 ---
 
