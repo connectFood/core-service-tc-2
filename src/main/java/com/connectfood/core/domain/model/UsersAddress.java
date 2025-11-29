@@ -13,7 +13,7 @@ public class UsersAddress {
   private final Users users;
   private final Address address;
 
-  public UsersAddress(UUID uuid, Users users, Address address) {
+  public UsersAddress(final UUID uuid, final Users users, final Address address) {
 
     if (users == null) {
       throw new BadRequestException("Users is required");
@@ -23,7 +23,7 @@ public class UsersAddress {
       throw new BadRequestException("Address is required");
     }
 
-    this.uuid = uuid;
+    this.uuid = uuid == null ? UUID.randomUUID() : uuid;
     this.users = users;
     this.address = address;
   }

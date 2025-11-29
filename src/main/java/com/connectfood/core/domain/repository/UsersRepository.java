@@ -10,7 +10,7 @@ public interface UsersRepository {
 
   Users save(Users usersType);
 
-  Optional<Users> findByUUID(UUID uuid);
+  Optional<Users> findByUuid(UUID uuid);
 
   List<Users> findAll();
 

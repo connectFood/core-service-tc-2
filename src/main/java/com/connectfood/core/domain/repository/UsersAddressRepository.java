@@ -10,7 +10,7 @@ public interface UsersAddressRepository {
 
   UsersAddress save(UsersAddress usersType);
 
-  Optional<UsersAddress> findByUUID(UUID uuid);
+  Optional<UsersAddress> findByUuid(UUID uuid);
 
   List<UsersAddress> findAll();
 

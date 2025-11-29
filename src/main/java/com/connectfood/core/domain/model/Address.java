@@ -19,8 +19,8 @@ public class Address {
   private final String country;
   private final String zipCode;
 
-  public Address(UUID uuid, String street, String number, String complement, String neighborhood, String city,
-      String state, String country, String zipCode) {
+  public Address(final UUID uuid, final String street, final String number, final String complement,
+      final String neighborhood, final String city, final String state, final String country, final String zipCode) {
 
     if (street == null || street.isBlank()) {
       throw new BadRequestException("Street is required");
