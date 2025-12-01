@@ -19,7 +19,18 @@ public class UsersType {
       throw new BadRequestException("Name is required");
     }
 
-    this.uuid = uuid == null ? UUID.randomUUID() : uuid;
+    this.uuid = uuid;
+    this.name = name;
+    this.description = description;
+  }
+
+  public UsersType(final String name, final String description) {
+
+    if (name == null || name.isBlank()) {
+      throw new BadRequestException("Name is required");
+    }
+
+    this.uuid = UUID.randomUUID();
     this.name = name;
     this.description = description;
   }

@@ -10,7 +10,9 @@ public interface UsersTypeRepository {
 
   UsersType save(UsersType usersType);
 
-    Optional<UsersType> findByUuid(UUID uuid);
+  UsersType update(UUID uuid, UsersType usersType);
+
+  Optional<UsersType> findByUuid(UUID uuid);
 
   List<UsersType> findAll();
 

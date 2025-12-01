@@ -1,0 +1,30 @@
+package com.connectfood.core.application.usertype.usecase;
+
+import jakarta.transaction.Transactional;
+
+import com.connectfood.core.application.usertype.dto.UsersTypeInput;
+import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
+import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
+import com.connectfood.core.domain.repository.UsersTypeRepository;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CreateUserTypeUseCase {
+
+  private final UsersTypeRepository repository;
+  private final UsersTypeAppMapper mapper;
+
+
+  public CreateUserTypeUseCase(final UsersTypeRepository repository, final UsersTypeAppMapper mapper) {
+    this.repository = repository;
+    this.mapper = mapper;
+  }
+
+  @Transactional
+  public UsersTypeOutput execute(final UsersTypeInput input) {
+    final var usersType = repository.save(mapper.toDomain(input));
+
+    return mapper.toOutput(usersType);
+  }
+}
