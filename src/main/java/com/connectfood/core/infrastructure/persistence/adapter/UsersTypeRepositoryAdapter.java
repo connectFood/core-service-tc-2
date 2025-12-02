@@ -5,10 +5,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
+import com.connectfood.core.infrastructure.persistence.entity.UsersTypeEntity;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaUsersTypeRepository;
 import com.connectfood.core.infrastructure.persistence.mappers.UsersTypeInfraMapper;
+import com.connectfood.core.infrastructure.persistence.specification.UsersTypeSpecification;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -47,12 +53,25 @@ public class UsersTypeRepositoryAdapter implements UsersTypeRepository {
   }
 
   @Override
-  public List<UsersType> findAll() {
-    final var entities = repository.findAll();
+  public PageModel<List<UsersType>> findAll(final String name, final Integer page, final Integer size,
+      final String sort, final String direction) {
 
-    return entities.stream()
+    final var pageable = PageRequest.of(page, size,
+        Sort.by(direction == null ? Sort.Direction.ASC : Sort.Direction.fromString(direction),
+            sort == null ? "id" : sort
+        )
+    );
+
+    final Specification<UsersTypeEntity> spec = Specification.allOf(UsersTypeSpecification.nameContains(name));
+
+    final var entities = repository.findAll(spec, pageable);
+
+    final var results = entities.getContent()
+        .stream()
         .map(mapper::toDomain)
         .toList();
+
+    return new PageModel<>(results, entities.getTotalElements());
   }
 
   @Override

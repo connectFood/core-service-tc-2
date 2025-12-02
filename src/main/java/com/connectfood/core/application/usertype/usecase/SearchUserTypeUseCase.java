@@ -3,6 +3,7 @@ package com.connectfood.core.application.usertype.usecase;
 import java.util.List;
 
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
+import com.connectfood.core.application.usertype.dto.commons.PageOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
@@ -19,11 +20,16 @@ public class SearchUserTypeUseCase {
     this.mapper = mapper;
   }
 
-  public List<UsersTypeOutput> execute() {
-    final var usersTypes = repository.findAll();
+  public PageOutput<List<UsersTypeOutput>> execute(final String name, final Integer page, final Integer size,
+      String sort,
+      String direction) {
+    final var usersTypes = repository.findAll(name, page, size, sort, direction);
 
-    return usersTypes.stream()
+    final var results = usersTypes.content()
+        .stream()
         .map(mapper::toOutput)
         .toList();
+
+    return new PageOutput<>(results, usersTypes.total());
   }
 }

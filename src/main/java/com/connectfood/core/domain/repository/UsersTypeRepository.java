@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.commons.PageModel;
 
 public interface UsersTypeRepository {
 
@@ -14,7 +15,7 @@ public interface UsersTypeRepository {
 
   Optional<UsersType> findByUuid(UUID uuid);
 
-  List<UsersType> findAll();
+  PageModel<List<UsersType>> findAll(String name, Integer page, Integer size, String sort, String direction);
 
   void delete(UUID uuid);
 }

@@ -29,6 +29,7 @@ public class UsersTypeInfraMapper {
     }
 
     var entity = new UsersTypeEntity();
+    entity.setUuid(model.getUuid());
     entity.setName(model.getName());
     entity.setDescription(model.getDescription());
     return entity;

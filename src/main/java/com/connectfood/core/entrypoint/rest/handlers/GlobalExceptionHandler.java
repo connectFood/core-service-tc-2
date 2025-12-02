@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ProblemDetailsResponse> handleGeneric(
       final Exception exception, final HttpServletRequest request) {
     return buildApiErrorResponse(
-        "Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI());
+        exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI());
   }
 
   private ResponseEntity<ProblemDetailsResponse> buildApiErrorResponse(
