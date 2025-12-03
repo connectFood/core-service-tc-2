@@ -2,8 +2,8 @@ package com.connectfood.core.application.usertype.usecase;
 
 import java.util.List;
 
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.dto.commons.PageOutput;
+import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
@@ -21,8 +21,7 @@ public class SearchUserTypeUseCase {
   }
 
   public PageOutput<List<UsersTypeOutput>> execute(final String name, final Integer page, final Integer size,
-      String sort,
-      String direction) {
+      final String sort, final String direction) {
     final var usersTypes = repository.findAll(name, page, size, sort, direction);
 
     final var results = usersTypes.content()
