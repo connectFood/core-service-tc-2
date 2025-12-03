@@ -40,4 +40,8 @@ public class Users {
     this.passwordHash = passwordHash;
     this.usersType = usersType;
   }
+
+  public Users(final String fullName, final String email, final String passwordHash, final UsersType usersType) {
+    this(null, fullName, email, passwordHash, usersType);
+  }
 }

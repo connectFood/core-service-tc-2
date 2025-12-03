@@ -11,7 +11,7 @@ public final class UsersTypeSpecification {
   private UsersTypeSpecification() {
   }
 
-  public static Specification<UsersTypeEntity> nameContains(String name) {
+  public static Specification<UsersTypeEntity> nameContains(final String name) {
     return likeIgnoreCase("name", name);
   }
 }

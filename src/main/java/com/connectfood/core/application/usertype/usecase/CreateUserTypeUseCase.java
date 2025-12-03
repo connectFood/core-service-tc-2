@@ -1,13 +1,12 @@
 package com.connectfood.core.application.usertype.usecase;
 
-import jakarta.transaction.Transactional;
-
 import com.connectfood.core.application.usertype.dto.UsersTypeInput;
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class CreateUserTypeUseCase {

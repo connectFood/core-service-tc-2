@@ -1,26 +1,26 @@
-package com.connectfood.core.application.usertype.usecase;
+package com.connectfood.core.application.users.usecase;
 
 import java.util.UUID;
 
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.UsersTypeRepository;
+import com.connectfood.core.domain.repository.UsersRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class RemoveUserTypeUseCase {
+public class RemoveUsersUseCase {
 
-  private final UsersTypeRepository repository;
+  private final UsersRepository repository;
 
-  public RemoveUserTypeUseCase(final UsersTypeRepository repository) {
+  public RemoveUsersUseCase(final UsersRepository repository) {
     this.repository = repository;
   }
 
   @Transactional
   public void execute(final UUID uuid) {
     repository.findByUuid(uuid)
-        .orElseThrow(() -> new NotFoundException("Users type not found"));
+        .orElseThrow(() -> new NotFoundException("Users not found"));
 
     repository.delete(uuid);
   }

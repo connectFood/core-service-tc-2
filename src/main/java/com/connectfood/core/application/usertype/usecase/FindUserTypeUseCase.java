@@ -8,6 +8,7 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class FindUserTypeUseCase {
@@ -20,6 +21,7 @@ public class FindUserTypeUseCase {
     this.mapper = mapper;
   }
 
+  @Transactional(readOnly = true)
   public UsersTypeOutput execute(final UUID uuid) {
     final var usersType = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Users type not found"));

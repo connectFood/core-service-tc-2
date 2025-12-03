@@ -5,10 +5,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.Users;
+import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UsersRepository;
+import com.connectfood.core.infrastructure.persistence.entity.UsersEntity;
+import com.connectfood.core.infrastructure.persistence.entity.UsersTypeEntity;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaUsersRepository;
+import com.connectfood.core.infrastructure.persistence.jpa.JpaUsersTypeRepository;
 import com.connectfood.core.infrastructure.persistence.mappers.UsersInfraMapper;
+import com.connectfood.core.infrastructure.persistence.specification.UsersSpecification;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,15 +24,45 @@ public class UsersRepositoryAdapter implements UsersRepository {
 
   private final JpaUsersRepository repository;
   private final UsersInfraMapper mapper;
+  private final JpaUsersTypeRepository usersTypeRepository;
 
-  public UsersRepositoryAdapter(final JpaUsersRepository repository, final UsersInfraMapper mapper) {
+  public UsersRepositoryAdapter(
+      final JpaUsersRepository repository,
+      final UsersInfraMapper mapper,
+      final JpaUsersTypeRepository usersTypeRepository) {
     this.repository = repository;
     this.mapper = mapper;
+    this.usersTypeRepository = usersTypeRepository;
   }
 
   @Override
-  public Users save(final Users usersType) {
-    final var entity = repository.save(mapper.toEntity(usersType));
+  public Users save(final Users users) {
+    final var userType = usersTypeRepository.findByUuid(users.getUsersType()
+            .getUuid())
+        .orElseThrow();
+
+    final var entity = repository.save(mapper.toEntity(users, userType));
+
+    return mapper.toDomain(entity);
+  }
+
+  @Override
+  public Users update(final UUID uuid, final Users users) {
+    var entity = repository.findByUuid(uuid)
+        .orElseThrow();
+
+    var userType = usersTypeRepository.findByUuid(users.getUsersType()
+            .getUuid())
+        .orElseThrow();
+
+    UsersTypeEntity usersTypeEntity = entity.getUsersType();
+
+    if (!usersTypeEntity.getUuid()
+        .equals(userType.getUuid())) {
+      usersTypeEntity = userType;
+    }
+
+    entity = repository.save(mapper.toEntity(users, entity, usersTypeEntity));
 
     return mapper.toDomain(entity);
   }
@@ -37,12 +75,27 @@ public class UsersRepositoryAdapter implements UsersRepository {
   }
 
   @Override
-  public List<Users> findAll() {
-    final var entities = repository.findAll();
+  public PageModel<List<Users>> findAll(final String fullName, final String email, final UUID usersTypeUuid,
+      final Integer page, final Integer size, final String sort, final String direction) {
 
-    return entities.stream()
+    final var pageable = PageRequest.of(page, size,
+        Sort.by(direction == null ? Sort.Direction.ASC : Sort.Direction.fromString(direction),
+            sort == null ? "id" : sort
+        )
+    );
+
+    final Specification<UsersEntity> spec = Specification.allOf(UsersSpecification.nameContains(fullName),
+        UsersSpecification.emailContains(email), UsersSpecification.hasUsersTypeUuid(usersTypeUuid)
+    );
+
+    final var entities = repository.findAll(spec, pageable);
+
+    final var result = entities.getContent()
+        .stream()
         .map(mapper::toDomain)
         .toList();
+
+    return new PageModel<>(result, entities.getTotalElements());
   }
 
   @Override
