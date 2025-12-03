@@ -2,15 +2,17 @@ package com.connectfood.core.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
 
 public interface AddressRepository {
 
-  List<Address> findAllByUserUuid(String uuid);
+  Address save(Address usersType);
 
-  Address save(Address address, String userUuid);
+  Optional<Address> findByUuid(UUID uuid);
 
-  void deleteByUserUuid(String userUuid);
+  List<Address> findAll();
+
+  void delete(UUID uuid);
 }

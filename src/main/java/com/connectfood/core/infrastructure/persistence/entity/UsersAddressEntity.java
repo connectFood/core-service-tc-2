@@ -2,7 +2,6 @@ package com.connectfood.core.infrastructure.persistence.entity;
 
 import com.connectfood.core.infrastructure.persistence.entity.commons.BaseEntity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -13,22 +12,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users_address")
 @Getter
 @Setter
 @NoArgsConstructor
-public class UsersEntity extends BaseEntity {
-
-  @Column(name = "full_name", nullable = false)
-  private String fullName;
-
-  @Column(name = "email", nullable = false)
-  private String email;
-
-  @Column(name = "password", nullable = false)
-  private String password;
+public class UsersAddressEntity extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "users_type_id", nullable = false)
-  private UsersTypeEntity usersType;
+  @JoinColumn(name = "user_id", nullable = false)
+  private UsersEntity users;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "address_id", nullable = false)
+  private AddressEntity address;
 }

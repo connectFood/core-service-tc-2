@@ -1,20 +1,8 @@
 package com.connectfood.core.domain.utils;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+public interface PasswordUtils {
 
-import lombok.experimental.UtilityClass;
+  String encode(String password);
 
-@UtilityClass
-public class PasswordUtils {
-
-  private static final PasswordEncoder enconder = new BCryptPasswordEncoder();
-
-  public static String encode(final String password) {
-    return enconder.encode(password);
-  }
-
-  public static boolean matches(final String password, final String encodedPassword) {
-    return enconder.matches(password, encodedPassword);
-  }
+  Boolean matches(String password, String encodedPassword);
 }

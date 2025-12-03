@@ -9,7 +9,6 @@ spring:
     time-zone: America/Sao_Paulo
     serialization:
       fail-on-empty-beans: false
-    default-property-inclusion: non_empty
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:connectfood}}
@@ -38,8 +37,11 @@ spring:
       max-request-size: 20MB
 
 springdoc:
-  api-docs.enabled: true
-  swagger-ui.enabled: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
 
 security:
   jwt:

@@ -1,25 +1,43 @@
 package com.connectfood.core.domain.model;
 
-import java.util.List;
+import java.util.UUID;
 
-import com.connectfood.core.domain.model.commons.BaseModel;
+import com.connectfood.core.domain.exception.BadRequestException;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
-@Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Users extends BaseModel {
+public class Users {
 
-  private String fullName;
-  private String email;
-  private String login;
-  private String password;
-  private List<String> roles;
+  private final UUID uuid;
+  private final String fullName;
+  private final String email;
+  private final String passwordHash;
+  private final UsersType usersType;
+
+  public Users(final UUID uuid, final String fullName, final String email, final String passwordHash,
+      final UsersType usersType) {
+
+    if (fullName == null || fullName.isBlank()) {
+      throw new BadRequestException("Full name is required");
+    }
+
+    if (email == null || email.isBlank()) {
+      throw new BadRequestException("Email is required");
+    }
+
+    if (passwordHash == null || passwordHash.isBlank()) {
+      throw new BadRequestException("Password hash is required");
+    }
+
+    if (usersType == null) {
+      throw new BadRequestException("Users type is required");
+    }
+
+    this.uuid = uuid == null ? UUID.randomUUID() : uuid;
+    this.fullName = fullName;
+    this.email = email;
+    this.passwordHash = passwordHash;
+    this.usersType = usersType;
+  }
 }

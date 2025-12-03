@@ -11,19 +11,14 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
 @MappedSuperclass
-@NoArgsConstructor
-@AllArgsConstructor
 public abstract class BaseEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -48,7 +43,6 @@ public abstract class BaseEntity {
 
   @PrePersist
   public void prePersist() {
-    this.uuid = UUID.randomUUID();
     this.createdAt = LocalDateTime.now();
     this.updatedAt = LocalDateTime.now();
   }
