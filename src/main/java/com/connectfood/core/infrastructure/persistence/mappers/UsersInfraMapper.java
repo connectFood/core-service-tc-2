@@ -34,6 +34,7 @@ public class UsersInfraMapper {
     }
 
     var entity = new UsersEntity();
+    entity.setUuid(model.getUuid());
     entity.setFullName(model.getFullName());
     entity.setEmail(model.getEmail());
     entity.setPassword(model.getPasswordHash());
