@@ -6,7 +6,6 @@ import com.connectfood.core.infrastructure.persistence.entity.UsersEntity;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import static com.connectfood.core.infrastructure.persistence.specification.commons.SpecificationCommons.eq;
 import static com.connectfood.core.infrastructure.persistence.specification.commons.SpecificationCommons.likeIgnoreCase;
 
 public final class UsersSpecification {
@@ -23,6 +22,12 @@ public final class UsersSpecification {
   }
 
   public static Specification<UsersEntity> hasUsersTypeUuid(final UUID usersTypeUuid) {
-    return eq("usersType.uuid", usersTypeUuid);
+    if (usersTypeUuid == null) {
+      return null;
+    }
+
+    return (root, query, cb) -> cb.equal(root.get("usersType")
+        .get("uuid"), usersTypeUuid
+    );
   }
 }

@@ -9,8 +9,7 @@ import com.connectfood.core.domain.repository.UsersTypeRepository;
 import com.connectfood.core.domain.utils.PasswordUtils;
 
 import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class CreateUsersUseCase {

@@ -1,7 +1,5 @@
 package com.connectfood.core.application.usertype.usecase;
 
-import jakarta.transaction.Transactional;
-
 import java.util.UUID;
 
 import com.connectfood.core.application.usertype.dto.UsersTypeInput;
@@ -11,6 +9,7 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class UpdateUserTypeUseCase {

@@ -8,6 +8,7 @@ import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class SearchUserTypeUseCase {
@@ -20,6 +21,7 @@ public class SearchUserTypeUseCase {
     this.mapper = mapper;
   }
 
+  @Transactional(readOnly = true)
   public PageOutput<List<UsersTypeOutput>> execute(final String name, final Integer page, final Integer size,
       final String sort, final String direction) {
     final var usersTypes = repository.findAll(name, page, size, sort, direction);

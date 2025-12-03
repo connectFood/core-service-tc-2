@@ -34,7 +34,7 @@ public class UsersAddressInfraMapper {
     }
 
     var entity = new UsersAddressEntity();
-    entity.setUsers(usersMapper.toEntity(model.getUsers()));
+//    entity.setUsers(usersMapper.toEntity(model.getUsers()));
     entity.setAddress(addressMapper.toEntity(model.getAddress()));
     return entity;
   }

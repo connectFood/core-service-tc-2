@@ -8,6 +8,7 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.UsersRepository;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class FindUsersUseCase {
@@ -20,6 +21,7 @@ public class FindUsersUseCase {
     this.mapper = mapper;
   }
 
+  @Transactional(readOnly = true)
   public UsersOutput execute(final UUID uuid) {
     final var users = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Users not found"));

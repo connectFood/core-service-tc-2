@@ -2,6 +2,7 @@ package com.connectfood.core.infrastructure.persistence.mappers;
 
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.infrastructure.persistence.entity.UsersEntity;
+import com.connectfood.core.infrastructure.persistence.entity.UsersTypeEntity;
 
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ public class UsersInfraMapper {
     );
   }
 
-  public UsersEntity toEntity(final Users model) {
+  public UsersEntity toEntity(final Users model, final UsersTypeEntity usersTypeEntity) {
     if (model == null) {
       return null;
     }
@@ -38,15 +39,15 @@ public class UsersInfraMapper {
     entity.setFullName(model.getFullName());
     entity.setEmail(model.getEmail());
     entity.setPassword(model.getPasswordHash());
-    entity.setUsersType(usersTypeMapper.toEntity(model.getUsersType()));
+    entity.setUsersType(usersTypeEntity);
     return entity;
   }
 
-  public UsersEntity toEntity(final Users model, final UsersEntity entity) {
+  public UsersEntity toEntity(final Users model, final UsersEntity entity, final UsersTypeEntity usersTypeEntity) {
     entity.setFullName(model.getFullName());
     entity.setEmail(model.getEmail());
     entity.setPassword(model.getPasswordHash());
-    entity.setUsersType(usersTypeMapper.toEntity(model.getUsersType()));
+    entity.setUsersType(usersTypeEntity);
     return entity;
   }
 }

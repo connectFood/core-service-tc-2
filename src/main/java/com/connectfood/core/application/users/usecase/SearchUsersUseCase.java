@@ -9,6 +9,7 @@ import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.repository.UsersRepository;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class SearchUsersUseCase {
@@ -21,6 +22,7 @@ public class SearchUsersUseCase {
     this.mapper = mapper;
   }
 
+  @Transactional(readOnly = true)
   public PageOutput<List<UsersOutput>> execute(final String fullName, final String email, final UUID usersTypeUuid,
       final Integer page, final Integer size, final String sort, final String direction) {
     final var users = repository.findAll(fullName, email, usersTypeUuid, page, size, sort, direction);

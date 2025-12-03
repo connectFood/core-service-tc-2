@@ -11,8 +11,7 @@ import com.connectfood.core.domain.repository.UsersRepository;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
 import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class UpdateUsersUseCase {

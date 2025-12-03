@@ -6,8 +6,7 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
 
 import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class RemoveUserTypeUseCase {
