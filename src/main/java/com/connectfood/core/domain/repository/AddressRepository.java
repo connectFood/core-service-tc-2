@@ -10,9 +10,5 @@ public interface AddressRepository {
 
   Address save(Address usersType);
 
-  Optional<Address> findByUuid(UUID uuid);
-
-  List<Address> findAll();
-
   void delete(UUID uuid);
 }
