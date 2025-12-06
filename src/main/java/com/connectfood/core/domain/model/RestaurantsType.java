@@ -21,7 +21,7 @@ public class RestaurantsType {
       throw new BadRequestException("Name length must be between 3 and 255 characters");
     }
 
-    this.uuid = uuid;
+    this.uuid = uuid == null ? UUID.randomUUID() : uuid;
     this.name = name;
     this.description = description;
   }
