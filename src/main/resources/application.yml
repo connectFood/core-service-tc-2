@@ -47,3 +47,4 @@ security:
   jwt:
     secret: ${JWT_SECRET:nqoTpDYVygp3dUsX6CNdTnZgWSuBmWZUNOv/kM8y6go=}
     expiration-seconds: ${JWT_EXPIRATION_SECONDS:3600}
+
