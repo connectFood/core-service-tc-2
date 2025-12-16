@@ -1,5 +1,6 @@
 package com.connectfood.core.infrastructure.persistence.adapter;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.UsersAddress;
@@ -42,6 +43,14 @@ public class UsersAddressRepositoryAdapter implements UsersAddressRepository {
 
     return mapper.toDomain(entity);
   }
+
+  @Override
+  public Optional<UsersAddress> findByUsersUuid(final UUID usersUuid) {
+    final var entity = repository.findByUsersUuid(usersUuid);
+
+    return entity.map(mapper::toDomain);
+  }
+
 
   @Override
   public void delete(final UUID uuid) {

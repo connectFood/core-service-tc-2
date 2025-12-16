@@ -7,6 +7,7 @@ import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
 import com.connectfood.core.entrypoint.rest.dto.address.UsersAddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.BaseResponse;
 import com.connectfood.core.entrypoint.rest.mappers.AddressEntryMapper;
+import com.connectfood.core.entrypoint.rest.mappers.UsersAddressEntryMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,16 @@ public class AddressController {
 
   private final CreateUsersAddressUseCase createUsersAddressUseCase;
   private final AddressEntryMapper mapper;
+  private final UsersAddressEntryMapper usersAddressMapper;
 
   public AddressController(
       final CreateUsersAddressUseCase createUsersAddressUseCase,
-      final AddressEntryMapper mapper
+      final AddressEntryMapper mapper,
+      final UsersAddressEntryMapper usersAddressMapper
   ) {
     this.createUsersAddressUseCase = createUsersAddressUseCase;
     this.mapper = mapper;
+    this.usersAddressMapper = usersAddressMapper;
   }
 
   @PostMapping(path = "/{uuid}/users")
@@ -49,7 +53,7 @@ public class AddressController {
       @Valid @RequestBody final AddressRequest request
   ) {
     final var result = createUsersAddressUseCase.execute(uuid, mapper.toInput(request));
-    final var response = mapper.toResponse(result);
+    final var response = usersAddressMapper.toResponse(result);
 
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new BaseResponse<>(response));

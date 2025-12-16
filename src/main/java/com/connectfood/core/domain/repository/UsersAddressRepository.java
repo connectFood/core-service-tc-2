@@ -10,5 +10,7 @@ public interface UsersAddressRepository {
 
   UsersAddress save(UsersAddress usersAddress);
 
+  Optional<UsersAddress> findByUsersUuid(UUID usersUuid);
+
   void delete(UUID uuid);
 }

@@ -2,6 +2,7 @@ package com.connectfood.core.entrypoint.rest.dto.users;
 
 import java.util.UUID;
 
+import com.connectfood.core.entrypoint.rest.dto.address.AddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.userstype.UsersTypeResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -40,4 +41,10 @@ public class UsersResponse {
       implementation = UsersTypeResponse.class
   )
   private UsersTypeResponse usersType;
+
+  @Schema(
+      description = "Address associated with the user",
+      implementation = UsersTypeResponse.class
+  )
+  private AddressResponse address;
 }

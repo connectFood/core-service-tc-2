@@ -3,6 +3,8 @@ package com.connectfood.core.application.address.mapper;
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
+import com.connectfood.core.application.address.dto.AddressOutput;
+import com.connectfood.core.application.address.dto.UsersAddressOutput;
 import com.connectfood.core.domain.model.Address;
 
 import org.springframework.stereotype.Component;
@@ -46,6 +48,24 @@ public class AddressAppMapper {
         input.getState(),
         input.getCountry(),
         input.getZipCode()
+    );
+  }
+
+  public AddressOutput toOutput(final Address model) {
+    if (model == null) {
+      return null;
+    }
+
+    return new AddressOutput(
+        model.getUuid(),
+        model.getStreet(),
+        model.getNumber(),
+        model.getComplement(),
+        model.getNeighborhood(),
+        model.getCity(),
+        model.getState(),
+        model.getCountry(),
+        model.getZipCode()
     );
   }
 }
