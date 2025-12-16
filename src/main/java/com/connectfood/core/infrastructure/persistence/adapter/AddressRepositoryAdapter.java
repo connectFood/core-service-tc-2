@@ -1,7 +1,5 @@
 package com.connectfood.core.infrastructure.persistence.adapter;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
@@ -23,26 +21,10 @@ public class AddressRepositoryAdapter implements AddressRepository {
   }
 
   @Override
-  public Address save(final Address usersType) {
-    final var entity = repository.save(mapper.toEntity(usersType));
+  public Address save(final Address address) {
+    final var entity = repository.save(mapper.toEntity(address));
 
     return mapper.toDomain(entity);
-  }
-
-  @Override
-  public Optional<Address> findByUuid(final UUID uuid) {
-    final var entity = repository.findByUuid(uuid);
-
-    return entity.map(mapper::toDomain);
-  }
-
-  @Override
-  public List<Address> findAll() {
-    final var entities = repository.findAll();
-
-    return entities.stream()
-        .map(mapper::toDomain)
-        .toList();
   }
 
   @Override

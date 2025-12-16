@@ -60,4 +60,9 @@ public class Address {
     this.country = country;
     this.zipCode = zipCode;
   }
+
+  public Address(final String street, final String number, final String complement, final String neighborhood,
+      final String city, final String state, final String country, final String zipCode) {
+    this(null, street, number, complement, neighborhood, city, state, country, zipCode);
+  }
 }

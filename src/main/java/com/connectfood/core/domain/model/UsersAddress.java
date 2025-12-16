@@ -27,4 +27,8 @@ public class UsersAddress {
     this.users = users;
     this.address = address;
   }
+
+  public UsersAddress(final Users users, final Address address) {
+    this(null, users, address);
+  }
 }
