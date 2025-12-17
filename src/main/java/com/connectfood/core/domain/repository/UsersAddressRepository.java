@@ -8,11 +8,9 @@ import com.connectfood.core.domain.model.UsersAddress;
 
 public interface UsersAddressRepository {
 
-  UsersAddress save(UsersAddress usersType);
+  UsersAddress save(UsersAddress usersAddress);
 
-  Optional<UsersAddress> findByUuid(UUID uuid);
-
-  List<UsersAddress> findAll();
+  Optional<UsersAddress> findByUsersUuid(UUID usersUuid);
 
   void delete(UUID uuid);
 }

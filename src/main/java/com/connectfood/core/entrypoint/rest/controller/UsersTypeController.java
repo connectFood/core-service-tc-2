@@ -85,7 +85,7 @@ public class UsersTypeController {
       summary = "Find user type by UUID",
       description = "Returns a user type for the given UUID"
   )
-  public ResponseEntity<BaseResponse<UsersTypeResponse>> findByUuid(@PathVariable("uuid") final UUID uuid) {
+  public ResponseEntity<BaseResponse<UsersTypeResponse>> findByUuid(@PathVariable final UUID uuid) {
     final var result = findUseCase.execute(uuid);
     final var response = mapper.toResponse(result);
 
@@ -112,7 +112,7 @@ public class UsersTypeController {
       description = "Updates an existing user type identified by UUID"
   )
   public ResponseEntity<BaseResponse<UsersTypeResponse>> update(
-      @PathVariable("uuid") final UUID uuid, @Valid @RequestBody final UsersTypeRequest request) {
+      @PathVariable final UUID uuid, @Valid @RequestBody final UsersTypeRequest request) {
     final var result = updateUseCase.execute(uuid, mapper.toInput(request));
     final var response = mapper.toResponse(result);
 
@@ -125,7 +125,7 @@ public class UsersTypeController {
       summary = "Delete an existing user type",
       description = "Deletes an existing user type identified by UUID"
   )
-  public ResponseEntity<Void> delete(@PathVariable("uuid") final UUID uuid) {
+  public ResponseEntity<Void> delete(@PathVariable final UUID uuid) {
     removeUseCase.execute(uuid);
 
     return ResponseEntity.noContent()

@@ -1,7 +1,11 @@
 package com.connectfood.core.infrastructure.persistence.mappers;
 
+import java.util.UUID;
+
 import com.connectfood.core.domain.model.UsersAddress;
+import com.connectfood.core.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.core.infrastructure.persistence.entity.UsersAddressEntity;
+import com.connectfood.core.infrastructure.persistence.entity.UsersEntity;
 
 import org.springframework.stereotype.Component;
 
@@ -28,14 +32,16 @@ public class UsersAddressInfraMapper {
     );
   }
 
-  public UsersAddressEntity toEntity(final UsersAddress model) {
-    if (model == null) {
+  public UsersAddressEntity toEntity(final UUID uuid, final UsersEntity usersEntity,
+      final AddressEntity addressEntity) {
+    if (usersEntity == null || addressEntity == null) {
       return null;
     }
 
     var entity = new UsersAddressEntity();
-//    entity.setUsers(usersMapper.toEntity(model.getUsers()));
-    entity.setAddress(addressMapper.toEntity(model.getAddress()));
+    entity.setUuid(uuid);
+    entity.setUsers(usersEntity);
+    entity.setAddress(addressEntity);
     return entity;
   }
 }

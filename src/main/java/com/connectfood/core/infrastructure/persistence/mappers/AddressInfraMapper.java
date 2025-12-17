@@ -36,6 +36,7 @@ public class AddressInfraMapper {
     }
 
     var entity = new AddressEntity();
+    entity.setUuid(model.getUuid());
     entity.setStreet(model.getStreet());
     entity.setNumber(model.getNumber());
     entity.setComplement(model.getComplement());

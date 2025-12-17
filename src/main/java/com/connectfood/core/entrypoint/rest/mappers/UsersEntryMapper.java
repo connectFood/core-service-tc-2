@@ -11,9 +11,13 @@ import org.springframework.stereotype.Component;
 public class UsersEntryMapper {
 
   private final UsersTypeEntryMapper usersTypeMapper;
+  private final AddressEntryMapper addressMapper;
 
-  public UsersEntryMapper(final UsersTypeEntryMapper usersTypeMapper) {
+  public UsersEntryMapper(
+      final UsersTypeEntryMapper usersTypeMapper,
+      final AddressEntryMapper addressMapper) {
     this.usersTypeMapper = usersTypeMapper;
+    this.addressMapper = addressMapper;
   }
 
   public UsersInput toInput(final UsersRequest request) {
@@ -38,7 +42,8 @@ public class UsersEntryMapper {
         output.getUuid(),
         output.getFullName(),
         output.getEmail(),
-        output.getUsersType() != null ? usersTypeMapper.toResponse(output.getUsersType()) : null
+        output.getUsersType() != null ? usersTypeMapper.toResponse(output.getUsersType()) : null,
+        output.getAddress() != null ? addressMapper.toResponse(output.getAddress()) : null
     );
   }
 }
