@@ -9,7 +9,7 @@ import com.connectfood.core.domain.model.commons.PageModel;
 
 public interface RestaurantItemsImagesRepository {
 
-  RestaurantItemsImages save(RestaurantItemsImages restaurantItemsImages);
+  RestaurantItemsImages save(UUID restaurantItemsUuid, RestaurantItemsImages restaurantItemsImages);
 
   RestaurantItemsImages update(UUID uuid, RestaurantItemsImages restaurantItemsImages);
 
