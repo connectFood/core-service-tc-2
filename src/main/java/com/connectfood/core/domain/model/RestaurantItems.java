@@ -32,9 +32,6 @@ public class RestaurantItems {
       throw new BadRequestException("Request Type hash is required");
     }
 
-    if (restaurant == null) {
-      throw new BadRequestException("Restaurant is required");
-    }
 
     this.uuid = uuid == null ? UUID.randomUUID() : uuid;
     this.name = name;
