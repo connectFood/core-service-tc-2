@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.connectfood.core.domain.exception.BadRequestException;
+import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ class RestaurantItemsTest {
     final var name = "TEST ITEM";
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
-    final var requestType = "DELIVERY";
+    final var requestType = RestaurantItemServiceType.DELIVERY;
     final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
 
     final var item = new RestaurantItems(uuid, name, description, value, requestType, restaurant);
@@ -40,7 +41,7 @@ class RestaurantItemsTest {
     final var name = "TEST ITEM";
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
-    final var requestType = "DELIVERY";
+    final var requestType = RestaurantItemServiceType.DELIVERY;
     final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
 
     final var item = new RestaurantItems(name, description, value, requestType, restaurant);
@@ -59,7 +60,7 @@ class RestaurantItemsTest {
     final var uuid = UUID.randomUUID();
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
-    final var requestType = "DELIVERY";
+    final var requestType = RestaurantItemServiceType.DELIVERY;
     final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
@@ -76,7 +77,7 @@ class RestaurantItemsTest {
     final var uuid = UUID.randomUUID();
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
-    final var requestType = "DELIVERY";
+    final var requestType = RestaurantItemServiceType.DELIVERY;
     final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
@@ -93,7 +94,7 @@ class RestaurantItemsTest {
     final var uuid = UUID.randomUUID();
     final var name = "TEST ITEM";
     final var description = "Test item description";
-    final var requestType = "DELIVERY";
+    final var requestType = RestaurantItemServiceType.DELIVERY;
     final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
@@ -116,23 +117,6 @@ class RestaurantItemsTest {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
         () -> new RestaurantItems(uuid, name, description, value, null, restaurant)
-    );
-
-    Assertions.assertEquals("Request Type hash is required", exception.getMessage());
-  }
-
-  @Test
-  @DisplayName("Não deve criar um item de restaurante com requestType em branco e lançar uma BadRequest")
-  void shouldNotCreateRestaurantItemsWithRequestTypeIsBlankAndThrowBadRequest() {
-    final var uuid = UUID.randomUUID();
-    final var name = "TEST ITEM";
-    final var description = "Test item description";
-    final var value = BigDecimal.valueOf(19.90);
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
-
-    final var exception = Assertions.assertThrows(
-        BadRequestException.class,
-        () -> new RestaurantItems(uuid, name, description, value, "", restaurant)
     );
 
     Assertions.assertEquals("Request Type hash is required", exception.getMessage());

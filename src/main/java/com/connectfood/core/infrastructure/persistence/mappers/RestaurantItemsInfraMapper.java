@@ -1,6 +1,7 @@
 package com.connectfood.core.infrastructure.persistence.mappers;
 
 import com.connectfood.core.domain.model.RestaurantItems;
+import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
 
@@ -25,7 +26,7 @@ public class RestaurantItemsInfraMapper {
         entity.getName(),
         entity.getDescription(),
         entity.getValue(),
-        entity.getRequestType(),
+        RestaurantItemServiceType.valueOf(entity.getRequestType()),
         entity.getRestaurant() != null ? restaurantsMapper.toDomain(entity.getRestaurant()) : null
     );
   }
@@ -41,7 +42,8 @@ public class RestaurantItemsInfraMapper {
     entity.setName(model.getName());
     entity.setDescription(model.getDescription());
     entity.setValue(model.getValue());
-    entity.setRequestType(model.getRequestType());
+    entity.setRequestType(model.getRequestType()
+        .toString());
     entity.setRestaurant(restaurantsEntity);
 
     return entity;
@@ -51,7 +53,8 @@ public class RestaurantItemsInfraMapper {
     entity.setName(model.getName());
     entity.setDescription(model.getDescription());
     entity.setValue(model.getValue());
-    entity.setRequestType(model.getRequestType());
+    entity.setRequestType(model.getRequestType()
+        .toString());
 
     return entity;
   }

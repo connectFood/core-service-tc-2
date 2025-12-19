@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
 
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -54,7 +54,8 @@ class RestaurantItemsInfraMapperTest {
     entity.setRestaurant(restaurantEntity);
 
     final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsMapper.toDomain(restaurantEntity)).thenReturn(restaurantDomain);
+    Mockito.when(restaurantsMapper.toDomain(restaurantEntity))
+        .thenReturn(restaurantDomain);
 
     final var result = mapper.toDomain(entity);
 
@@ -63,10 +64,13 @@ class RestaurantItemsInfraMapperTest {
     Assertions.assertEquals(name, result.getName());
     Assertions.assertEquals(description, result.getDescription());
     Assertions.assertEquals(value, result.getValue());
-    Assertions.assertEquals(requestType, result.getRequestType());
+    Assertions.assertEquals(requestType, result.getRequestType()
+        .toString()
+    );
     Assertions.assertEquals(restaurantDomain, result.getRestaurant());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toDomain(restaurantEntity);
+    Mockito.verify(restaurantsMapper, Mockito.times(1))
+        .toDomain(restaurantEntity);
   }
 
   @Test
@@ -93,7 +97,9 @@ class RestaurantItemsInfraMapperTest {
     Assertions.assertEquals(name, result.getName());
     Assertions.assertEquals(description, result.getDescription());
     Assertions.assertEquals(value, result.getValue());
-    Assertions.assertEquals(requestType, result.getRequestType());
+    Assertions.assertEquals(requestType, result.getRequestType()
+        .toString()
+    );
     Assertions.assertNull(result.getRestaurant());
 
     Mockito.verifyNoInteractions(restaurantsMapper);
@@ -128,7 +134,7 @@ class RestaurantItemsInfraMapperTest {
     final var name = "ITEM";
     final var description = "Desc";
     final var value = BigDecimal.valueOf(9.90);
-    final var requestType = "DELIVERY";
+    final var requestType = RestaurantItemServiceType.DELIVERY;
 
     final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
     final var model = new RestaurantItems(uuid, name, description, value, requestType, restaurantDomain);
@@ -142,7 +148,7 @@ class RestaurantItemsInfraMapperTest {
     Assertions.assertEquals(name, result.getName());
     Assertions.assertEquals(description, result.getDescription());
     Assertions.assertEquals(value, result.getValue());
-    Assertions.assertEquals(requestType, result.getRequestType());
+    Assertions.assertEquals(requestType.toString(), result.getRequestType());
     Assertions.assertEquals(restaurantsEntity, result.getRestaurant());
 
     Mockito.verifyNoInteractions(restaurantsMapper);
@@ -165,7 +171,7 @@ class RestaurantItemsInfraMapperTest {
         "NEW",
         "NEW DESC",
         BigDecimal.valueOf(12.34),
-        "DELIVERY",
+        RestaurantItemServiceType.DELIVERY,
         restaurantDomain
     );
 

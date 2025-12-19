@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
+import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 
 import lombok.Getter;
 
@@ -14,11 +15,11 @@ public class RestaurantItemsOutput {
   private final String name;
   private final String description;
   private final BigDecimal value;
-  private final String requestType;
+  private final RestaurantItemServiceType requestType;
   private final RestaurantsOutput restaurant;
 
   public RestaurantItemsOutput(final UUID uuid, final String name, final String description,
-      final BigDecimal value, final String requestType, final RestaurantsOutput restaurant) {
+      final BigDecimal value, final RestaurantItemServiceType requestType, final RestaurantsOutput restaurant) {
     this.uuid = uuid;
     this.name = name;
     this.description = description;
@@ -28,7 +29,7 @@ public class RestaurantItemsOutput {
   }
 
   public RestaurantItemsOutput(final UUID uuid, final String name, final String description,
-      final BigDecimal value, final String requestType) {
+      final BigDecimal value, final RestaurantItemServiceType requestType) {
     this(uuid, name, description, value, requestType, null);
   }
 }
