@@ -6,7 +6,6 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutpu
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.RestaurantItemsRepository;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +15,12 @@ public class FindRestaurantItemsUseCase {
 
   private final RestaurantItemsRepository repository;
   private final RestaurantItemsAppMapper mapper;
-  private final RestaurantsRepository restaurantsRepository;
 
   public FindRestaurantItemsUseCase(
       final RestaurantItemsRepository repository,
-      final RestaurantItemsAppMapper mapper,
-      final RestaurantsRepository restaurantsRepository) {
+      final RestaurantItemsAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
-    this.restaurantsRepository = restaurantsRepository;
   }
 
   @Transactional(readOnly = true)
