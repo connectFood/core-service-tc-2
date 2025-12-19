@@ -187,7 +187,6 @@ class RestaurantItemsAppMapperTest {
   void toOutputShouldMapToOutputWhenRestaurantIsNull() {
     final var uuid = UUID.randomUUID();
 
-    // restaurant null aqui é proposital para cobrir o ternário do mapper
     final var model = new RestaurantItems(
         uuid,
         "ITEM",
@@ -215,7 +214,7 @@ class RestaurantItemsAppMapperTest {
       "toDomain: deve propagar BadRequestException quando input tiver dados inválidos (validação é do domínio)")
   void toDomainShouldPropagateBadRequestExceptionWhenInputIsInvalid() {
     final var input = new RestaurantItemsInput(
-        "", // inválido -> domínio deve lançar "Name is required"
+        "",
         "DESC",
         BigDecimal.valueOf(10.00),
         RestaurantItemServiceType.DELIVERY,
