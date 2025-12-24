@@ -19,6 +19,7 @@ public class RestaurantItemsImagesEntryMapper {
     }
 
     return new RestaurantItemsImagesInput(
+        request.getUuid() != null ? request.getUuid() : null,
         request.getName(),
         request.getDescription(),
         request.getPath()

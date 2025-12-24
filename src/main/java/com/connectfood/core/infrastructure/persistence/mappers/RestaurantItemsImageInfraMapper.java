@@ -46,7 +46,6 @@ public class RestaurantItemsImageInfraMapper {
       final RestaurantItemsImagesEntity entity) {
     entity.setName(model.getName());
     entity.setDescription(model.getDescription());
-    entity.setPath(model.getPath());
 
     return entity;
   }

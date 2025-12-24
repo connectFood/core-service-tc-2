@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class RestaurantItemsRepositoryAdapter implements RestaurantItemsRepository {
@@ -46,6 +47,7 @@ public class RestaurantItemsRepositoryAdapter implements RestaurantItemsReposito
   }
 
   @Override
+  @Transactional
   public RestaurantItems update(final UUID uuid, final RestaurantItems model) {
     var entity = repository.findByUuid(uuid)
         .orElseThrow();
@@ -56,6 +58,7 @@ public class RestaurantItemsRepositoryAdapter implements RestaurantItemsReposito
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Optional<RestaurantItems> findByUuid(final UUID uuid) {
     final var entity = repository.findByUuid(uuid);
 

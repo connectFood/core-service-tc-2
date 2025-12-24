@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class RestaurantItemsImagesRepositoryAdapter implements RestaurantItemsImagesRepository {
@@ -86,6 +87,7 @@ public class RestaurantItemsImagesRepositoryAdapter implements RestaurantItemsIm
   }
 
   @Override
+  @Transactional
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
   }
