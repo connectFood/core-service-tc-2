@@ -79,7 +79,7 @@ public class RestaurantItemsRepositoryAdapter implements RestaurantItemsReposito
 
     final var result = entities.getContent()
         .stream()
-        .map(mapper::toDomain)
+        .map(mapper::toDomainAll)
         .toList();
 
     return new PageModel<>(result, entities.getTotalElements());

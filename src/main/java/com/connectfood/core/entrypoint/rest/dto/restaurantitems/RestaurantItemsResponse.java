@@ -1,6 +1,7 @@
 package com.connectfood.core.entrypoint.rest.dto.restaurantitems;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
@@ -46,7 +47,7 @@ public class RestaurantItemsResponse {
   @Schema(
       description = "Request type of the item",
       example = "DELIVERY",
-      allowableValues = { "DELIVERY", "LOCAL_ONLY" }
+      allowableValues = {"DELIVERY", "LOCAL_ONLY"}
   )
   private RestaurantItemServiceType requestType;
 
@@ -55,4 +56,10 @@ public class RestaurantItemsResponse {
       implementation = RestaurantsResponse.class
   )
   private RestaurantsResponse restaurant;
+
+  @Schema(
+      description = "Images associated with the restaurant item",
+      implementation = RestaurantItemsImagesResponse.class
+  )
+  private List<RestaurantItemsImagesResponse> images;
 }

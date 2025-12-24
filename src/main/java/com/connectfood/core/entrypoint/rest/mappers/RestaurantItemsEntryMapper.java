@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
 public class RestaurantItemsEntryMapper {
 
   private final RestaurantsEntryMapper restaurantsMapper;
+  private final RestaurantItemsImagesEntryMapper restaurantItemsImagesMapper;
 
-  public RestaurantItemsEntryMapper(final RestaurantsEntryMapper restaurantsMapper) {
+  public RestaurantItemsEntryMapper(final RestaurantsEntryMapper restaurantsMapper,
+      final RestaurantItemsImagesEntryMapper restaurantItemsImagesMapper) {
     this.restaurantsMapper = restaurantsMapper;
+    this.restaurantItemsImagesMapper = restaurantItemsImagesMapper;
   }
 
   public RestaurantItemsInput toInput(final RestaurantItemsRequest request) {
@@ -26,7 +29,11 @@ public class RestaurantItemsEntryMapper {
         request.getDescription(),
         request.getValue(),
         request.getRequestType(),
-        request.getRestaurantUuid()
+        request.getRestaurantUuid(),
+        request.getImages()
+            .stream()
+            .map(restaurantItemsImagesMapper::toInput)
+            .toList()
     );
   }
 
@@ -41,7 +48,11 @@ public class RestaurantItemsEntryMapper {
         output.getDescription(),
         output.getValue(),
         output.getRequestType(),
-        output.getRestaurant() != null ? restaurantsMapper.toResponse(output.getRestaurant()) : null
+        output.getRestaurant() != null ? restaurantsMapper.toResponse(output.getRestaurant()) : null,
+        output.getImages() != null ? output.getImages()
+            .stream()
+            .map(restaurantItemsImagesMapper::toResponse)
+            .toList() : null
     );
   }
 }

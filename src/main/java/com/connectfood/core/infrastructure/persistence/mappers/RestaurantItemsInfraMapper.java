@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
 public class RestaurantItemsInfraMapper {
 
   private final RestaurantsInfraMapper restaurantsMapper;
+  private final RestaurantItemsImageInfraMapper restaurantItemsImageMapper;
 
-  public RestaurantItemsInfraMapper(final RestaurantsInfraMapper restaurantsMapper) {
+  public RestaurantItemsInfraMapper(final RestaurantsInfraMapper restaurantsMapper,
+      final RestaurantItemsImageInfraMapper restaurantItemsImageMapper) {
     this.restaurantsMapper = restaurantsMapper;
+    this.restaurantItemsImageMapper = restaurantItemsImageMapper;
   }
 
   public RestaurantItems toDomain(final RestaurantItemsEntity entity) {
@@ -27,7 +30,25 @@ public class RestaurantItemsInfraMapper {
         entity.getDescription(),
         entity.getValue(),
         RestaurantItemServiceType.valueOf(entity.getRequestType()),
-        entity.getRestaurant() != null ? restaurantsMapper.toDomain(entity.getRestaurant()) : null
+        entity.getRestaurant() != null ? restaurantsMapper.toDomain(entity.getRestaurant()) : null,
+        entity.getImages()
+            .stream()
+            .map(restaurantItemsImageMapper::toDomain)
+            .toList()
+    );
+  }
+
+  public RestaurantItems toDomainAll(final RestaurantItemsEntity entity) {
+    if (entity == null) {
+      return null;
+    }
+
+    return new RestaurantItems(
+        entity.getUuid(),
+        entity.getName(),
+        entity.getDescription(),
+        entity.getValue(),
+        RestaurantItemServiceType.valueOf(entity.getRequestType())
     );
   }
 

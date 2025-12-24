@@ -1,11 +1,13 @@
 package com.connectfood.core.entrypoint.rest.dto.restaurantitems;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,11 +48,11 @@ public class RestaurantItemsRequest {
       requiredMode = Schema.RequiredMode.REQUIRED
   )
   @NotNull(message = "Item value is required")
-  @DecimalMin(value = "0.01", inclusive = true, message = "Item value must be greater than zero")
+  @DecimalMin(value = "0.01", message = "Item value must be greater than zero")
   private BigDecimal value;
 
   @Schema(
-      description = "Request type of the item",
+      description = "Service type of the item",
       example = "DELIVERY",
       allowableValues = {"DELIVERY", "LOCAL_ONLY"},
       requiredMode = Schema.RequiredMode.REQUIRED
@@ -65,4 +67,12 @@ public class RestaurantItemsRequest {
   )
   @NotNull(message = "Restaurant UUID is required")
   private UUID restaurantUuid;
+
+  @Schema(
+      description = "Images associated with the restaurant item",
+      implementation = RestaurantItemsImagesRequest.class,
+      requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
+  @Valid
+  private List<RestaurantItemsImagesRequest> images;
 }
