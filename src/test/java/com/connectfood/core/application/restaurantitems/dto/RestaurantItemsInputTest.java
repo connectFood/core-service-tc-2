@@ -1,6 +1,7 @@
 package com.connectfood.core.application.restaurantitems.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
@@ -23,12 +24,15 @@ class RestaurantItemsInputTest {
     final var requestType = RestaurantItemServiceType.DELIVERY;
     final var restaurantUuid = UUID.randomUUID();
 
+    final var images = List.<RestaurantItemsImagesInput>of();
+
     final var input = new RestaurantItemsInput(
         name,
         description,
         value,
         requestType,
-        restaurantUuid
+        restaurantUuid,
+        images
     );
 
     Assertions.assertEquals(name, input.getName());
@@ -36,6 +40,7 @@ class RestaurantItemsInputTest {
     Assertions.assertEquals(value, input.getValue());
     Assertions.assertEquals(requestType, input.getRequestType());
     Assertions.assertEquals(restaurantUuid, input.getRestaurantUuid());
+    Assertions.assertEquals(images, input.getImages());
   }
 
   @Test
@@ -51,7 +56,8 @@ class RestaurantItemsInputTest {
         null,
         value,
         requestType,
-        restaurantUuid
+        restaurantUuid,
+        null
     );
 
     Assertions.assertEquals(name, input.getName());
@@ -59,5 +65,6 @@ class RestaurantItemsInputTest {
     Assertions.assertEquals(value, input.getValue());
     Assertions.assertEquals(requestType, input.getRequestType());
     Assertions.assertEquals(restaurantUuid, input.getRestaurantUuid());
+    Assertions.assertNull(input.getImages());
   }
 }

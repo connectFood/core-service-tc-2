@@ -199,7 +199,7 @@ class RestaurantItemsRepositoryAdapterTest {
     final var entity1 = new RestaurantItemsEntity();
     final var entity2 = new RestaurantItemsEntity();
 
-    final var entitiesPage = new PageImpl<RestaurantItemsEntity>(
+    final var entitiesPage = new PageImpl<>(
         List.of(entity1, entity2),
         PageRequest.of(page, size),
         25L
@@ -214,9 +214,9 @@ class RestaurantItemsRepositoryAdapterTest {
     final RestaurantItems domain1 = Mockito.mock(RestaurantItems.class);
     final RestaurantItems domain2 = Mockito.mock(RestaurantItems.class);
 
-    Mockito.when(mapper.toDomain(entity1))
+    Mockito.when(mapper.toDomainAll(entity1))
         .thenReturn(domain1);
-    Mockito.when(mapper.toDomain(entity2))
+    Mockito.when(mapper.toDomainAll(entity2))
         .thenReturn(domain2);
 
     final var result = adapter.findAll(restaurantUuid, page, size, sort, direction);
@@ -243,6 +243,11 @@ class RestaurantItemsRepositoryAdapterTest {
         .getOrderFor(sort);
     Assertions.assertNotNull(order);
     Assertions.assertEquals(Sort.Direction.ASC, order.getDirection());
+
+    Mockito.verify(mapper, Mockito.times(1))
+        .toDomainAll(entity1);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toDomainAll(entity2);
   }
 
   @Test

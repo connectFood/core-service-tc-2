@@ -54,7 +54,7 @@ class RestaurantItemsControllerTest {
   private RestaurantItemsController controller;
 
   @Test
-  @DisplayName("search: deve retornar PageResponse com status 200 e dados paginados")
+  @DisplayName("Deve retornar PageResponse com status 200 e dados paginados")
   void searchShouldReturnPageResponseOk() {
     final var restaurantUuid = UUID.randomUUID();
     final var page = 1;
@@ -96,7 +96,7 @@ class RestaurantItemsControllerTest {
   }
 
   @Test
-  @DisplayName("findByUuid: deve retornar BaseResponse com status 200")
+  @DisplayName("Deve retornar BaseResponse com status 200")
   void findByUuidShouldReturnBaseResponseOk() {
     final var uuid = UUID.randomUUID();
 
@@ -121,7 +121,7 @@ class RestaurantItemsControllerTest {
   }
 
   @Test
-  @DisplayName("create: deve retornar BaseResponse com status 201")
+  @DisplayName("Deve retornar BaseResponse com status 201")
   void createShouldReturnCreated() {
     final RestaurantItemsRequest request = Mockito.mock(RestaurantItemsRequest.class);
 
@@ -151,7 +151,7 @@ class RestaurantItemsControllerTest {
   }
 
   @Test
-  @DisplayName("update: deve retornar BaseResponse com status 200")
+  @DisplayName("Deve retornar BaseResponse com status 200")
   void updateShouldReturnOk() {
     final var uuid = UUID.randomUUID();
     final RestaurantItemsRequest request = Mockito.mock(RestaurantItemsRequest.class);
@@ -182,7 +182,7 @@ class RestaurantItemsControllerTest {
   }
 
   @Test
-  @DisplayName("delete: deve retornar 204 e executar remoção")
+  @DisplayName("Deve retornar 204 e executar remoção")
   void deleteShouldReturnNoContent() {
     final var uuid = UUID.randomUUID();
 

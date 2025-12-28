@@ -1,16 +1,19 @@
 package com.connectfood.core.application.restaurantitems.usecase;
 
-import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesInput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
+import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsImagesAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
+import com.connectfood.core.domain.model.RestaurantItemsImages;
 import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
+import com.connectfood.core.domain.repository.RestaurantItemsImagesRepository;
 import com.connectfood.core.domain.repository.RestaurantItemsRepository;
 
 import org.junit.jupiter.api.Assertions;
@@ -31,80 +34,411 @@ class UpdateRestaurantItemsUseCaseTest {
   @Mock
   private RestaurantItemsAppMapper mapper;
 
+  @Mock
+  private RestaurantItemsImagesAppMapper restaurantItemsImagesMapper;
+
+  @Mock
+  private RestaurantItemsImagesRepository restaurantItemsImagesRepository;
+
   @InjectMocks
   private UpdateRestaurantItemsUseCase useCase;
 
   @Test
-  @DisplayName("Deve atualizar item de restaurante quando existir e retornar output")
-  void shouldUpdateRestaurantItemsWhenExistsAndReturnOutput() {
+  @DisplayName("Deve lançar NotFoundException quando item não existir")
+  void shouldThrowNotFoundExceptionWhenRestaurantItemsDoesNotExist() {
     final var uuid = UUID.randomUUID();
+    final var input = Mockito.mock(RestaurantItemsInput.class);
 
-    final var input = new RestaurantItemsInput(
-        "ITEM",
-        "DESC",
-        BigDecimal.valueOf(12.34),
-        RestaurantItemServiceType.DELIVERY,
-        UUID.randomUUID()
-    );
+    Mockito.when(repository.findByUuid(uuid))
+        .thenReturn(Optional.empty());
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final var ex = Assertions.assertThrows(NotFoundException.class, () -> useCase.execute(uuid, input));
+    Assertions.assertEquals("Restaurant Items not found", ex.getMessage());
+
+    Mockito.verify(repository, Mockito.times(1))
+        .findByUuid(uuid);
+    Mockito.verifyNoInteractions(mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+    Mockito.verifyNoMoreInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("Deve atualizar quando existir, com input sem imagens e retornar output")
+  void shouldUpdateRestaurantItemsWhenExistsAndReturnOutputWithoutImages() {
+    final var uuid = UUID.randomUUID();
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final RestaurantItems existingModel = Mockito.mock(RestaurantItems.class);
     Mockito.when(existingModel.getRestaurant())
-        .thenReturn(restaurants);
+        .thenReturn(restaurant);
+    Mockito.when(existingModel.getImages())
+        .thenReturn(List.of());
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(existingModel));
 
+    final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
+    Mockito.when(input.getImages())
+        .thenReturn(List.of());
+
     final RestaurantItems domainToUpdate = Mockito.mock(RestaurantItems.class);
-    Mockito.when(mapper.toDomain(uuid, input, restaurants))
+    Mockito.when(mapper.toDomain(uuid, input, restaurant))
         .thenReturn(domainToUpdate);
 
     final RestaurantItems updatedModel = Mockito.mock(RestaurantItems.class);
     Mockito.when(repository.update(uuid, domainToUpdate))
         .thenReturn(updatedModel);
 
-    final RestaurantItemsOutput expectedOutput = Mockito.mock(RestaurantItemsOutput.class);
-    Mockito.when(mapper.toOutput(updatedModel))
-        .thenReturn(expectedOutput);
+    final RestaurantItemsOutput expected = Mockito.mock(RestaurantItemsOutput.class);
+    Mockito.when(mapper.toOutput(updatedModel, List.of()))
+        .thenReturn(expected);
 
     final var result = useCase.execute(uuid, input);
+    Assertions.assertSame(expected, result);
 
-    Assertions.assertSame(expectedOutput, result);
-
-    Mockito.verify(repository, Mockito.times(1))
+    Mockito.verify(repository)
         .findByUuid(uuid);
-    Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(uuid, input, restaurants);
-    Mockito.verify(repository, Mockito.times(1))
+    Mockito.verify(mapper)
+        .toDomain(uuid, input, restaurant);
+    Mockito.verify(repository)
         .update(uuid, domainToUpdate);
-    Mockito.verify(mapper, Mockito.times(1))
-        .toOutput(updatedModel);
 
+    Mockito.verifyNoInteractions(restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+
+    Mockito.verify(mapper)
+        .toOutput(updatedModel, List.of());
     Mockito.verifyNoMoreInteractions(repository, mapper);
   }
 
   @Test
-  @DisplayName("Não deve atualizar item de restaurante quando não existir e deve lançar NotFoundException")
-  void shouldThrowNotFoundExceptionWhenRestaurantItemsDoesNotExist() {
-    final var uuid = UUID.randomUUID();
+  @DisplayName("Deve cobrir update, keep, save e delete e não deletar uuid null")
+  void shouldSyncImagesUpdateKeepSaveDeleteAndSkipNullDelete() {
+    final var itemUuid = UUID.randomUUID();
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
-    final var input = Mockito.mock(RestaurantItemsInput.class);
+    final var keepUuid = UUID.randomUUID();
+    final var updateUuid = UUID.randomUUID();
+    final var deleteUuid = UUID.randomUUID();
 
-    Mockito.when(repository.findByUuid(uuid))
-        .thenReturn(Optional.empty());
+    final RestaurantItemsImages currentKeep = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentKeep.getUuid())
+        .thenReturn(keepUuid);
+    Mockito.when(currentKeep.getName())
+        .thenReturn("keep-name");
+    Mockito.when(currentKeep.getDescription())
+        .thenReturn("keep-desc");
 
-    final var exception = Assertions.assertThrows(
-        NotFoundException.class,
-        () -> useCase.execute(uuid, input)
-    );
+    final RestaurantItemsImages currentUpdate = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentUpdate.getUuid())
+        .thenReturn(updateUuid);
+    Mockito.when(currentUpdate.getName())
+        .thenReturn("old-name");
 
-    Assertions.assertEquals("Restaurant Items not found", exception.getMessage());
+    final RestaurantItemsImages currentDelete = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentDelete.getUuid())
+        .thenReturn(deleteUuid);
 
-    Mockito.verify(repository, Mockito.times(1))
-        .findByUuid(uuid);
-    Mockito.verifyNoInteractions(mapper);
-    Mockito.verify(repository, Mockito.never())
+    final RestaurantItemsImages currentNullUuid = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentNullUuid.getUuid())
+        .thenReturn(null);
+
+    final RestaurantItems existingModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(existingModel.getRestaurant())
+        .thenReturn(restaurant);
+    Mockito.when(existingModel.getImages())
+        .thenReturn(List.of(currentKeep, currentUpdate, currentDelete, currentNullUuid));
+    Mockito.when(existingModel.getUuid())
+        .thenReturn(itemUuid);
+
+    Mockito.when(repository.findByUuid(itemUuid))
+        .thenReturn(Optional.of(existingModel));
+
+    final RestaurantItemsImagesInput inKeep = Mockito.mock(RestaurantItemsImagesInput.class);
+    Mockito.when(inKeep.getUuid())
+        .thenReturn(keepUuid);
+    Mockito.when(inKeep.getName())
+        .thenReturn("keep-name");
+    Mockito.when(inKeep.getDescription())
+        .thenReturn("keep-desc");
+
+    final RestaurantItemsImagesInput inUpdate = Mockito.mock(RestaurantItemsImagesInput.class);
+    Mockito.when(inUpdate.getUuid())
+        .thenReturn(updateUuid);
+    Mockito.when(inUpdate.getName())
+        .thenReturn("new-name");
+
+    final RestaurantItemsImagesInput inNew = Mockito.mock(RestaurantItemsImagesInput.class);
+    Mockito.when(inNew.getUuid())
+        .thenReturn(null);
+
+    final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
+    Mockito.when(input.getImages())
+        .thenReturn(List.of(inKeep, inUpdate, inNew));
+
+    final RestaurantItems domainToUpdate = Mockito.mock(RestaurantItems.class);
+    Mockito.when(mapper.toDomain(itemUuid, input, restaurant))
+        .thenReturn(domainToUpdate);
+
+    final RestaurantItems updatedModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(repository.update(itemUuid, domainToUpdate))
+        .thenReturn(updatedModel);
+
+    final RestaurantItemsImages domainAny = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(restaurantItemsImagesMapper.toDomain(Mockito.any(RestaurantItemsImagesInput.class)))
+        .thenReturn(domainAny);
+
+    final RestaurantItemsImages persistedUpdated = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(
+            restaurantItemsImagesRepository.update(Mockito.eq(updateUuid), Mockito.any(RestaurantItemsImages.class)))
+        .thenReturn(persistedUpdated);
+
+    final RestaurantItemsImages persistedNew = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(restaurantItemsImagesRepository.save(Mockito.eq(itemUuid), Mockito.any(RestaurantItemsImages.class)))
+        .thenReturn(persistedNew);
+
+    final var expectedImages = List.of(currentKeep, persistedUpdated, persistedNew);
+
+    final RestaurantItemsOutput expectedOutput = Mockito.mock(RestaurantItemsOutput.class);
+    Mockito.when(mapper.toOutput(updatedModel, expectedImages))
+        .thenReturn(expectedOutput);
+
+    final var result = useCase.execute(itemUuid, input);
+    Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(repository)
+        .findByUuid(itemUuid);
+    Mockito.verify(mapper)
+        .toDomain(itemUuid, input, restaurant);
+    Mockito.verify(repository)
+        .update(itemUuid, domainToUpdate);
+
+    Mockito.verify(restaurantItemsImagesMapper, Mockito.times(3))
+        .toDomain(Mockito.any(RestaurantItemsImagesInput.class));
+
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+        .update(Mockito.eq(keepUuid), Mockito.any(RestaurantItemsImages.class));
+
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+        .update(Mockito.eq(updateUuid), Mockito.any(RestaurantItemsImages.class));
+
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+        .save(Mockito.eq(itemUuid), Mockito.any(RestaurantItemsImages.class));
+
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+        .delete(deleteUuid);
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+        .delete(Mockito.isNull());
+
+    Mockito.verify(mapper)
+        .toOutput(updatedModel, expectedImages);
+
+    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+  }
+
+  @Test
+  @DisplayName("Deve lançar NotFoundException quando incoming uuid não existir no currentByUuid")
+  void shouldThrowNotFoundExceptionWhenIncomingImageUuidNotFoundInCurrent() {
+    final var itemUuid = UUID.randomUUID();
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+
+    final var currentUuid = UUID.randomUUID();
+    final RestaurantItemsImages current = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(current.getUuid())
+        .thenReturn(currentUuid);
+
+    final RestaurantItems existingModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(existingModel.getRestaurant())
+        .thenReturn(restaurant);
+    Mockito.when(existingModel.getImages())
+        .thenReturn(List.of(current));
+
+    Mockito.when(repository.findByUuid(itemUuid))
+        .thenReturn(Optional.of(existingModel));
+
+    final var unknownUuid = UUID.randomUUID();
+    final RestaurantItemsImagesInput incoming = Mockito.mock(RestaurantItemsImagesInput.class);
+    Mockito.when(incoming.getUuid())
+        .thenReturn(unknownUuid);
+
+    final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
+    Mockito.when(input.getImages())
+        .thenReturn(List.of(incoming));
+
+    final RestaurantItems domainToUpdate = Mockito.mock(RestaurantItems.class);
+    Mockito.when(mapper.toDomain(itemUuid, input, restaurant))
+        .thenReturn(domainToUpdate);
+
+    final RestaurantItems updatedModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(repository.update(itemUuid, domainToUpdate))
+        .thenReturn(updatedModel);
+
+    Mockito.when(restaurantItemsImagesMapper.toDomain(incoming))
+        .thenReturn(Mockito.mock(RestaurantItemsImages.class));
+
+    final var ex = Assertions.assertThrows(NotFoundException.class, () -> useCase.execute(itemUuid, input));
+    Assertions.assertEquals("Restaurant Item Images not found", ex.getMessage());
+
+    Mockito.verify(repository)
+        .findByUuid(itemUuid);
+    Mockito.verify(mapper)
+        .toDomain(itemUuid, input, restaurant);
+    Mockito.verify(repository)
+        .update(itemUuid, domainToUpdate);
+
+    Mockito.verify(restaurantItemsImagesMapper)
+        .toDomain(incoming);
+
+    Mockito.verifyNoInteractions(restaurantItemsImagesRepository);
+    Mockito.verify(mapper, Mockito.never())
+        .toOutput(Mockito.any(), Mockito.any());
+
+    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper);
+  }
+
+  @Test
+  @DisplayName("Deve executar merge (a,b)->a quando current tiver UUID duplicado")
+  void shouldUseMergeFunctionWhenCurrentHasDuplicateUuid() {
+    final var itemUuid = UUID.randomUUID();
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+
+    final var dupUuid = UUID.randomUUID();
+
+    final RestaurantItemsImages currentA = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentA.getUuid())
+        .thenReturn(dupUuid);
+    Mockito.when(currentA.getName())
+        .thenReturn("same-name");
+    Mockito.when(currentA.getDescription())
+        .thenReturn("same-desc");
+
+    final RestaurantItemsImages currentB = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentB.getUuid())
+        .thenReturn(dupUuid);
+
+    final RestaurantItemsImages currentNull = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(currentNull.getUuid())
+        .thenReturn(null);
+
+    final RestaurantItems existingModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(existingModel.getRestaurant())
+        .thenReturn(restaurant);
+    Mockito.when(existingModel.getImages())
+        .thenReturn(List.of(currentA, currentB, currentNull));
+
+    Mockito.when(repository.findByUuid(itemUuid))
+        .thenReturn(Optional.of(existingModel));
+
+    final RestaurantItemsImagesInput incoming = Mockito.mock(RestaurantItemsImagesInput.class);
+    Mockito.when(incoming.getUuid())
+        .thenReturn(dupUuid);
+    Mockito.when(incoming.getName())
+        .thenReturn("same-name");
+    Mockito.when(incoming.getDescription())
+        .thenReturn("same-desc");
+
+    final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
+    Mockito.when(input.getImages())
+        .thenReturn(List.of(incoming));
+
+    final RestaurantItems domainToUpdate = Mockito.mock(RestaurantItems.class);
+    Mockito.when(mapper.toDomain(itemUuid, input, restaurant))
+        .thenReturn(domainToUpdate);
+
+    final RestaurantItems updatedModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(repository.update(itemUuid, domainToUpdate))
+        .thenReturn(updatedModel);
+
+    Mockito.when(restaurantItemsImagesMapper.toDomain(incoming))
+        .thenReturn(Mockito.mock(RestaurantItemsImages.class));
+
+    final var expectedImages = List.of(currentA);
+
+    final RestaurantItemsOutput expectedOutput = Mockito.mock(RestaurantItemsOutput.class);
+    Mockito.when(mapper.toOutput(updatedModel, expectedImages))
+        .thenReturn(expectedOutput);
+
+    final var result = useCase.execute(itemUuid, input);
+    Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
         .update(Mockito.any(), Mockito.any());
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+        .save(Mockito.any(), Mockito.any());
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+        .delete(Mockito.any());
+
+    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+  }
+
+  @Test
+  @DisplayName("Deve considerar changed quando name é igual e description é diferente")
+  void shouldUpdateWhenDescriptionChangesEvenIfNameIsSame() {
+    final var itemUuid = UUID.randomUUID();
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+
+    final var imageUuid = UUID.randomUUID();
+
+    final RestaurantItemsImages current = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(current.getUuid())
+        .thenReturn(imageUuid);
+    Mockito.when(current.getName())
+        .thenReturn("same-name");
+    Mockito.when(current.getDescription())
+        .thenReturn("old-desc");
+
+    final RestaurantItems existingModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(existingModel.getRestaurant())
+        .thenReturn(restaurant);
+    Mockito.when(existingModel.getImages())
+        .thenReturn(List.of(current));
+
+    Mockito.when(repository.findByUuid(itemUuid))
+        .thenReturn(Optional.of(existingModel));
+
+    final RestaurantItemsImagesInput incoming = Mockito.mock(RestaurantItemsImagesInput.class);
+    Mockito.when(incoming.getUuid())
+        .thenReturn(imageUuid);
+    Mockito.when(incoming.getName())
+        .thenReturn("same-name");
+    Mockito.when(incoming.getDescription())
+        .thenReturn("new-desc");
+
+    final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
+    Mockito.when(input.getImages())
+        .thenReturn(List.of(incoming));
+
+    final RestaurantItems domainToUpdate = Mockito.mock(RestaurantItems.class);
+    Mockito.when(mapper.toDomain(itemUuid, input, restaurant))
+        .thenReturn(domainToUpdate);
+
+    final RestaurantItems updatedModel = Mockito.mock(RestaurantItems.class);
+    Mockito.when(repository.update(itemUuid, domainToUpdate))
+        .thenReturn(updatedModel);
+
+    final RestaurantItemsImages imageDomain = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(restaurantItemsImagesMapper.toDomain(incoming))
+        .thenReturn(imageDomain);
+
+    final RestaurantItemsImages persistedUpdated = Mockito.mock(RestaurantItemsImages.class);
+    Mockito.when(restaurantItemsImagesRepository.update(imageUuid, imageDomain))
+        .thenReturn(persistedUpdated);
+
+    final var expectedImages = List.of(persistedUpdated);
+
+    final RestaurantItemsOutput expectedOutput = Mockito.mock(RestaurantItemsOutput.class);
+    Mockito.when(mapper.toOutput(updatedModel, expectedImages))
+        .thenReturn(expectedOutput);
+
+    final var result = useCase.execute(itemUuid, input);
+
+    Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(restaurantItemsImagesRepository)
+        .update(imageUuid, imageDomain);
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+        .save(Mockito.any(), Mockito.any());
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+        .delete(Mockito.any());
+
+    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
   }
 }

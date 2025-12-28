@@ -1,6 +1,9 @@
 package com.connectfood.core.infrastructure.persistence.mappers;
 
+import java.util.List;
+
 import com.connectfood.core.domain.model.RestaurantItems;
+import com.connectfood.core.domain.model.RestaurantItemsImages;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
@@ -24,6 +27,13 @@ public class RestaurantItemsInfraMapper {
       return null;
     }
 
+    final List<RestaurantItemsImages> images = entity.getImages() == null
+        ? List.of()
+        : entity.getImages()
+        .stream()
+        .map(restaurantItemsImageMapper::toDomain)
+        .toList();
+
     return new RestaurantItems(
         entity.getUuid(),
         entity.getName(),
@@ -31,10 +41,7 @@ public class RestaurantItemsInfraMapper {
         entity.getValue(),
         RestaurantItemServiceType.valueOf(entity.getRequestType()),
         entity.getRestaurant() != null ? restaurantsMapper.toDomain(entity.getRestaurant()) : null,
-        entity.getImages()
-            .stream()
-            .map(restaurantItemsImageMapper::toDomain)
-            .toList()
+        images
     );
   }
 

@@ -3,6 +3,7 @@ package com.connectfood.core.application.restaurantitems.usecase;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesInput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
@@ -46,9 +47,10 @@ public class CreateRestaurantItemsUseCase {
 
     var model = repository.save(mapper.toDomain(input, restaurants));
 
+    final List<RestaurantItemsImagesInput> imagesInput = input.getImages() == null ? List.of() : input.getImages();
     List<RestaurantItemsImages> images = new ArrayList<>();
 
-    for (var image : input.getImages()) {
+    for (var image : imagesInput) {
       images.add(restaurantItemsImagesRepository.save(model.getUuid(), restaurantItemsImagesMapper.toDomain(image)));
     }
 

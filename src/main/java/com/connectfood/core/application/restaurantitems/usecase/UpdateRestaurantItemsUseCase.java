@@ -87,7 +87,7 @@ public class UpdateRestaurantItemsUseCase {
 
     for (var current : restaurantItems.getImages()) {
       final var currentUuid = current.getUuid();
-      if (!incomingUuids.contains(currentUuid)) {
+      if (currentUuid != null && !incomingUuids.contains(currentUuid)) {
         restaurantItemsImagesRepository.delete(currentUuid);
       }
     }
