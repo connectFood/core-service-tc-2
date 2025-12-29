@@ -6,6 +6,7 @@ import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.repository.UsersAddressRepository;
 import com.connectfood.core.domain.repository.UsersRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,8 @@ class FindUsersUseCaseTest {
   private UsersRepository repository;
   @Mock
   private UsersAppMapper mapper;
+  @Mock
+  private UsersAddressRepository usersAddressRepository;
 
   @InjectMocks
   private FindUsersUseCase useCase;
