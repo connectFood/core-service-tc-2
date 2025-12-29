@@ -1,6 +1,7 @@
 package com.connectfood.core.domain.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.domain.exception.BadRequestException;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +26,7 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final var item = new RestaurantItems(uuid, name, description, value, requestType, restaurant);
 
@@ -33,6 +36,7 @@ class RestaurantItemsTest {
     Assertions.assertEquals(value, item.getValue());
     Assertions.assertEquals(requestType, item.getRequestType());
     Assertions.assertEquals(restaurant, item.getRestaurant());
+    Assertions.assertNull(item.getImages());
   }
 
   @Test
@@ -42,7 +46,7 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final var item = new RestaurantItems(name, description, value, requestType, restaurant);
 
@@ -52,16 +56,59 @@ class RestaurantItemsTest {
     Assertions.assertEquals(value, item.getValue());
     Assertions.assertEquals(requestType, item.getRequestType());
     Assertions.assertEquals(restaurant, item.getRestaurant());
+    Assertions.assertNull(item.getImages());
   }
 
   @Test
-  @DisplayName("Não deve criar um item de restaurante sem nome e lançar uma BadRequest")
+  @DisplayName("Deve criar um item com construtor completo incluindo imagens")
+  void shouldCreateRestaurantItemsWithImages() {
+    final var uuid = UUID.randomUUID();
+    final var name = "TEST ITEM";
+    final var description = "Test item description";
+    final var value = BigDecimal.valueOf(19.90);
+    final var requestType = RestaurantItemServiceType.DELIVERY;
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final List<RestaurantItemsImages> images = List.of(Mockito.mock(RestaurantItemsImages.class));
+
+    final var item = new RestaurantItems(uuid, name, description, value, requestType, restaurant, images);
+
+    Assertions.assertEquals(uuid, item.getUuid());
+    Assertions.assertEquals(name, item.getName());
+    Assertions.assertEquals(description, item.getDescription());
+    Assertions.assertEquals(value, item.getValue());
+    Assertions.assertEquals(requestType, item.getRequestType());
+    Assertions.assertEquals(restaurant, item.getRestaurant());
+    Assertions.assertEquals(images, item.getImages());
+  }
+
+  @Test
+  @DisplayName("Deve criar um item com constructor que não recebe restaurant nem images")
+  void shouldCreateRestaurantItemsWithoutRestaurantAndImages() {
+    final var uuid = UUID.randomUUID();
+    final var name = "TEST ITEM";
+    final var description = "Test item description";
+    final var value = BigDecimal.valueOf(19.90);
+    final var requestType = RestaurantItemServiceType.DELIVERY;
+
+    final var item = new RestaurantItems(uuid, name, description, value, requestType);
+
+    Assertions.assertEquals(uuid, item.getUuid());
+    Assertions.assertEquals(name, item.getName());
+    Assertions.assertEquals(description, item.getDescription());
+    Assertions.assertEquals(value, item.getValue());
+    Assertions.assertEquals(requestType, item.getRequestType());
+    Assertions.assertNull(item.getRestaurant());
+    Assertions.assertNull(item.getImages());
+  }
+
+  @Test
+  @DisplayName("Não deve criar um item de restaurante sem nome e lançar BadRequestException")
   void shouldNotCreateRestaurantItemsWithoutNameAndThrowBadRequest() {
     final var uuid = UUID.randomUUID();
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
@@ -72,13 +119,13 @@ class RestaurantItemsTest {
   }
 
   @Test
-  @DisplayName("Não deve criar um item de restaurante com nome em branco e lançar uma BadRequest")
-  void shouldNotCreateRestaurantItemsWithNameIsBlankAndThrowBadRequest() {
+  @DisplayName("Não deve criar um item de restaurante com nome vazio e lançar BadRequestException")
+  void shouldNotCreateRestaurantItemsWithNameEmptyAndThrowBadRequest() {
     final var uuid = UUID.randomUUID();
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
@@ -89,13 +136,30 @@ class RestaurantItemsTest {
   }
 
   @Test
-  @DisplayName("Não deve criar um item de restaurante sem value e lançar uma BadRequest")
+  @DisplayName("Não deve criar um item de restaurante com nome apenas espaços e lançar BadRequestException")
+  void shouldNotCreateRestaurantItemsWithNameBlankSpacesAndThrowBadRequest() {
+    final var uuid = UUID.randomUUID();
+    final var description = "Test item description";
+    final var value = BigDecimal.valueOf(19.90);
+    final var requestType = RestaurantItemServiceType.DELIVERY;
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+
+    final var exception = Assertions.assertThrows(
+        BadRequestException.class,
+        () -> new RestaurantItems(uuid, "   ", description, value, requestType, restaurant)
+    );
+
+    Assertions.assertEquals("Name is required", exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Não deve criar um item de restaurante sem value e lançar BadRequestException")
   void shouldNotCreateRestaurantItemsWithoutValueAndThrowBadRequest() {
     final var uuid = UUID.randomUUID();
     final var name = "TEST ITEM";
     final var description = "Test item description";
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
@@ -106,13 +170,13 @@ class RestaurantItemsTest {
   }
 
   @Test
-  @DisplayName("Não deve criar um item de restaurante sem requestType e lançar uma BadRequest")
+  @DisplayName("Não deve criar um item de restaurante sem requestType e lançar BadRequestException")
   void shouldNotCreateRestaurantItemsWithoutRequestTypeAndThrowBadRequest() {
     final var uuid = UUID.randomUUID();
     final var name = "TEST ITEM";
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
-    final Restaurants restaurant = org.mockito.Mockito.mock(Restaurants.class);
+    final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
