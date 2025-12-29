@@ -1,5 +1,9 @@
 package com.connectfood.core.infrastructure.persistence.adapter;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantsRepository;
@@ -8,17 +12,12 @@ import com.connectfood.core.infrastructure.persistence.entity.RestaurantsTypeEnt
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
 import com.connectfood.core.infrastructure.persistence.mappers.RestaurantsInfraMapper;
-
 import com.connectfood.core.infrastructure.persistence.specification.RestaurantsSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
@@ -27,7 +26,8 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
   private final RestaurantsInfraMapper mapper;
   private final JpaRestaurantsTypeRepository restaurantsTypeRepository;
 
-  public RestaurantsRepositoryAdapter(JpaRestaurantsRepository repository, RestaurantsInfraMapper mapper, JpaRestaurantsTypeRepository restaurantsTypeRepository) {
+  public RestaurantsRepositoryAdapter(JpaRestaurantsRepository repository, RestaurantsInfraMapper mapper,
+      JpaRestaurantsTypeRepository restaurantsTypeRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsTypeRepository = restaurantsTypeRepository;
@@ -35,7 +35,8 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
 
   @Override
   public Restaurants save(final Restaurants restaurants) {
-    final var restaurantsType = restaurantsTypeRepository.findByUuid(restaurants.getRestaurantsType().getUuid())
+    final var restaurantsType = restaurantsTypeRepository.findByUuid(restaurants.getRestaurantsType()
+            .getUuid())
         .orElseThrow();
 
     final var entity = repository.save(mapper.toEntity(restaurants, restaurantsType));
@@ -45,16 +46,18 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
 
   @Override
   public Restaurants update(UUID uuid, Restaurants restaurants) {
-    var entity = repository.findByUuid(uuid).orElseThrow();
+    var entity = repository.findByUuid(uuid)
+        .orElseThrow();
 
     var restaurantType = restaurantsTypeRepository.findByUuid(restaurants.getRestaurantsType()
-        .getUuid())
+            .getUuid())
         .orElseThrow();
 
     RestaurantsTypeEntity restaurantsTypeEntity = entity.getRestaurantsType();
 
-    if(!restaurantsTypeEntity.getUuid()
-        .equals(restaurants.getRestaurantsType())) {
+    if (!restaurantsTypeEntity.getUuid()
+        .equals(restaurants.getRestaurantsType()
+            .getUuid())) {
       restaurantsTypeEntity = restaurantType;
     }
 
@@ -86,7 +89,8 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
     );
 
     final Specification<RestaurantsEntity> spec = Specification.allOf(RestaurantsSpecification.nameContains(name),
-        RestaurantsSpecification.hasRestaurantsTypeUuid(restaurantsTypeUuid));
+        RestaurantsSpecification.hasRestaurantsTypeUuid(restaurantsTypeUuid)
+    );
 
     final var entities = repository.findAll(spec, pageable);
 

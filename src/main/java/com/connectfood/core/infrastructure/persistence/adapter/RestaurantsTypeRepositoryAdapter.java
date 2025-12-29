@@ -69,7 +69,7 @@ public class RestaurantsTypeRepositoryAdapter implements RestaurantsTypeReposito
     final var entities = repository.findAll(spec, pageable);
     final var results = entities.getContent()
         .stream()
-        .map(entity -> mapper.toDomain(entity))
+        .map(mapper::toDomain)
         .toList();
 
     return new PageModel<>(results, entities.getTotalElements());

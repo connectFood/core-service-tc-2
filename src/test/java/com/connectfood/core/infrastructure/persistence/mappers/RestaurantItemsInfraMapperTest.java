@@ -14,7 +14,9 @@ import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -33,7 +35,7 @@ class RestaurantItemsInfraMapperTest {
   private RestaurantItemsInfraMapper mapper;
 
   @Test
-  @DisplayName("toDomain: deve retornar null quando entity for null")
+  @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
     final var result = mapper.toDomain(null);
 
@@ -42,7 +44,7 @@ class RestaurantItemsInfraMapperTest {
   }
 
   @Test
-  @DisplayName("toDomain: deve mapear entity para domain quando restaurant estiver presente")
+  @DisplayName("Deve mapear entity para domain quando restaurant estiver presente")
   void toDomainShouldMapEntityToDomainWhenRestaurantIsPresent() {
     final var uuid = UUID.randomUUID();
     final var name = "ITEM";
@@ -81,8 +83,7 @@ class RestaurantItemsInfraMapperTest {
     Assertions.assertEquals(RestaurantItemServiceType.DELIVERY, result.getRequestType());
     Assertions.assertSame(restaurantDomain, result.getRestaurant());
     Assertions.assertNotNull(result.getImages());
-    Assertions.assertTrue(result.getImages()
-        .isEmpty());
+    Assertions.assertTrue(result.getImages().isEmpty());
 
     Mockito.verify(restaurantsMapper, Mockito.times(1))
         .toDomain(restaurantEntity);
@@ -90,7 +91,7 @@ class RestaurantItemsInfraMapperTest {
   }
 
   @Test
-  @DisplayName("toDomain: deve mapear entity para domain quando restaurant for null")
+  @DisplayName("Deve mapear entity para domain quando restaurant for null")
   void toDomainShouldMapEntityToDomainWhenRestaurantIsNull() {
     final var uuid = UUID.randomUUID();
 
@@ -117,14 +118,13 @@ class RestaurantItemsInfraMapperTest {
     Assertions.assertEquals(RestaurantItemServiceType.DELIVERY, result.getRequestType());
     Assertions.assertNull(result.getRestaurant());
     Assertions.assertNotNull(result.getImages());
-    Assertions.assertTrue(result.getImages()
-        .isEmpty());
+    Assertions.assertTrue(result.getImages().isEmpty());
 
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImageMapper);
   }
 
   @Test
-  @DisplayName("toDomain: deve mapear imagens usando RestaurantItemsImageInfraMapper")
+  @DisplayName("Deve mapear imagens utilizando o mapper de imagens")
   void toDomainShouldMapImages() {
     final RestaurantItemsEntity entity = Mockito.mock(RestaurantItemsEntity.class);
     Mockito.when(entity.getUuid())
@@ -161,9 +161,7 @@ class RestaurantItemsInfraMapperTest {
     final var result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
-    Assertions.assertEquals(2, result.getImages()
-        .size()
-    );
+    Assertions.assertEquals(2, result.getImages().size());
     Assertions.assertEquals(List.of(img1, img2), result.getImages());
 
     Mockito.verify(restaurantItemsImageMapper, Mockito.times(1))
@@ -174,7 +172,7 @@ class RestaurantItemsInfraMapperTest {
   }
 
   @Test
-  @DisplayName("toEntity(model, restaurantsEntity): deve retornar null quando model for null")
+  @DisplayName("Deve retornar null quando model for null")
   void toEntityWithRestaurantsEntityShouldReturnNullWhenModelIsNull() {
     final var restaurantsEntity = Mockito.mock(RestaurantsEntity.class);
 
@@ -185,7 +183,7 @@ class RestaurantItemsInfraMapperTest {
   }
 
   @Test
-  @DisplayName("toEntity(model, restaurantsEntity): deve retornar null quando restaurantsEntity for null")
+  @DisplayName("Deve retornar null quando restaurantsEntity for null")
   void toEntityWithRestaurantsEntityShouldReturnNullWhenRestaurantsEntityIsNull() {
     final RestaurantItems model = Mockito.mock(RestaurantItems.class);
 
@@ -196,7 +194,7 @@ class RestaurantItemsInfraMapperTest {
   }
 
   @Test
-  @DisplayName("toEntity(model, restaurantsEntity): deve mapear domain para entity com restaurant informado")
+  @DisplayName("Deve mapear domain para entity com restaurant informado")
   void toEntityWithRestaurantsEntityShouldMapDomainToEntity() {
     final var uuid = UUID.randomUUID();
     final var name = "ITEM";
@@ -218,6 +216,80 @@ class RestaurantItemsInfraMapperTest {
     Assertions.assertEquals(value, result.getValue());
     Assertions.assertEquals("DELIVERY", result.getRequestType());
     Assertions.assertEquals(restaurantsEntity, result.getRestaurant());
+
+    Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImageMapper);
+  }
+
+  @Test
+  @DisplayName("Deve retornar null quando entity for null no toDomainAll")
+  void toDomainAllShouldReturnNullWhenEntityIsNull() {
+    final var result = mapper.toDomainAll(null);
+
+    Assertions.assertNull(result);
+    Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImageMapper);
+  }
+
+  @Test
+  @DisplayName("Deve mapear entity para domain corretamente no toDomainAll")
+  void toDomainAllShouldMapEntityToDomainCorrectly() {
+    final var uuid = UUID.randomUUID();
+    final var entity = Mockito.mock(RestaurantItemsEntity.class);
+
+    Mockito.when(entity.getUuid())
+        .thenReturn(uuid);
+    Mockito.when(entity.getName())
+        .thenReturn("ITEM");
+    Mockito.when(entity.getDescription())
+        .thenReturn("Desc");
+    Mockito.when(entity.getValue())
+        .thenReturn(BigDecimal.valueOf(9.90));
+    Mockito.when(entity.getRequestType())
+        .thenReturn("DELIVERY");
+
+    final RestaurantItems result = mapper.toDomainAll(entity);
+
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(uuid, result.getUuid());
+    Assertions.assertEquals("ITEM", result.getName());
+    Assertions.assertEquals("Desc", result.getDescription());
+    Assertions.assertEquals(BigDecimal.valueOf(9.90), result.getValue());
+    Assertions.assertEquals(RestaurantItemServiceType.DELIVERY, result.getRequestType());
+    Assertions.assertNull(result.getRestaurant());
+    Assertions.assertNull(result.getImages());
+
+    Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImageMapper);
+  }
+
+  @Test
+  @DisplayName("Deve atualizar entity existente com base no model")
+  void toEntityWithExistingEntityShouldUpdateFields() {
+    final var uuid = UUID.randomUUID();
+
+    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    Mockito.when(model.getName())
+        .thenReturn("NEW_NAME");
+    Mockito.when(model.getDescription())
+        .thenReturn("NEW_DESC");
+    Mockito.when(model.getValue())
+        .thenReturn(BigDecimal.valueOf(19.90));
+    Mockito.when(model.getRequestType())
+        .thenReturn(RestaurantItemServiceType.DELIVERY);
+
+    final var entity = new RestaurantItemsEntity();
+    entity.setUuid(uuid);
+    entity.setName("OLD_NAME");
+    entity.setDescription("OLD_DESC");
+    entity.setValue(BigDecimal.ZERO);
+    entity.setRequestType("PICKUP");
+
+    final var result = mapper.toEntity(model, entity);
+
+    Assertions.assertSame(entity, result);
+    Assertions.assertEquals("NEW_NAME", result.getName());
+    Assertions.assertEquals("NEW_DESC", result.getDescription());
+    Assertions.assertEquals(BigDecimal.valueOf(19.90), result.getValue());
+    Assertions.assertEquals("DELIVERY", result.getRequestType());
+    Assertions.assertEquals(uuid, result.getUuid());
 
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImageMapper);
   }
