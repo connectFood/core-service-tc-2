@@ -131,7 +131,7 @@ class AddressInfraMapperTest {
     final AddressEntity result = mapper.toEntity(model, entity);
 
     Assertions.assertSame(entity, result);
-    Assertions.assertEquals(uuidOriginal, result.getUuid()); // uuid não é alterado nesse overload
+    Assertions.assertEquals(uuidOriginal, result.getUuid());
     Assertions.assertEquals("New Street", result.getStreet());
     Assertions.assertEquals("999", result.getNumber());
     Assertions.assertEquals("New Complement", result.getComplement());
