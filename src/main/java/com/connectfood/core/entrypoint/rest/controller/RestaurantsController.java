@@ -1,10 +1,10 @@
 package com.connectfood.core.entrypoint.rest.controller;
 
-import com.connectfood.core.application.restaurants.useCase.CreateRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.useCase.FindRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.useCase.RemoveRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.useCase.SearchRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.useCase.UpdateRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
 
 import com.connectfood.core.entrypoint.rest.dto.commons.BaseResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.PageResponse;

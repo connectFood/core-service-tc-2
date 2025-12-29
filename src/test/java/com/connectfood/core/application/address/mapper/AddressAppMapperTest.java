@@ -44,7 +44,7 @@ class AddressAppMapperTest {
     final var result = mapper.toDomain(input);
 
     Assertions.assertNotNull(result);
-    Assertions.assertNotNull(result.getUuid()); // gerado no construtor do domínio
+    Assertions.assertNotNull(result.getUuid());
     Assertions.assertEquals("Rua A", result.getStreet());
     Assertions.assertEquals("123", result.getNumber());
     Assertions.assertEquals("Apto 10", result.getComplement());
