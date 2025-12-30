@@ -161,7 +161,7 @@ class RestaurantItemsAppMapperTest {
     final var uuid = UUID.randomUUID();
 
     final var model = mockModelWithoutImages(uuid, null);
-    Mockito.when(model.getImages()).thenReturn(null); // aqui o método é usado
+    Mockito.when(model.getImages()).thenReturn(null);
 
     final var result = mapper.toOutput(model);
 
