@@ -44,8 +44,8 @@ class RestaurantItemsRepositoryAdapterTest {
   private RestaurantItemsRepositoryAdapter adapter;
 
   @Test
-  @DisplayName("save: deve salvar item quando restaurant existir e retornar domain mapeado")
-  void saveShouldPersistAndReturnDomain() {
+  @DisplayName("Deve salvar o item quando o restaurant existir e retornar o domain mapeado")
+  void shouldSaveItemWhenRestaurantExistsAndReturnMappedDomain() {
     final var restaurantUuid = UUID.randomUUID();
 
     final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
@@ -87,8 +87,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("save: deve lançar exceção quando restaurant não existir")
-  void saveShouldThrowWhenRestaurantDoesNotExist() {
+  @DisplayName("Deve lançar exceção quando o restaurant não existir")
+  void shouldThrowExceptionWhenRestaurantDoesNotExist() {
     final var restaurantUuid = UUID.randomUUID();
 
     final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
@@ -112,8 +112,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("update: deve atualizar item existente e retornar domain mapeado")
-  void updateShouldUpdateAndReturnDomain() {
+  @DisplayName("Deve atualizar o item existente e retornar o domain mapeado")
+  void shouldUpdateExistingItemAndReturnMappedDomain() {
     final var uuid = UUID.randomUUID();
 
     final RestaurantItems model = Mockito.mock(RestaurantItems.class);
@@ -149,8 +149,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("findByUuid: deve retornar Optional vazio quando não existir")
-  void findByUuidShouldReturnEmptyWhenNotFound() {
+  @DisplayName("Deve retornar Optional vazio quando não existir")
+  void shouldReturnEmptyOptionalWhenNotFound() {
     final var uuid = UUID.randomUUID();
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.empty());
@@ -164,8 +164,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("findByUuid: deve retornar Optional com domain quando existir")
-  void findByUuidShouldReturnDomainWhenFound() {
+  @DisplayName("Deve retornar Optional com domain quando existir")
+  void shouldReturnOptionalWithDomainWhenFound() {
     final var uuid = UUID.randomUUID();
 
     final var entity = new RestaurantItemsEntity();
@@ -188,8 +188,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("findAll: deve retornar PageModel com lista mapeada e totalElements")
-  void findAllShouldReturnPageModel() {
+  @DisplayName("Deve retornar PageModel com lista mapeada e totalElements")
+  void shouldReturnPageModelWithMappedListAndTotalElements() {
     final var restaurantUuid = UUID.randomUUID();
     final var page = 0;
     final var size = 10;
@@ -251,8 +251,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("findAll: deve usar defaults quando sort/direction forem null")
-  void findAllShouldUseDefaultsWhenSortAndDirectionAreNull() {
+  @DisplayName("Deve usar defaults quando sort/direction forem null")
+  void shouldUseDefaultsWhenSortAndDirectionAreNull() {
     final var restaurantUuid = UUID.randomUUID();
 
     final var entitiesPage = new PageImpl<RestaurantItemsEntity>(
@@ -292,8 +292,8 @@ class RestaurantItemsRepositoryAdapterTest {
   }
 
   @Test
-  @DisplayName("delete: deve delegar deleteByUuid para o repository")
-  void deleteShouldDelegateToRepository() {
+  @DisplayName("Deve delegar deleteByUuid para o repository")
+  void shouldDelegateDeleteByUuidToRepository() {
     final var uuid = UUID.randomUUID();
 
     adapter.delete(uuid);

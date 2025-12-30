@@ -21,12 +21,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.http.HttpStatus;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,7 +53,7 @@ class RestaurantItemsControllerTest {
 
   @Test
   @DisplayName("Deve retornar PageResponse com status 200 e dados paginados")
-  void searchShouldReturnPageResponseOk() {
+  void shouldReturnPageResponseWithStatus200AndPaginatedData() {
     final var restaurantUuid = UUID.randomUUID();
     final var page = 1;
     final var size = 10;
@@ -66,15 +64,20 @@ class RestaurantItemsControllerTest {
     final RestaurantItemsOutput out2 = Mockito.mock(RestaurantItemsOutput.class);
 
     final PageOutput<List<RestaurantItemsOutput>> pageOutput = Mockito.mock(PageOutput.class);
-    Mockito.when(pageOutput.content()).thenReturn(List.of(out1, out2));
-    Mockito.when(pageOutput.total()).thenReturn(25L);
+    Mockito.when(pageOutput.content())
+        .thenReturn(List.of(out1, out2));
+    Mockito.when(pageOutput.total())
+        .thenReturn(25L);
 
-    Mockito.when(searchUseCase.execute(restaurantUuid, page, size, sort, direction)).thenReturn(pageOutput);
+    Mockito.when(searchUseCase.execute(restaurantUuid, page, size, sort, direction))
+        .thenReturn(pageOutput);
 
     final RestaurantItemsResponse res1 = Mockito.mock(RestaurantItemsResponse.class);
     final RestaurantItemsResponse res2 = Mockito.mock(RestaurantItemsResponse.class);
-    Mockito.when(mapper.toResponse(out1)).thenReturn(res1);
-    Mockito.when(mapper.toResponse(out2)).thenReturn(res2);
+    Mockito.when(mapper.toResponse(out1))
+        .thenReturn(res1);
+    Mockito.when(mapper.toResponse(out2))
+        .thenReturn(res2);
 
     final var responseEntity = controller.search(restaurantUuid, page, size, sort, direction);
 
@@ -88,23 +91,28 @@ class RestaurantItemsControllerTest {
     Assertions.assertEquals(page, body.page());
     Assertions.assertEquals(size, body.size());
 
-    Mockito.verify(searchUseCase, Mockito.times(1)).execute(restaurantUuid, page, size, sort, direction);
-    Mockito.verify(mapper, Mockito.times(1)).toResponse(out1);
-    Mockito.verify(mapper, Mockito.times(1)).toResponse(out2);
+    Mockito.verify(searchUseCase, Mockito.times(1))
+        .execute(restaurantUuid, page, size, sort, direction);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toResponse(out1);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toResponse(out2);
     Mockito.verifyNoMoreInteractions(searchUseCase, mapper);
     Mockito.verifyNoInteractions(findUseCase, createUseCase, updateUseCase, removeUseCase);
   }
 
   @Test
-  @DisplayName("Deve retornar BaseResponse com status 200")
-  void findByUuidShouldReturnBaseResponseOk() {
+  @DisplayName("Deve retornar BaseResponse com status 200 ao buscar por uuid")
+  void shouldReturnBaseResponseWithStatus200WhenFindingByUuid() {
     final var uuid = UUID.randomUUID();
 
     final RestaurantItemsOutput output = Mockito.mock(RestaurantItemsOutput.class);
-    Mockito.when(findUseCase.execute(uuid)).thenReturn(output);
+    Mockito.when(findUseCase.execute(uuid))
+        .thenReturn(output);
 
     final RestaurantItemsResponse response = Mockito.mock(RestaurantItemsResponse.class);
-    Mockito.when(mapper.toResponse(output)).thenReturn(response);
+    Mockito.when(mapper.toResponse(output))
+        .thenReturn(response);
 
     final var responseEntity = controller.findByUuid(uuid);
 
@@ -114,25 +122,30 @@ class RestaurantItemsControllerTest {
     final BaseResponse<RestaurantItemsResponse> body = responseEntity.getBody();
     Assertions.assertEquals(response, body.content());
 
-    Mockito.verify(findUseCase, Mockito.times(1)).execute(uuid);
-    Mockito.verify(mapper, Mockito.times(1)).toResponse(output);
+    Mockito.verify(findUseCase, Mockito.times(1))
+        .execute(uuid);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toResponse(output);
     Mockito.verifyNoMoreInteractions(findUseCase, mapper);
     Mockito.verifyNoInteractions(searchUseCase, createUseCase, updateUseCase, removeUseCase);
   }
 
   @Test
-  @DisplayName("Deve retornar BaseResponse com status 201")
-  void createShouldReturnCreated() {
+  @DisplayName("Deve retornar BaseResponse com status 201 ao criar")
+  void shouldReturnBaseResponseWithStatus201WhenCreating() {
     final RestaurantItemsRequest request = Mockito.mock(RestaurantItemsRequest.class);
 
     final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
-    Mockito.when(mapper.toInput(request)).thenReturn(input);
+    Mockito.when(mapper.toInput(request))
+        .thenReturn(input);
 
     final RestaurantItemsOutput output = Mockito.mock(RestaurantItemsOutput.class);
-    Mockito.when(createUseCase.execute(input)).thenReturn(output);
+    Mockito.when(createUseCase.execute(input))
+        .thenReturn(output);
 
     final RestaurantItemsResponse response = Mockito.mock(RestaurantItemsResponse.class);
-    Mockito.when(mapper.toResponse(output)).thenReturn(response);
+    Mockito.when(mapper.toResponse(output))
+        .thenReturn(response);
 
     final var responseEntity = controller.create(request);
 
@@ -142,28 +155,34 @@ class RestaurantItemsControllerTest {
     final BaseResponse<RestaurantItemsResponse> body = responseEntity.getBody();
     Assertions.assertEquals(response, body.content());
 
-    Mockito.verify(mapper, Mockito.times(1)).toInput(request);
-    Mockito.verify(createUseCase, Mockito.times(1)).execute(input);
-    Mockito.verify(mapper, Mockito.times(1)).toResponse(output);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toInput(request);
+    Mockito.verify(createUseCase, Mockito.times(1))
+        .execute(input);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toResponse(output);
 
     Mockito.verifyNoMoreInteractions(createUseCase, mapper);
     Mockito.verifyNoInteractions(searchUseCase, findUseCase, updateUseCase, removeUseCase);
   }
 
   @Test
-  @DisplayName("Deve retornar BaseResponse com status 200")
-  void updateShouldReturnOk() {
+  @DisplayName("Deve retornar BaseResponse com status 200 ao atualizar")
+  void shouldReturnBaseResponseWithStatus200WhenUpdating() {
     final var uuid = UUID.randomUUID();
     final RestaurantItemsRequest request = Mockito.mock(RestaurantItemsRequest.class);
 
     final RestaurantItemsInput input = Mockito.mock(RestaurantItemsInput.class);
-    Mockito.when(mapper.toInput(request)).thenReturn(input);
+    Mockito.when(mapper.toInput(request))
+        .thenReturn(input);
 
     final RestaurantItemsOutput output = Mockito.mock(RestaurantItemsOutput.class);
-    Mockito.when(updateUseCase.execute(uuid, input)).thenReturn(output);
+    Mockito.when(updateUseCase.execute(uuid, input))
+        .thenReturn(output);
 
     final RestaurantItemsResponse response = Mockito.mock(RestaurantItemsResponse.class);
-    Mockito.when(mapper.toResponse(output)).thenReturn(response);
+    Mockito.when(mapper.toResponse(output))
+        .thenReturn(response);
 
     final var responseEntity = controller.update(uuid, request);
 
@@ -173,17 +192,20 @@ class RestaurantItemsControllerTest {
     final BaseResponse<RestaurantItemsResponse> body = responseEntity.getBody();
     Assertions.assertEquals(response, body.content());
 
-    Mockito.verify(mapper, Mockito.times(1)).toInput(request);
-    Mockito.verify(updateUseCase, Mockito.times(1)).execute(uuid, input);
-    Mockito.verify(mapper, Mockito.times(1)).toResponse(output);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toInput(request);
+    Mockito.verify(updateUseCase, Mockito.times(1))
+        .execute(uuid, input);
+    Mockito.verify(mapper, Mockito.times(1))
+        .toResponse(output);
 
     Mockito.verifyNoMoreInteractions(updateUseCase, mapper);
     Mockito.verifyNoInteractions(searchUseCase, findUseCase, createUseCase, removeUseCase);
   }
 
   @Test
-  @DisplayName("Deve retornar 204 e executar remoção")
-  void deleteShouldReturnNoContent() {
+  @DisplayName("Deve retornar status 204 e executar a remoção")
+  void shouldReturnNoContentAndExecuteRemovalWhenDeleting() {
     final var uuid = UUID.randomUUID();
 
     final var responseEntity = controller.delete(uuid);
@@ -191,7 +213,8 @@ class RestaurantItemsControllerTest {
     Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
     Assertions.assertNull(responseEntity.getBody());
 
-    Mockito.verify(removeUseCase, Mockito.times(1)).execute(uuid);
+    Mockito.verify(removeUseCase, Mockito.times(1))
+        .execute(uuid);
     Mockito.verifyNoMoreInteractions(removeUseCase);
     Mockito.verifyNoInteractions(searchUseCase, findUseCase, createUseCase, updateUseCase, mapper);
   }

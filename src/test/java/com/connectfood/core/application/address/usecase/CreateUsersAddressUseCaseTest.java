@@ -46,8 +46,8 @@ class CreateUsersAddressUseCaseTest {
   private CreateUsersAddressUseCase useCase;
 
   @Test
-  @DisplayName("Execute: deve lançar NotFoundException quando usuário não for encontrado")
-  void executeShouldThrowNotFoundExceptionWhenUserNotFound() {
+  @DisplayName("Não deve criar endereço quando o usuário não for encontrado")
+  void shouldThrowNotFoundExceptionWhenUserIsNotFound() {
     final var userUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
@@ -65,8 +65,8 @@ class CreateUsersAddressUseCaseTest {
   }
 
   @Test
-  @DisplayName("Execute: deve criar endereço, vincular ao usuário e retornar output")
-  void executeShouldCreateUsersAddressAndReturnOutput() {
+  @DisplayName("Deve criar endereço, vincular ao usuário e retornar o output")
+  void shouldCreateUsersAddressAndReturnOutput() {
     final var userUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
