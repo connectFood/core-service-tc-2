@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -39,8 +38,8 @@ class RestaurantItemsEntryMapperTest {
   private RestaurantItemsEntryMapper mapper;
 
   @Test
-  @DisplayName("toInput: deve retornar null quando request for null")
-  void toInputShouldReturnNullWhenRequestIsNull() {
+  @DisplayName("Deve retornar null quando o request for null")
+  void shouldReturnNullWhenRequestIsNull() {
     final var result = mapper.toInput(null);
 
     Assertions.assertNull(result);
@@ -48,8 +47,8 @@ class RestaurantItemsEntryMapperTest {
   }
 
   @Test
-  @DisplayName("toInput: deve mapear RestaurantItemsRequest para RestaurantItemsInput com lista vazia de imagens")
-  void toInputShouldMapRequestToInputWithEmptyImages() {
+  @DisplayName("Deve mapear o request para input com lista vazia de imagens")
+  void shouldMapRequestToInputWithEmptyImages() {
     final var restaurantUuid = UUID.randomUUID();
 
     final var request = Mockito.mock(RestaurantItemsRequest.class);
@@ -76,8 +75,8 @@ class RestaurantItemsEntryMapperTest {
   }
 
   @Test
-  @DisplayName("Deve mapear imagens usando RestaurantItemsImagesEntryMapper")
-  void shouldMapImages() {
+  @DisplayName("Deve mapear as imagens utilizando o mapper de imagens")
+  void shouldMapImagesUsingImagesMapper() {
     final var restaurantUuid = UUID.randomUUID();
 
     final RestaurantItemsImagesRequest imageRequest = Mockito.mock(RestaurantItemsImagesRequest.class);
@@ -104,7 +103,7 @@ class RestaurantItemsEntryMapperTest {
   }
 
   @Test
-  @DisplayName("Deve retornar null quando output for null")
+  @DisplayName("Deve retornar null quando o output for null")
   void shouldReturnNullWhenOutputIsNull() {
     final var result = mapper.toResponse(null);
 
@@ -113,7 +112,7 @@ class RestaurantItemsEntryMapperTest {
   }
 
   @Test
-  @DisplayName("Deve mapear RestaurantItemsOutput para RestaurantItemsResponse com restaurante e imagens")
+  @DisplayName("Deve mapear o output para response com restaurante e imagens")
   void shouldMapOutputToResponseWithRestaurantAndImages() {
     final var restaurantOutput = Mockito.mock(RestaurantsOutput.class);
     final var restaurantResponse = Mockito.mock(RestaurantsResponse.class);
@@ -153,7 +152,7 @@ class RestaurantItemsEntryMapperTest {
   }
 
   @Test
-  @DisplayName("Deve mapear RestaurantItemsOutput para RestaurantItemsResponse sem restaurante e sem imagens")
+  @DisplayName("Deve mapear o output para response sem restaurante e sem imagens")
   void shouldMapOutputToResponseWithoutRestaurantAndImages() {
     final var uuid = UUID.randomUUID();
 

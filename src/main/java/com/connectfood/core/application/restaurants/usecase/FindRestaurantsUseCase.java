@@ -1,4 +1,4 @@
-package com.connectfood.core.application.restaurants.useCase;
+package com.connectfood.core.application.restaurants.usecase;
 
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;

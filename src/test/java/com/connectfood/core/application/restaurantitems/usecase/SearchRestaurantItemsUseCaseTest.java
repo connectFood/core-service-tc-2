@@ -9,7 +9,7 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutpu
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.Restaurants; // ajuste se o nome do model for diferente
+import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantItemsRepository;
 import com.connectfood.core.domain.repository.RestaurantsRepository;

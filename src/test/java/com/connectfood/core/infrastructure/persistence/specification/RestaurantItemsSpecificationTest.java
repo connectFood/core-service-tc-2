@@ -22,7 +22,7 @@ import jakarta.persistence.criteria.Root;
 class RestaurantItemsSpecificationTest {
 
   @Test
-  @DisplayName("hasRestaurantUuid: deve retornar null quando restaurantUuid for null")
+  @DisplayName("Deve retornar null quando o restaurantUuid for null")
   void shouldReturnNullWhenRestaurantUuidIsNull() {
     final Specification<RestaurantItemsEntity> spec =
         RestaurantItemsSpecification.hasRestaurantUuid(null);
@@ -31,7 +31,7 @@ class RestaurantItemsSpecificationTest {
   }
 
   @Test
-  @DisplayName("hasRestaurantUuid: deve criar predicate corretamente quando restaurantUuid for informado")
+  @DisplayName("Deve criar o predicate corretamente quando o restaurantUuid for informado")
   @SuppressWarnings("unchecked")
   void shouldCreatePredicateWhenRestaurantUuidIsProvided() {
     final var restaurantUuid = UUID.randomUUID();
