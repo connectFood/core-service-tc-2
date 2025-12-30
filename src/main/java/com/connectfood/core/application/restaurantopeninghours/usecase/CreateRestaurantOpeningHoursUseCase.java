@@ -30,7 +30,7 @@ public class CreateRestaurantOpeningHoursUseCase {
   public RestaurantOpeningHoursOutput execute(final RestaurantOpeningHoursInput input) {
     final var restaurants =
         restaurantsRepository.findByUuid(input.getRestaurantUuid())
-            .orElseThrow(() -> new NotFoundException("Restaurant opening hours not found"));
+            .orElseThrow(() -> new NotFoundException("Restaurant not found"));
 
     var model = repository.save(mapper.toDomain(input, restaurants));
 

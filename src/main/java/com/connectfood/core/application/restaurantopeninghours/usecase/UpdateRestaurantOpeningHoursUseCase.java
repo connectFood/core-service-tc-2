@@ -27,7 +27,7 @@ public class UpdateRestaurantOpeningHoursUseCase {
   @Transactional
   public RestaurantOpeningHoursOutput execute(final UUID uuid, final RestaurantOpeningHoursInput input) {
     final var model = repository.findByUuid(uuid)
-        .orElseThrow(() -> new NotFoundException("Restaurant Items not found"));
+        .orElseThrow(() -> new NotFoundException("Restaurant opening hours not found"));
 
     final var modelUpdated = repository.update(uuid, mapper.toDomain(uuid, input, model.getRestaurant()));
 

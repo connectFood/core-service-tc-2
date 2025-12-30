@@ -28,7 +28,7 @@ public class SearchRestaurantTypeUseCase {
 
     final var results = restaurantsTypes.content()
         .stream()
-        .map(entity -> mapper.toOutput(entity))
+        .map(mapper::toOutput)
         .toList();
 
     return new PageOutput<>(results, restaurantsTypes.total());
