@@ -1,6 +1,6 @@
-package com.connectfood.core.application.restaurantAddress.mapper;
+package com.connectfood.core.application.address.mapper;
 
-import com.connectfood.core.application.restaurantAddress.dto.RestaurantsAddressOutput;
+import com.connectfood.core.application.address.dto.RestaurantsAddressOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 
 import com.connectfood.core.domain.model.Address;

@@ -15,7 +15,7 @@ public interface RestaurantsAddressRepository {
 
   Optional<RestaurantsAddress> findByRestaurantsUuid(UUID uuid);
 
-  PageModel<List<RestaurantsAddress>> findAll(UUID restaurantsUuid, UUID addressUuid, Integer page, Integer size,
+  PageModel<List<RestaurantsAddress>> findAll(UUID restaurantsUuid, Integer page, Integer size,
       String sort, String direction);
 
   void delete(UUID uuid);

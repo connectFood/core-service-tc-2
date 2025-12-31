@@ -1,4 +1,4 @@
-package com.connectfood.core.application.restaurantAddress.dto;
+package com.connectfood.core.application.address.dto;
 
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 

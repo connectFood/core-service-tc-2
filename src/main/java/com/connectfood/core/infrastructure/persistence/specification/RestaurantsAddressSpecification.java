@@ -20,14 +20,4 @@ public class RestaurantsAddressSpecification {
         .get("uuid"), restaurantsUuid
     ));
   }
-
-  public static Specification<RestaurantsAddressEntity> hasAddressUuid(final UUID addressUuid) {
-    if(addressUuid == null) {
-      return null;
-    }
-
-    return ((root, query, cb) -> cb.equal(root.get("address")
-        .get("uuid"), addressUuid
-    ));
-  }
 }

@@ -96,7 +96,6 @@ public class RestaurantsAddressRepositoryAdapter implements RestaurantsAddressRe
   @Override
   public PageModel<List<RestaurantsAddress>> findAll(
       final UUID restaurantsUuid,
-      final UUID addressUuid,
       final Integer page,
       final Integer size,
       final String sort,
@@ -109,8 +108,7 @@ public class RestaurantsAddressRepositoryAdapter implements RestaurantsAddressRe
     );
 
     final Specification<RestaurantsAddressEntity> spec =
-        Specification.allOf(RestaurantsAddressSpecification.hasRestaurantsUuid(restaurantsUuid),
-            RestaurantsAddressSpecification.hasAddressUuid(addressUuid));
+        Specification.allOf(RestaurantsAddressSpecification.hasRestaurantsUuid(restaurantsUuid));
 
     final var entities = repository.findAll(spec, pageable);
 
@@ -128,5 +126,5 @@ public class RestaurantsAddressRepositoryAdapter implements RestaurantsAddressRe
   }
 }
 
-
+// AINDA TENHO DUVIDAS SOBRE O FINDALL() E UPDATE()
 

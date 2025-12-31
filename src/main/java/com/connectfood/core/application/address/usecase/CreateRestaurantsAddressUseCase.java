@@ -1,9 +1,9 @@
-package com.connectfood.core.application.restaurantAddress.useCase;
+package com.connectfood.core.application.address.usecase;
 
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
-import com.connectfood.core.application.restaurantAddress.dto.RestaurantsAddressOutput;
-import com.connectfood.core.application.restaurantAddress.mapper.RestaurantsAddressAppMapper;
+import com.connectfood.core.application.address.mapper.RestaurantsAddressAppMapper;
+import com.connectfood.core.application.address.dto.RestaurantsAddressOutput;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.AddressRepository;
 
