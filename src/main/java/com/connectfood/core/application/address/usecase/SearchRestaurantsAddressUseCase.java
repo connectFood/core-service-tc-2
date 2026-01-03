@@ -7,6 +7,7 @@ import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,13 +25,17 @@ public class SearchRestaurantsAddressUseCase {
 
   @Transactional(readOnly = true)
   public PageOutput<List<RestaurantsAddressOutput>> execute(
+      final String city,
+      final String state,
+      final String country,
       final UUID restaurantsUuid,
       final Integer page,
       final Integer size,
       final String sort,
       final String direction
   ) {
-    final var restaurantsAddress = repository.findAll(restaurantsUuid, page, size, sort, direction);
+    final var restaurantsAddress = repository.findAll(city, state, country, restaurantsUuid, page, size, sort,
+        direction);
 
     final var results = restaurantsAddress.content()
         .stream()

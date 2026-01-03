@@ -38,16 +38,13 @@ public class UpdateRestaurantsAddressUseCase {
   @Transactional
   public RestaurantsAddressOutput execute(
       final UUID uuid,
-      final RestaurantsAddressInput input,
       final AddressInput addressInput
   ) {
     final var restaurantsAddress = repository.findByRestaurantsUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurants Address Not Found"));
 
-    Address address = restaurantsAddress.getAddress();
-
-    final var addressUpdated = addressRepository.update(address.getUuid(),
-        addressMapper.toDomain(address.getUuid(), addressInput));
+    final var addressUpdated = addressRepository.update(uuid,
+        addressMapper.toDomain(uuid, addressInput));
 
     return mapper.toOutput(addressUpdated);
   }
