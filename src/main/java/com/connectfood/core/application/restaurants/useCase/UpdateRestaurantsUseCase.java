@@ -32,12 +32,12 @@ public class UpdateRestaurantsUseCase {
 
   @Transactional
   public RestaurantsOutput execute(final UUID uuid, final RestaurantsInput input) {
-    final var restauants = repository.findByUuid(uuid)
+    final var restaurants = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurants not found"));
 
-    RestaurantsType restaurantsType = restauants.getRestaurantsType();
+    RestaurantsType restaurantsType = restaurants.getRestaurantsType();
 
-    if(!restauants.getRestaurantsType()
+    if(!restaurants.getRestaurantsType()
         .getUuid()
         .equals(input.getRestaurantsTypeUuid())) {
       restaurantsType = restaurantsTypeRepository.findById(input.getRestaurantsTypeUuid())
