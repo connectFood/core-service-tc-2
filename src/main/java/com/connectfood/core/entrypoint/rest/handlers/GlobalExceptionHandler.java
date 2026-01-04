@@ -68,12 +68,12 @@ public class GlobalExceptionHandler {
         "Invalid input data", HttpStatus.BAD_REQUEST, request.getRequestURI(), errors);
   }
 
-//  @ExceptionHandler(Exception.class)
-//  public ResponseEntity<ProblemDetailsResponse> handleGeneric(
-//      final Exception exception, final HttpServletRequest request) {
-//    return buildApiErrorResponse(
-//        exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI());
-//  }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ProblemDetailsResponse> handleGeneric(
+      final Exception exception, final HttpServletRequest request) {
+    return buildApiErrorResponse(
+        exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI());
+  }
 
   private ResponseEntity<ProblemDetailsResponse> buildApiErrorResponse(
       final String message, final HttpStatus status, final String path) {
