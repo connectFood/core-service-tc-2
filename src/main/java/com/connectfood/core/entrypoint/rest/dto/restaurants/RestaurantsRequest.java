@@ -1,5 +1,11 @@
 package com.connectfood.core.entrypoint.rest.dto.restaurants;
 
+import java.util.List;
+import java.util.UUID;
+
+import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
+import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursRequest;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,8 +13,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -32,4 +36,17 @@ public class RestaurantsRequest {
   )
   @NotNull(message = "Restaurant type UUID is required")
   private UUID restaurantsTypeUuid;
+
+
+  @Schema(
+      description = "List of opening hours for the restaurant, including days of the week and time ranges",
+      requiredMode = Schema.RequiredMode.REQUIRED
+  )
+  private List<RestaurantOpeningHoursRequest> openingHours;
+
+  @Schema(
+      description = "Address information of the restaurant, including street, city, state and postal code",
+      requiredMode = Schema.RequiredMode.REQUIRED
+  )
+  private AddressRequest address;
 }

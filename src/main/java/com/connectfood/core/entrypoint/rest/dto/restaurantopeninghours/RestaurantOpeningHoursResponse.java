@@ -49,10 +49,4 @@ public class RestaurantOpeningHoursResponse {
       example = "18:00:00"
   )
   private LocalTime endTime;
-
-  @Schema(
-      description = "Restaurant associated with the opening hours",
-      implementation = RestaurantsResponse.class
-  )
-  private RestaurantsResponse restaurant;
 }

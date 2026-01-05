@@ -1,15 +1,17 @@
 package com.connectfood.core.entrypoint.rest.dto.restaurants;
 
-import com.connectfood.core.entrypoint.rest.dto.restaurantstype.RestaurantsTypeResponse;
+import java.util.List;
+import java.util.UUID;
 
+import com.connectfood.core.entrypoint.rest.dto.address.AddressResponse;
+import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;
+import com.connectfood.core.entrypoint.rest.dto.restaurantstype.RestaurantsTypeResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -35,4 +37,16 @@ public class RestaurantsResponse {
       implementation = RestaurantsTypeResponse.class
   )
   private RestaurantsTypeResponse restaurantsType;
+
+  @Schema(
+      description = "List of opening hours configured for the restaurant, grouped by day of the week",
+      requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
+  private List<RestaurantOpeningHoursResponse> openingHours;
+
+  @Schema(
+      description = "Address details of the restaurant",
+      requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
+  private AddressResponse address;
 }

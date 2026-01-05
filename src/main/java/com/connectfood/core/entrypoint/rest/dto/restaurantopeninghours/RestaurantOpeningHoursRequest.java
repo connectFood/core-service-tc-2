@@ -2,7 +2,6 @@ package com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -46,12 +45,4 @@ public class RestaurantOpeningHoursRequest {
   )
   @NotNull(message = "End time is required")
   private LocalTime endTime;
-
-  @Schema(
-      description = "UUID of the restaurant",
-      example = "c1c6b2d2-3b45-4f4e-9c4c-4c8b0c8c5a12",
-      requiredMode = Schema.RequiredMode.REQUIRED
-  )
-  @NotNull(message = "Restaurant UUID is required")
-  private UUID restaurantUuid;
 }

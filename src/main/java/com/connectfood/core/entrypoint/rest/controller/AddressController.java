@@ -9,7 +9,6 @@ import com.connectfood.core.application.address.usecase.FindRestaurantsAddressUs
 import com.connectfood.core.application.address.usecase.RemoveRestaurantsAddressUseCase;
 import com.connectfood.core.application.address.usecase.SearchRestaurantsAddressUseCase;
 import com.connectfood.core.application.address.usecase.UpdateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.useCase.CreateRestaurantsUseCase;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
 import com.connectfood.core.entrypoint.rest.dto.address.RestaurantsAddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.address.UsersAddressResponse;
@@ -122,7 +121,8 @@ public class AddressController {
       @RequestParam(required = false) final String direction
   ) {
     final var result = searchRestaurantsAddressUseCase.execute(city, state, country, restaurantsUuid, page, size,
-        sort, direction);
+        sort, direction
+    );
 
     final var response = result.content()
         .stream()
@@ -172,6 +172,7 @@ public class AddressController {
   public ResponseEntity<Void> delete(@PathVariable("uuid") final UUID uuid) {
 
     removeRestaurantsAddressUseCase.execute(uuid);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.noContent()
+        .build();
   }
 }

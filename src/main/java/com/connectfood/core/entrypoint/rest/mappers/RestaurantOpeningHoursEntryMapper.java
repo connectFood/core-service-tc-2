@@ -10,10 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestaurantOpeningHoursEntryMapper {
 
-  private final RestaurantsEntryMapper restaurantsMapper;
-
-  public RestaurantOpeningHoursEntryMapper(final RestaurantsEntryMapper restaurantsMapper) {
-    this.restaurantsMapper = restaurantsMapper;
+  public RestaurantOpeningHoursEntryMapper() {
   }
 
   public RestaurantOpeningHoursInput toInput(final RestaurantOpeningHoursRequest request) {
@@ -25,7 +22,7 @@ public class RestaurantOpeningHoursEntryMapper {
         request.getDayOfWeek(),
         request.getStartTime(),
         request.getEndTime(),
-        request.getRestaurantUuid()
+        null
     );
   }
 
@@ -38,8 +35,7 @@ public class RestaurantOpeningHoursEntryMapper {
         output.getUuid(),
         output.getDayOfWeek(),
         output.getStartTime(),
-        output.getEndTime(),
-        output.getRestaurant() != null ? restaurantsMapper.toResponse(output.getRestaurant()) : null
+        output.getEndTime()
     );
   }
 }
