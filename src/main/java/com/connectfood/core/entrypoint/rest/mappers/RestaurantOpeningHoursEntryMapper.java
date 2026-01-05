@@ -21,8 +21,7 @@ public class RestaurantOpeningHoursEntryMapper {
     return new RestaurantOpeningHoursInput(
         request.getDayOfWeek(),
         request.getStartTime(),
-        request.getEndTime(),
-        null
+        request.getEndTime()
     );
   }
 

@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestaurantOpeningHoursInfraMapper {
 
-  private final RestaurantsInfraMapper restaurantsMapper;
-
-  public RestaurantOpeningHoursInfraMapper(final RestaurantsInfraMapper restaurantsMapper) {
-    this.restaurantsMapper = restaurantsMapper;
+  public RestaurantOpeningHoursInfraMapper() {
   }
 
   public RestaurantOpeningHours toDomain(final RestaurantOpeningHoursEntity entity) {
@@ -24,8 +21,7 @@ public class RestaurantOpeningHoursInfraMapper {
         entity.getUuid(),
         entity.getDayOfWeek(),
         entity.getStartTime(),
-        entity.getEndTime(),
-        entity.getRestaurant() != null ? restaurantsMapper.toDomain(entity.getRestaurant()) : null
+        entity.getEndTime()
     );
   }
 

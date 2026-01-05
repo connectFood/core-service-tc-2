@@ -1,9 +1,7 @@
 package com.connectfood.core.infrastructure.persistence.mappers;
 
 import com.connectfood.core.domain.model.Restaurants;
-
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
-
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsTypeEntity;
 
 import org.springframework.stereotype.Component;
@@ -12,25 +10,37 @@ import org.springframework.stereotype.Component;
 public class RestaurantsInfraMapper {
 
   private final RestaurantsTypeInfraMapper restaurantsTypeMapper;
+  private final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper;
+  private final AddressInfraMapper addressMapper;
 
-  public RestaurantsInfraMapper(final RestaurantsTypeInfraMapper restaurantsTypeMapper) {
+  public RestaurantsInfraMapper(
+      final RestaurantsTypeInfraMapper restaurantsTypeMapper,
+      final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper,
+      final AddressInfraMapper addressMapper) {
     this.restaurantsTypeMapper = restaurantsTypeMapper;
+    this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
+    this.addressMapper = addressMapper;
   }
 
   public Restaurants toDomain(final RestaurantsEntity entity) {
-    if(entity == null) {
+    if (entity == null) {
       return null;
     }
 
     return new Restaurants(
         entity.getUuid(),
         entity.getName(),
-        entity.getRestaurantsType() != null ? restaurantsTypeMapper.toDomain(entity.getRestaurantsType()) : null
+        entity.getRestaurantsType() != null ? restaurantsTypeMapper.toDomain(entity.getRestaurantsType()) : null,
+        entity.getOpeningHours()
+            .stream()
+            .map(restaurantOpeningHoursMapper::toDomain)
+            .toList(),
+        entity.getAddress() != null ? addressMapper.toDomain(entity.getAddress()) : null
     );
   }
 
   public RestaurantsEntity toEntity(final Restaurants model, final RestaurantsTypeEntity restaurantsTypeEntity) {
-    if(model == null) {
+    if (model == null) {
       return null;
     }
 

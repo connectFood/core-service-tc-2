@@ -1,24 +1,19 @@
 package com.connectfood.core.application.address.usecase;
 
 import com.connectfood.core.application.address.dto.AddressInput;
+import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.address.mapper.RestaurantsAddressAppMapper;
-import com.connectfood.core.application.address.dto.RestaurantsAddressOutput;
-import com.connectfood.core.domain.exception.NotFoundException;
+import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.repository.AddressRepository;
-
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Component
 public class CreateRestaurantsAddressUseCase {
 
-  private final RestaurantsRepository restaurantsRepository;
   private final AddressRepository repository;
   private final AddressAppMapper mapper;
   private final RestaurantsAddressRepository restaurantsAddressRepository;
@@ -26,13 +21,11 @@ public class CreateRestaurantsAddressUseCase {
 
 
   public CreateRestaurantsAddressUseCase(
-      final RestaurantsRepository restaurantsRepository,
       final AddressRepository repository,
       final AddressAppMapper mapper,
       final RestaurantsAddressRepository restaurantsAddressRepository,
       final RestaurantsAddressAppMapper restaurantsAddressMapper
   ) {
-    this.restaurantsRepository = restaurantsRepository;
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsAddressRepository = restaurantsAddressRepository;
@@ -40,14 +33,12 @@ public class CreateRestaurantsAddressUseCase {
   }
 
   @Transactional
-  public RestaurantsAddressOutput execute(final UUID restaurantUuid, final AddressInput input) {
-    final var restaurants = restaurantsRepository.findByUuid(restaurantUuid)
-        .orElseThrow(() -> new NotFoundException("Restaurant not found"));
-
+  public AddressOutput execute(final Restaurants restaurants, final AddressInput input) {
     final var address = repository.save(mapper.toDomain(input));
     final var restaurantsAddress = restaurantsAddressRepository.save(restaurantsAddressMapper.toDomain(restaurants,
-        address));
+        address
+    ));
 
-    return restaurantsAddressMapper.toOutput(restaurantsAddress);
+    return mapper.toOutput(restaurantsAddress.getAddress());
   }
 }

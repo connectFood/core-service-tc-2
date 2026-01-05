@@ -5,11 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.commons.PageModel;
 
 public interface RestaurantOpeningHoursRepository {
 
-  RestaurantOpeningHours save(RestaurantOpeningHours model);
+  RestaurantOpeningHours save(RestaurantOpeningHours model, final UUID restaurantUuid);
 
   RestaurantOpeningHours update(UUID uuid, RestaurantOpeningHours model);
 

@@ -1,12 +1,19 @@
 package com.connectfood.core.infrastructure.persistence.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.connectfood.core.infrastructure.persistence.entity.commons.BaseEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +32,13 @@ public class RestaurantsEntity extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "restaurant_type_id", nullable = false)
   private RestaurantsTypeEntity restaurantsType;
+
+  @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<RestaurantOpeningHoursEntity> openingHours = new HashSet<>();
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "restaurant_address",
+      joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id"))
+  private AddressEntity address;
 }

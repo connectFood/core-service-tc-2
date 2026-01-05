@@ -3,7 +3,6 @@ package com.connectfood.core.entrypoint.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantopeninghours.usecase.CreateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.FindRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.RemoveRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.SearchRestaurantOpeningHoursUseCase;
@@ -14,12 +13,10 @@ import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.Restauran
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;
 import com.connectfood.core.entrypoint.rest.mappers.RestaurantOpeningHoursEntryMapper;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +35,6 @@ public class RestaurantOpeningHoursController {
 
   private final SearchRestaurantOpeningHoursUseCase searchUseCase;
   private final FindRestaurantOpeningHoursUseCase findUseCase;
-  private final CreateRestaurantOpeningHoursUseCase createUseCase;
   private final UpdateRestaurantOpeningHoursUseCase updateUseCase;
   private final RemoveRestaurantOpeningHoursUseCase removeUseCase;
   private final RestaurantOpeningHoursEntryMapper mapper;
@@ -46,14 +42,12 @@ public class RestaurantOpeningHoursController {
   public RestaurantOpeningHoursController(
       final SearchRestaurantOpeningHoursUseCase searchUseCase,
       final FindRestaurantOpeningHoursUseCase findUseCase,
-      final CreateRestaurantOpeningHoursUseCase createUseCase,
       final UpdateRestaurantOpeningHoursUseCase updateUseCase,
       final RemoveRestaurantOpeningHoursUseCase removeUseCase,
       final RestaurantOpeningHoursEntryMapper mapper
   ) {
     this.searchUseCase = searchUseCase;
     this.findUseCase = findUseCase;
-    this.createUseCase = createUseCase;
     this.updateUseCase = updateUseCase;
     this.removeUseCase = removeUseCase;
     this.mapper = mapper;
@@ -92,20 +86,6 @@ public class RestaurantOpeningHoursController {
     final var response = mapper.toResponse(result);
 
     return ResponseEntity.ok()
-        .body(new BaseResponse<>(response));
-  }
-
-  @PostMapping
-  @Operation(
-      summary = "Create a new restaurant opening hours",
-      description = "Creates a new restaurant opening hours and returns the created resource"
-  )
-  public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> create(
-      @Valid @RequestBody final RestaurantOpeningHoursRequest request) {
-    final var result = createUseCase.execute(mapper.toInput(request));
-    final var response = mapper.toResponse(result);
-
-    return ResponseEntity.status(HttpStatus.CREATED)
         .body(new BaseResponse<>(response));
   }
 

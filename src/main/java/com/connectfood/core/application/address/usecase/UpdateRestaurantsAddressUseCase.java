@@ -1,19 +1,17 @@
 package com.connectfood.core.application.address.usecase;
 
+import java.util.UUID;
+
 import com.connectfood.core.application.address.dto.AddressInput;
-import com.connectfood.core.application.address.dto.RestaurantsAddressInput;
-import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.address.dto.RestaurantsAddressOutput;
+import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.address.mapper.RestaurantsAddressAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Component
 public class UpdateRestaurantsAddressUseCase {
@@ -44,8 +42,9 @@ public class UpdateRestaurantsAddressUseCase {
         .orElseThrow(() -> new NotFoundException("Restaurants Address Not Found"));
 
     final var addressUpdated = addressRepository.update(uuid,
-        addressMapper.toDomain(uuid, addressInput));
+        addressMapper.toDomain(uuid, addressInput)
+    );
 
-    return mapper.toOutput(addressUpdated);
+    return null;
   }
 }

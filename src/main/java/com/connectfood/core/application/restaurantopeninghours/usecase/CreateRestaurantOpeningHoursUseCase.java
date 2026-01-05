@@ -1,9 +1,11 @@
 package com.connectfood.core.application.restaurantopeninghours.usecase;
 
+import java.util.UUID;
+
 import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.application.restaurantopeninghours.mapper.RestaurantOpeningHoursAppMapper;
-import com.connectfood.core.domain.exception.NotFoundException;
+import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
 import com.connectfood.core.domain.repository.RestaurantsRepository;
 
@@ -15,24 +17,17 @@ public class CreateRestaurantOpeningHoursUseCase {
 
   private final RestaurantOpeningHoursRepository repository;
   private final RestaurantOpeningHoursAppMapper mapper;
-  private final RestaurantsRepository restaurantsRepository;
 
   public CreateRestaurantOpeningHoursUseCase(
       final RestaurantOpeningHoursRepository repository,
-      final RestaurantOpeningHoursAppMapper mapper,
-      final RestaurantsRepository restaurantsRepository) {
+      final RestaurantOpeningHoursAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
-    this.restaurantsRepository = restaurantsRepository;
   }
 
   @Transactional
-  public RestaurantOpeningHoursOutput execute(final RestaurantOpeningHoursInput input) {
-    final var restaurants =
-        restaurantsRepository.findByUuid(input.getRestaurantUuid())
-            .orElseThrow(() -> new NotFoundException("Restaurant not found"));
-
-    var model = repository.save(mapper.toDomain(input, restaurants));
+  public RestaurantOpeningHoursOutput execute(final UUID restaurantUuid, final RestaurantOpeningHoursInput input) {
+    var model = repository.save(mapper.toDomain(input), restaurantUuid);
 
     return mapper.toOutput(model);
   }

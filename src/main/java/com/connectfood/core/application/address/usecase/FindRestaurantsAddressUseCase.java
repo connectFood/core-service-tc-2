@@ -26,6 +26,6 @@ public class FindRestaurantsAddressUseCase {
     final var restaurantsAddress = repository.findByRestaurantsUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurants Address not found"));
 
-    return mapper.toOutput(restaurantsAddress);
+    return null;
   }
 }

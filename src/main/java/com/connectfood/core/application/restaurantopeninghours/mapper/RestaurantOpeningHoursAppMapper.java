@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
-import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
 import com.connectfood.core.domain.model.Restaurants;
 
@@ -13,22 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestaurantOpeningHoursAppMapper {
 
-  private final RestaurantsAppMapper restaurantsMapper;
 
-  public RestaurantOpeningHoursAppMapper(final RestaurantsAppMapper restaurantsMapper) {
-    this.restaurantsMapper = restaurantsMapper;
+  public RestaurantOpeningHoursAppMapper() {
   }
 
-  public RestaurantOpeningHours toDomain(final RestaurantOpeningHoursInput input, final Restaurants restaurants) {
-    if (input == null || restaurants == null) {
+  public RestaurantOpeningHours toDomain(final RestaurantOpeningHoursInput input) {
+    if (input == null) {
       return null;
     }
 
     return new RestaurantOpeningHours(
         input.getDayOfWeek(),
         input.getStartTime(),
-        input.getEndTime(),
-        restaurants
+        input.getEndTime()
     );
   }
 
@@ -42,8 +38,7 @@ public class RestaurantOpeningHoursAppMapper {
         uuid,
         input.getDayOfWeek(),
         input.getStartTime(),
-        input.getEndTime(),
-        restaurants
+        input.getEndTime()
     );
   }
 
@@ -56,8 +51,7 @@ public class RestaurantOpeningHoursAppMapper {
         model.getUuid(),
         model.getDayWeek(),
         model.getStartTime(),
-        model.getEndTime(),
-        model.getRestaurant() != null ? restaurantsMapper.toOutput(model.getRestaurant()) : null
+        model.getEndTime()
     );
   }
 }

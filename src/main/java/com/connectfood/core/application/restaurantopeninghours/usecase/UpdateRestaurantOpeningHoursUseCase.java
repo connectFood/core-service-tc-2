@@ -29,7 +29,7 @@ public class UpdateRestaurantOpeningHoursUseCase {
     final var model = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurant opening hours not found"));
 
-    final var modelUpdated = repository.update(uuid, mapper.toDomain(uuid, input, model.getRestaurant()));
+    final var modelUpdated = repository.update(uuid, mapper.toDomain(uuid, input, null));
 
     return mapper.toOutput(modelUpdated);
   }

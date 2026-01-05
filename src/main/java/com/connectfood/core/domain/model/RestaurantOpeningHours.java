@@ -15,10 +15,9 @@ public class RestaurantOpeningHours {
   private final DayOfWeek dayWeek;
   private final LocalTime startTime;
   private final LocalTime endTime;
-  private final Restaurants restaurant;
 
   public RestaurantOpeningHours(final UUID uuid, final DayOfWeek dayWeek,
-      final LocalTime startTime, final LocalTime endTime, final Restaurants restaurant) {
+      final LocalTime startTime, final LocalTime endTime) {
 
     if (dayWeek == null) {
       throw new BadRequestException("Day of week is required");
@@ -36,16 +35,9 @@ public class RestaurantOpeningHours {
     this.dayWeek = dayWeek;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.restaurant = restaurant;
   }
 
-  public RestaurantOpeningHours(final DayOfWeek dayWeek, final LocalTime startTime, final LocalTime endTime,
-      final Restaurants restaurant) {
-    this(null, dayWeek, startTime, endTime, restaurant);
-  }
-
-  public RestaurantOpeningHours(final UUID uuid, final DayOfWeek dayWeek, final LocalTime startTime,
-      final LocalTime endTime) {
-    this(uuid, dayWeek, startTime, endTime, null);
+  public RestaurantOpeningHours(final DayOfWeek dayWeek, final LocalTime startTime, final LocalTime endTime) {
+    this(null, dayWeek, startTime, endTime);
   }
 }

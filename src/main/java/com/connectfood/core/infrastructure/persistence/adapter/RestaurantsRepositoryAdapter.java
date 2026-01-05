@@ -11,6 +11,8 @@ import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsTypeEntity;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
+import com.connectfood.core.infrastructure.persistence.mappers.AddressInfraMapper;
+import com.connectfood.core.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
 import com.connectfood.core.infrastructure.persistence.mappers.RestaurantsInfraMapper;
 import com.connectfood.core.infrastructure.persistence.specification.RestaurantsSpecification;
 
@@ -25,12 +27,19 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
   private final JpaRestaurantsRepository repository;
   private final RestaurantsInfraMapper mapper;
   private final JpaRestaurantsTypeRepository restaurantsTypeRepository;
+  private final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper;
+  private final AddressInfraMapper addressMapper;
 
-  public RestaurantsRepositoryAdapter(JpaRestaurantsRepository repository, RestaurantsInfraMapper mapper,
-      JpaRestaurantsTypeRepository restaurantsTypeRepository) {
+  public RestaurantsRepositoryAdapter(final JpaRestaurantsRepository repository,
+      final RestaurantsInfraMapper mapper,
+      final JpaRestaurantsTypeRepository restaurantsTypeRepository,
+      final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper,
+      final AddressInfraMapper addressMapper) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsTypeRepository = restaurantsTypeRepository;
+    this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
+    this.addressMapper = addressMapper;
   }
 
   @Override

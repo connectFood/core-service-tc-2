@@ -4,16 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
-import com.connectfood.core.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantOpeningHoursRepository;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.core.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
-import com.connectfood.core.infrastructure.persistence.specification.RestaurantItemsSpecification;
 import com.connectfood.core.infrastructure.persistence.specification.RestaurantOpeningHoursSpecification;
 
 import org.springframework.data.domain.PageRequest;
@@ -39,9 +36,8 @@ public class RestaurantOpeningHoursRepositoryAdapter implements RestaurantOpenin
   }
 
   @Override
-  public RestaurantOpeningHours save(final RestaurantOpeningHours model) {
-    final var restaurant = restaurantsRepository.findByUuid(model.getRestaurant()
-            .getUuid())
+  public RestaurantOpeningHours save(final RestaurantOpeningHours model, final UUID restaurantUuid) {
+    final var restaurant = restaurantsRepository.findByUuid(restaurantUuid)
         .orElseThrow();
 
     final var entity = repository.save(mapper.toEntity(model, restaurant));
@@ -69,7 +65,8 @@ public class RestaurantOpeningHoursRepositoryAdapter implements RestaurantOpenin
   }
 
   @Override
-  public PageModel<List<RestaurantOpeningHours>> findAll(final UUID restaurantUuid, final Integer page, final Integer size,
+  public PageModel<List<RestaurantOpeningHours>> findAll(final UUID restaurantUuid, final Integer page,
+      final Integer size,
       final String sort, final String direction) {
 
     final var pageable = PageRequest.of(page, size,

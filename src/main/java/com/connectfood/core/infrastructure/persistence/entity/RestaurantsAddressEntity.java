@@ -18,12 +18,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RestaurantsAddressEntity extends BaseEntity {
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "restaurant_id", nullable = false)
   private RestaurantsEntity restaurants;
 
-
-  @ManyToOne(fetch = FetchType.LAZY)  // TODO: TESTAR POIS PODE REMOVER O ADDRESS NO BANCO
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "address_id", nullable = false)
   private AddressEntity address;
 }
