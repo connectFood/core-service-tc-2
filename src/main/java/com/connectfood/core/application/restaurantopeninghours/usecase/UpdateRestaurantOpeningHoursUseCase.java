@@ -25,11 +25,11 @@ public class UpdateRestaurantOpeningHoursUseCase {
   }
 
   @Transactional
-  public RestaurantOpeningHoursOutput execute(final UUID uuid, final RestaurantOpeningHoursInput input) {
-    final var model = repository.findByUuid(uuid)
+  public RestaurantOpeningHoursOutput execute(final UUID openingHoursUuid, final RestaurantOpeningHoursInput input) {
+    repository.findByUuid(openingHoursUuid)
         .orElseThrow(() -> new NotFoundException("Restaurant opening hours not found"));
 
-    final var modelUpdated = repository.update(uuid, mapper.toDomain(uuid, input, null));
+    final var modelUpdated = repository.update(openingHoursUuid, mapper.toDomain(openingHoursUuid, input));
 
     return mapper.toOutput(modelUpdated);
   }

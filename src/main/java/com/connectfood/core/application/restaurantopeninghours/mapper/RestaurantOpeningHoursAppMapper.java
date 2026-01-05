@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
-import com.connectfood.core.domain.model.Restaurants;
 
 import org.springframework.stereotype.Component;
 
@@ -28,9 +27,8 @@ public class RestaurantOpeningHoursAppMapper {
     );
   }
 
-  public RestaurantOpeningHours toDomain(final UUID uuid, final RestaurantOpeningHoursInput input,
-      final Restaurants restaurants) {
-    if (input == null || restaurants == null) {
+  public RestaurantOpeningHours toDomain(final UUID uuid, final RestaurantOpeningHoursInput input) {
+    if (input == null) {
       return null;
     }
 

@@ -1,21 +1,22 @@
 package com.connectfood.core.entrypoint.rest.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import com.connectfood.core.application.restaurantopeninghours.usecase.UpdateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
-
 import com.connectfood.core.entrypoint.rest.dto.commons.BaseResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.PageResponse;
+import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursRequest;
+import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;
 import com.connectfood.core.entrypoint.rest.dto.restaurants.RestaurantsRequest;
 import com.connectfood.core.entrypoint.rest.dto.restaurants.RestaurantsResponse;
+import com.connectfood.core.entrypoint.rest.mappers.RestaurantOpeningHoursEntryMapper;
 import com.connectfood.core.entrypoint.rest.mappers.RestaurantsEntryMapper;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.UUID;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/restaurants")
@@ -43,6 +45,8 @@ public class RestaurantsController {
   private final UpdateRestaurantsUseCase updateUseCase;
   private final RemoveRestaurantsUseCase removeUseCase;
   private final RestaurantsEntryMapper mapper;
+  private final UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase;
+  private final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper;
 
   public RestaurantsController(
       final SearchRestaurantsUseCase searchUseCase,
@@ -50,7 +54,9 @@ public class RestaurantsController {
       final CreateRestaurantsUseCase createUseCase,
       final UpdateRestaurantsUseCase updateUseCase,
       final RemoveRestaurantsUseCase removeUseCase,
-      final RestaurantsEntryMapper mapper
+      final RestaurantsEntryMapper mapper,
+      final UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase,
+      final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper
   ) {
     this.searchUseCase = searchUseCase;
     this.findUseCase = findUseCase;
@@ -58,6 +64,8 @@ public class RestaurantsController {
     this.updateUseCase = updateUseCase;
     this.removeUseCase = removeUseCase;
     this.mapper = mapper;
+    this.updateRestaurantOpeningHoursUseCase = updateRestaurantOpeningHoursUseCase;
+    this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
   }
 
   @GetMapping
@@ -103,7 +111,8 @@ public class RestaurantsController {
       summary = "Create a new restaurant",
       description = "Create a new restaurant and returns the created resource"
   )
-  public ResponseEntity<BaseResponse<RestaurantsResponse>> create(@Valid @RequestBody final RestaurantsRequest request) {
+  public ResponseEntity<BaseResponse<RestaurantsResponse>> create(
+      @Valid @RequestBody final RestaurantsRequest request) {
 
     final var result = createUseCase.execute(mapper.toInput(request));
     final var response = mapper.toResponse(result);
@@ -124,6 +133,24 @@ public class RestaurantsController {
 
     final var result = updateUseCase.execute(uuid, mapper.toInput(request));
     final var response = mapper.toResponse(result);
+
+    return ResponseEntity.ok()
+        .body(new BaseResponse<>(response));
+  }
+
+  @PutMapping(path = "/opening_hours/{openingHoursUuid}")
+  @Operation(
+      summary = "Update an existing restaurant opening hours",
+      description = "Updates an existing restaurant opening hours identified by UUID"
+  )
+  public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> update(
+      @PathVariable final UUID openingHoursUuid,
+      @Valid @RequestBody final RestaurantOpeningHoursRequest request
+  ) {
+    final var result = updateRestaurantOpeningHoursUseCase.execute(openingHoursUuid,
+        restaurantOpeningHoursMapper.toInput(request)
+    );
+    final var response = restaurantOpeningHoursMapper.toResponse(result);
 
     return ResponseEntity.ok()
         .body(new BaseResponse<>(response));

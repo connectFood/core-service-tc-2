@@ -1,5 +1,8 @@
 package com.connectfood.core.application.restaurants.usecase;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
@@ -7,9 +10,6 @@ import com.connectfood.core.domain.repository.RestaurantsRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Component
 public class SearchRestaurantsUseCase {
@@ -35,7 +35,7 @@ public class SearchRestaurantsUseCase {
 
     final var results = restaurants.content()
         .stream()
-        .map(mapper::toOutput)
+        .map(mapper::toOutputAll)
         .toList();
 
     return new PageOutput<>(results, restaurants.total());
