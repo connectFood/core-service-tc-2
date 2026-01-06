@@ -3,9 +3,8 @@ package com.connectfood.core.application.address.usecase;
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
-import com.connectfood.core.application.address.dto.RestaurantsAddressOutput;
+import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
-import com.connectfood.core.application.address.mapper.RestaurantsAddressAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
@@ -17,34 +16,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdateRestaurantsAddressUseCase {
 
   private final RestaurantsAddressRepository repository;
-  private final RestaurantsAddressAppMapper mapper;
-  private final AddressAppMapper addressMapper;
+  private final AddressAppMapper mapper;
   private final AddressRepository addressRepository;
 
   public UpdateRestaurantsAddressUseCase(
       final RestaurantsAddressRepository repository,
-      final RestaurantsAddressAppMapper mapper,
-      final AddressAppMapper addressMapper,
+      final AddressAppMapper mapper,
       final AddressRepository addressRepository
   ) {
     this.repository = repository;
     this.mapper = mapper;
-    this.addressMapper = addressMapper;
     this.addressRepository = addressRepository;
   }
 
   @Transactional
-  public RestaurantsAddressOutput execute(
-      final UUID uuid,
+  public AddressOutput execute(
+      final UUID restaurantUuid,
       final AddressInput addressInput
   ) {
-    final var restaurantsAddress = repository.findByRestaurantsUuid(uuid)
+    final var restaurantsAddress = repository.findByRestaurantsUuid(restaurantUuid)
         .orElseThrow(() -> new NotFoundException("Restaurants Address Not Found"));
 
-    final var addressUpdated = addressRepository.update(uuid,
-        addressMapper.toDomain(uuid, addressInput)
-    );
+    final var addressUuid = restaurantsAddress.getAddress()
+        .getUuid();
 
-    return null;
+    final var addressUpdated = addressRepository.update(addressUuid, mapper.toDomain(addressUuid, addressInput));
+
+    return mapper.toOutput(addressUpdated);
   }
 }

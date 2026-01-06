@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.application.address.usecase.CreateRestaurantsAddressUseCase;
+import com.connectfood.core.application.address.usecase.RemoveRestaurantsAddressUseCase;
+import com.connectfood.core.application.address.usecase.UpdateRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.CreateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.RemoveRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.UpdateRestaurantOpeningHoursUseCase;
@@ -56,6 +58,8 @@ public class RestaurantsController {
   private final RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase;
   private final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper;
   private final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase;
+  private final UpdateRestaurantsAddressUseCase updateRestaurantsAddressUseCase;
+  private final RemoveRestaurantsAddressUseCase removeRestaurantsAddressUseCase;
   private final AddressEntryMapper addressMapper;
 
   public RestaurantsController(
@@ -70,6 +74,8 @@ public class RestaurantsController {
       final RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase,
       final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper,
       final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase,
+      final UpdateRestaurantsAddressUseCase updateRestaurantsAddressUseCase,
+      final RemoveRestaurantsAddressUseCase removeRestaurantsAddressUseCase,
       final AddressEntryMapper addressMapper
   ) {
     this.searchUseCase = searchUseCase;
@@ -83,6 +89,8 @@ public class RestaurantsController {
     this.removeRestaurantOpeningHoursUseCase = removeRestaurantOpeningHoursUseCase;
     this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
     this.createRestaurantsAddressUseCase = createRestaurantsAddressUseCase;
+    this.updateRestaurantsAddressUseCase = updateRestaurantsAddressUseCase;
+    this.removeRestaurantsAddressUseCase = removeRestaurantsAddressUseCase;
     this.addressMapper = addressMapper;
   }
 
@@ -174,7 +182,7 @@ public class RestaurantsController {
   @PutMapping(path = "/{uuid}")
   @Operation(
       summary = "Update an existing restaurant",
-      description = "Updates an exxisting restaurants identified by UUID"
+      description = "Updates an existing restaurants identified by UUID"
   )
   public ResponseEntity<BaseResponse<RestaurantsResponse>> update(
       @PathVariable final UUID uuid,
@@ -206,6 +214,22 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
+  @PutMapping(path = "/{uuid}/address")
+  @Operation(
+      summary = "Update an existing restaurant address",
+      description = "Updates an existing restaurants address identified by UUID"
+  )
+  public ResponseEntity<BaseResponse<AddressResponse>> updateAddress(
+      @PathVariable final UUID uuid,
+      @Valid @RequestBody final AddressRequest request) {
+
+    final var result = updateRestaurantsAddressUseCase.execute(uuid, addressMapper.toInput(request));
+    final var response = addressMapper.toResponse(result);
+
+    return ResponseEntity.ok()
+        .body(new BaseResponse<>(response));
+  }
+
   @DeleteMapping(path = "/{uuid}")
   @Operation(
       summary = "Delete an existing restaurant",
@@ -225,6 +249,18 @@ public class RestaurantsController {
   )
   public ResponseEntity<Void> deleteOpeningHoursUuid(@PathVariable final UUID openingHoursUuid) {
     removeRestaurantOpeningHoursUseCase.execute(openingHoursUuid);
+
+    return ResponseEntity.noContent()
+        .build();
+  }
+
+  @DeleteMapping(path = "/{uuid}/address")
+  @Operation(
+      summary = "Delete an existing restaurant address",
+      description = "Deletes an existing restaurant address identified by UUID"
+  )
+  public ResponseEntity<Void> deleteAddress(@PathVariable final UUID uuid) {
+    removeRestaurantsAddressUseCase.execute(uuid);
 
     return ResponseEntity.noContent()
         .build();
