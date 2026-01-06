@@ -1,11 +1,11 @@
-package com.connectfood.core.application.address.usecase;
+package com.connectfood.core.application.restaurants.usecase;
 
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
-import com.connectfood.core.application.address.mapper.RestaurantsAddressAppMapper;
+import com.connectfood.core.application.restaurants.mapper.RestaurantsAddressAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;

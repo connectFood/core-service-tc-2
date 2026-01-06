@@ -1,4 +1,4 @@
-package com.connectfood.core.application.address.usecase;
+package com.connectfood.core.application.restaurants.usecase;
 
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.AddressRepository;

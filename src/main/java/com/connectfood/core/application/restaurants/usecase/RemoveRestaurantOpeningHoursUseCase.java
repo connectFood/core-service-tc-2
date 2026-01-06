@@ -1,4 +1,4 @@
-package com.connectfood.core.application.restaurantopeninghours.usecase;
+package com.connectfood.core.application.restaurants.usecase;
 
 import java.util.UUID;
 

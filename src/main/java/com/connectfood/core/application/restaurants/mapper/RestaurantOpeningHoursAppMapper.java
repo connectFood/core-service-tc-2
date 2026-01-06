@@ -1,9 +1,9 @@
-package com.connectfood.core.application.restaurantopeninghours.mapper;
+package com.connectfood.core.application.restaurants.mapper;
 
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
 
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.connectfood.core.application.restaurantopeninghours.dto;
+package com.connectfood.core.application.restaurants.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

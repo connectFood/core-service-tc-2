@@ -1,13 +1,11 @@
-package com.connectfood.core.application.restaurantopeninghours.usecase;
+package com.connectfood.core.application.restaurants.usecase;
 
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
-import com.connectfood.core.application.restaurantopeninghours.mapper.RestaurantOpeningHoursAppMapper;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
+import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHoursAppMapper;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

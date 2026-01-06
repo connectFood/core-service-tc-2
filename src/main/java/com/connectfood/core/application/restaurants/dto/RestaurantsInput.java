@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
 
 import lombok.Getter;
 

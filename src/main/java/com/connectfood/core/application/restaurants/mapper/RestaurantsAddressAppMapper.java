@@ -1,4 +1,4 @@
-package com.connectfood.core.application.address.mapper;
+package com.connectfood.core.application.restaurants.mapper;
 
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Restaurants;

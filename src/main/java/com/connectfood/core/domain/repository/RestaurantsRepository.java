@@ -15,8 +15,8 @@ public interface RestaurantsRepository {
 
   Optional<Restaurants> findByUuid(UUID uuid);
 
-  PageModel<List<Restaurants>> findAll(String name, UUID restaurantsTypeUuid, Integer page, Integer size, String sort,
-      String direction);
+  PageModel<List<Restaurants>> findAll(String name, UUID restaurantsTypeUuid, String street, String city,
+      String state, Integer page, Integer size, String sort, String direction);
 
   void delete(UUID uuid);
 }

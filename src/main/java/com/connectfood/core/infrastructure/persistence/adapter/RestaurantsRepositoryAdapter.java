@@ -11,8 +11,6 @@ import com.connectfood.core.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.core.infrastructure.persistence.entity.RestaurantsTypeEntity;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
-import com.connectfood.core.infrastructure.persistence.mappers.AddressInfraMapper;
-import com.connectfood.core.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
 import com.connectfood.core.infrastructure.persistence.mappers.RestaurantsInfraMapper;
 import com.connectfood.core.infrastructure.persistence.specification.RestaurantsSpecification;
 
@@ -27,19 +25,13 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
   private final JpaRestaurantsRepository repository;
   private final RestaurantsInfraMapper mapper;
   private final JpaRestaurantsTypeRepository restaurantsTypeRepository;
-  private final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper;
-  private final AddressInfraMapper addressMapper;
 
   public RestaurantsRepositoryAdapter(final JpaRestaurantsRepository repository,
       final RestaurantsInfraMapper mapper,
-      final JpaRestaurantsTypeRepository restaurantsTypeRepository,
-      final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper,
-      final AddressInfraMapper addressMapper) {
+      final JpaRestaurantsTypeRepository restaurantsTypeRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsTypeRepository = restaurantsTypeRepository;
-    this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
-    this.addressMapper = addressMapper;
   }
 
   @Override
@@ -83,14 +75,9 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
   }
 
   @Override
-  public PageModel<List<Restaurants>> findAll(
-      final String name,
-      final UUID restaurantsTypeUuid,
-      final Integer page,
-      final Integer size,
-      final String sort,
-      final String direction
-  ) {
+  public PageModel<List<Restaurants>> findAll(final String name, final UUID restaurantsTypeUuid, final String street,
+      final String city, final String state, final Integer page, final Integer size, final String sort,
+      final String direction) {
     final var pageable = PageRequest.of(page, size,
         Sort.by(direction == null ? Sort.Direction.ASC : Sort.Direction.fromString(direction),
             sort == null ? "id" : sort
@@ -98,7 +85,9 @@ public class RestaurantsRepositoryAdapter implements RestaurantsRepository {
     );
 
     final Specification<RestaurantsEntity> spec = Specification.allOf(RestaurantsSpecification.nameContains(name),
-        RestaurantsSpecification.hasRestaurantsTypeUuid(restaurantsTypeUuid)
+        RestaurantsSpecification.hasRestaurantsTypeUuid(restaurantsTypeUuid),
+        RestaurantsSpecification.streetContains(street), RestaurantsSpecification.cityContains(city),
+        RestaurantsSpecification.stateContains(state)
     );
 
     final var entities = repository.findAll(spec, pageable);

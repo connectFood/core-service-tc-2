@@ -3,12 +3,12 @@ package com.connectfood.core.entrypoint.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.address.usecase.CreateRestaurantsAddressUseCase;
-import com.connectfood.core.application.address.usecase.RemoveRestaurantsAddressUseCase;
-import com.connectfood.core.application.address.usecase.UpdateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurantopeninghours.usecase.CreateRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurantopeninghours.usecase.RemoveRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurantopeninghours.usecase.UpdateRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsAddressUseCase;
+import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsAddressUseCase;
+import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
+import com.connectfood.core.application.restaurants.usecase.CreateRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
