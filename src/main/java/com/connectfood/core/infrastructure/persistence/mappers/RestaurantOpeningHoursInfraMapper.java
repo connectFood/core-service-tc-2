@@ -25,19 +25,6 @@ public class RestaurantOpeningHoursInfraMapper {
     );
   }
 
-  public RestaurantOpeningHours toDomainAll(final RestaurantOpeningHoursEntity entity) {
-    if (entity == null) {
-      return null;
-    }
-
-    return new RestaurantOpeningHours(
-        entity.getUuid(),
-        entity.getDayOfWeek(),
-        entity.getStartTime(),
-        entity.getEndTime()
-    );
-  }
-
   public RestaurantOpeningHoursEntity toEntity(final RestaurantOpeningHours model,
       final RestaurantsEntity restaurantsEntity) {
 

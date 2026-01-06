@@ -46,7 +46,7 @@ public class CreateRestaurantsUseCase {
 
     final var restaurants = repository.save(mapper.toDomain(input, restaurantsType));
 
-    final var address = createRestaurantsAddressUseCase.execute(restaurants, input.getAddress());
+    final var address = createRestaurantsAddressUseCase.execute(restaurants.getUuid(), input.getAddress());
 
     var openingHours = new ArrayList<RestaurantOpeningHoursOutput>();
     for (var openingHour : input.getOpeningHours()) {

@@ -3,18 +3,24 @@ package com.connectfood.core.entrypoint.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.connectfood.core.application.address.usecase.CreateRestaurantsAddressUseCase;
+import com.connectfood.core.application.restaurantopeninghours.usecase.CreateRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurantopeninghours.usecase.RemoveRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurantopeninghours.usecase.UpdateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
+import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
+import com.connectfood.core.entrypoint.rest.dto.address.AddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.BaseResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.PageResponse;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursRequest;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;
 import com.connectfood.core.entrypoint.rest.dto.restaurants.RestaurantsRequest;
 import com.connectfood.core.entrypoint.rest.dto.restaurants.RestaurantsResponse;
+import com.connectfood.core.entrypoint.rest.mappers.AddressEntryMapper;
 import com.connectfood.core.entrypoint.rest.mappers.RestaurantOpeningHoursEntryMapper;
 import com.connectfood.core.entrypoint.rest.mappers.RestaurantsEntryMapper;
 
@@ -45,8 +51,12 @@ public class RestaurantsController {
   private final UpdateRestaurantsUseCase updateUseCase;
   private final RemoveRestaurantsUseCase removeUseCase;
   private final RestaurantsEntryMapper mapper;
+  private final CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase;
   private final UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase;
+  private final RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase;
   private final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper;
+  private final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase;
+  private final AddressEntryMapper addressMapper;
 
   public RestaurantsController(
       final SearchRestaurantsUseCase searchUseCase,
@@ -55,8 +65,12 @@ public class RestaurantsController {
       final UpdateRestaurantsUseCase updateUseCase,
       final RemoveRestaurantsUseCase removeUseCase,
       final RestaurantsEntryMapper mapper,
+      final CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase,
       final UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase,
-      final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper
+      final RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase,
+      final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper,
+      final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase,
+      final AddressEntryMapper addressMapper
   ) {
     this.searchUseCase = searchUseCase;
     this.findUseCase = findUseCase;
@@ -64,8 +78,12 @@ public class RestaurantsController {
     this.updateUseCase = updateUseCase;
     this.removeUseCase = removeUseCase;
     this.mapper = mapper;
+    this.createRestaurantOpeningHoursUseCase = createRestaurantOpeningHoursUseCase;
     this.updateRestaurantOpeningHoursUseCase = updateRestaurantOpeningHoursUseCase;
+    this.removeRestaurantOpeningHoursUseCase = removeRestaurantOpeningHoursUseCase;
     this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
+    this.createRestaurantsAddressUseCase = createRestaurantsAddressUseCase;
+    this.addressMapper = addressMapper;
   }
 
   @GetMapping
@@ -121,13 +139,45 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
+  @PostMapping(path = "/{uuid}/opening_hours")
+  @Operation(
+      summary = "Create a new restaurant opening hours",
+      description = "Create a new restaurant opening hours and returns the created resource"
+  )
+  public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> createOpeningHours(
+      @PathVariable final UUID uuid,
+      @Valid @RequestBody final RestaurantOpeningHoursRequest request) {
+
+    final var result = createRestaurantOpeningHoursUseCase.execute(uuid, restaurantOpeningHoursMapper.toInput(request));
+    final var response = restaurantOpeningHoursMapper.toResponse(result);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(new BaseResponse<>(response));
+  }
+
+  @PostMapping(path = "/{uuid}/address")
+  @Operation(
+      summary = "Create a new restaurant address",
+      description = "Create a new restaurant address and returns the created resource"
+  )
+  public ResponseEntity<BaseResponse<AddressResponse>> createAddress(
+      @PathVariable final UUID uuid,
+      @Valid @RequestBody final AddressRequest request) {
+
+    final var result = createRestaurantsAddressUseCase.execute(uuid, addressMapper.toInput(request));
+    final var response = addressMapper.toResponse(result);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(new BaseResponse<>(response));
+  }
+
   @PutMapping(path = "/{uuid}")
   @Operation(
       summary = "Update an existing restaurant",
       description = "Updates an exxisting restaurants identified by UUID"
   )
   public ResponseEntity<BaseResponse<RestaurantsResponse>> update(
-      @PathVariable("uuid") final UUID uuid,
+      @PathVariable final UUID uuid,
       @Valid @RequestBody final RestaurantsRequest request
   ) {
 
@@ -163,6 +213,18 @@ public class RestaurantsController {
   )
   public ResponseEntity<Void> delete(@PathVariable("uuid") final UUID uuid) {
     removeUseCase.execute(uuid);
+
+    return ResponseEntity.noContent()
+        .build();
+  }
+
+  @DeleteMapping(path = "/opening_hours/{openingHoursUuid}")
+  @Operation(
+      summary = "Delete an existing restaurant opening hours",
+      description = "Deletes an existing restaurant opening hours identified by UUID"
+  )
+  public ResponseEntity<Void> deleteOpeningHoursUuid(@PathVariable final UUID openingHoursUuid) {
+    removeRestaurantOpeningHoursUseCase.execute(openingHoursUuid);
 
     return ResponseEntity.noContent()
         .build();
