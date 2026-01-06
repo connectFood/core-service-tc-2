@@ -9,7 +9,6 @@ import com.connectfood.core.application.address.usecase.FindRestaurantsAddressUs
 import com.connectfood.core.application.address.usecase.RemoveRestaurantsAddressUseCase;
 import com.connectfood.core.application.address.usecase.SearchRestaurantsAddressUseCase;
 import com.connectfood.core.application.address.usecase.UpdateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.useCase.CreateRestaurantsUseCase;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
 import com.connectfood.core.entrypoint.rest.dto.address.RestaurantsAddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.address.UsersAddressResponse;
