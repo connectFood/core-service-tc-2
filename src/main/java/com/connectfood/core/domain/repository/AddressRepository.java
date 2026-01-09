@@ -10,7 +10,7 @@ public interface AddressRepository {
 
   Address save(Address usersType);
 
-  RestaurantsAddress update(UUID uuid, Address address);
+  Address update(UUID uuid, Address address);
 
   Optional<Address> findByUuid(UUID uuid);
 

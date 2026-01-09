@@ -4,8 +4,8 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursRequest;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;

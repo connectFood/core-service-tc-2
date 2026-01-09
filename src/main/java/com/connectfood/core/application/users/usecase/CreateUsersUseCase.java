@@ -18,21 +18,23 @@ public class CreateUsersUseCase {
   private final UsersAppMapper mapper;
   private final UsersTypeRepository usersTypeRepository;
   private final PasswordUtils passwordUtils;
+  private final CreateUsersAddressUseCase createUsersAddressUseCase;
 
   public CreateUsersUseCase(
       final UsersRepository repository,
       final UsersAppMapper mapper,
       final UsersTypeRepository usersTypeRepository,
-      final PasswordUtils passwordUtils) {
+      final PasswordUtils passwordUtils,
+      final CreateUsersAddressUseCase createUsersAddressUseCase) {
     this.repository = repository;
     this.mapper = mapper;
     this.usersTypeRepository = usersTypeRepository;
     this.passwordUtils = passwordUtils;
+    this.createUsersAddressUseCase = createUsersAddressUseCase;
   }
 
   @Transactional
   public UsersOutput execute(final UsersInput input) {
-
     final var passwordHash = passwordUtils.encode(input.getPassword());
 
     final var usersType =
@@ -41,6 +43,8 @@ public class CreateUsersUseCase {
 
     final var users = repository.save(mapper.toDomain(input, passwordHash, usersType));
 
-    return mapper.toOutput(users);
+    final var address = createUsersAddressUseCase.execute(users.getUuid(), input.getAddress());
+
+    return mapper.toOutput(users, address);
   }
 }

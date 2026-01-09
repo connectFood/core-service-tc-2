@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "restaurant_address")
+@Table(name = "users_restaurant")
 @Getter
 @Setter
 @NoArgsConstructor
-public class RestaurantsAddressEntity extends BaseEntity {
+public class UsersRestaurantEntity extends BaseEntity {
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private UsersEntity users;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "restaurant_id", nullable = false)
   private RestaurantsEntity restaurants;
-
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "address_id", nullable = false)
-  private AddressEntity address;
 }

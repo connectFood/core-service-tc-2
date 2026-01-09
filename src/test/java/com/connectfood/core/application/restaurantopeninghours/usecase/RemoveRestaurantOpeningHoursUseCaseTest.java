@@ -3,6 +3,7 @@ package com.connectfood.core.application.restaurantopeninghours.usecase;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantOpeningHoursUseCase;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;

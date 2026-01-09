@@ -2,6 +2,7 @@ package com.connectfood.core.application.users.mapper;
 
 import java.util.UUID;
 
+import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.users.dto.UsersInput;
 import com.connectfood.core.application.users.dto.UsersOutput;
@@ -62,6 +63,20 @@ public class UsersAppMapper {
         model.getFullName(),
         model.getEmail(),
         model.getUsersType() != null ? usersTypeMapper.toOutput(model.getUsersType()) : null
+    );
+  }
+
+  public UsersOutput toOutput(final Users model, final AddressOutput addressOutput) {
+    if (model == null) {
+      return null;
+    }
+
+    return new UsersOutput(
+        model.getUuid(),
+        model.getFullName(),
+        model.getEmail(),
+        model.getUsersType() != null ? usersTypeMapper.toOutput(model.getUsersType()) : null,
+        addressOutput
     );
   }
 

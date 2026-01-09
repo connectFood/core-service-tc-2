@@ -58,8 +58,7 @@ public class RestaurantItemsResponse {
   private RestaurantsResponse restaurant;
 
   @Schema(
-      description = "Images associated with the restaurant item",
-      implementation = RestaurantItemsImagesResponse.class
+      description = "Images associated with the restaurant item"
   )
   private List<RestaurantItemsImagesResponse> images;
 }

@@ -70,7 +70,6 @@ public class RestaurantItemsRequest {
 
   @Schema(
       description = "Images associated with the restaurant item",
-      implementation = RestaurantItemsImagesRequest.class,
       requiredMode = Schema.RequiredMode.NOT_REQUIRED
   )
   @Valid

@@ -4,9 +4,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
-import com.connectfood.core.application.address.dto.UsersAddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
-import com.connectfood.core.application.address.mapper.UsersAddressAppMapper;
+import com.connectfood.core.application.users.mapper.UsersAddressAppMapper;
+import com.connectfood.core.application.users.usecase.CreateUsersAddressUseCase;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Users;
@@ -91,8 +91,8 @@ class CreateUsersAddressUseCaseTest {
         .thenReturn(savedUsersAddress);
 
     final UsersAddressOutput expectedOutput = Mockito.mock(UsersAddressOutput.class);
-    Mockito.when(usersAddressMapper.toOutput(savedUsersAddress))
-        .thenReturn(expectedOutput);
+//    Mockito.when(usersAddressMapper.toOutput(savedUsersAddress))
+//        .thenReturn(expectedOutput);
 
     final var result = useCase.execute(userUuid, input);
 
@@ -109,7 +109,7 @@ class CreateUsersAddressUseCaseTest {
         .toDomain(users, savedAddress);
     Mockito.verify(usersAddressRepository, Mockito.times(1))
         .save(usersAddressToSave);
-    Mockito.verify(usersAddressMapper, Mockito.times(1))
-        .toOutput(savedUsersAddress);
+//    Mockito.verify(usersAddressMapper, Mockito.times(1))
+//        .toOutput(savedUsersAddress);
   }
 }

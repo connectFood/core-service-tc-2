@@ -30,8 +30,13 @@ public class AddressRepositoryAdapter implements AddressRepository {
   }
 
   @Override
-  public RestaurantsAddress update(UUID uuid, Address address) {
-    return null;
+  public Address update(UUID uuid, Address model) {
+    var entity = repository.findByUuid(uuid)
+        .orElseThrow();
+
+    entity = repository.save(mapper.toEntity(model, entity));
+
+    return mapper.toDomain(entity);
   }
 
   @Override

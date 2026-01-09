@@ -32,7 +32,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/v1/users_types")
+@RequestMapping("/v1/users-types")
 @Tag(name = "Users Type Controller", description = "Operations related to user types management")
 public class UsersTypeController {
 

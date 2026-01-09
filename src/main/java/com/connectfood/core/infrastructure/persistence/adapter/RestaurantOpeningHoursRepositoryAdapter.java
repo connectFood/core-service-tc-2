@@ -1,24 +1,14 @@
 package com.connectfood.core.infrastructure.persistence.adapter;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
-import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
-import com.connectfood.core.infrastructure.persistence.entity.RestaurantItemsEntity;
-import com.connectfood.core.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantOpeningHoursRepository;
 import com.connectfood.core.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.core.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
-import com.connectfood.core.infrastructure.persistence.specification.RestaurantItemsSpecification;
-import com.connectfood.core.infrastructure.persistence.specification.RestaurantOpeningHoursSpecification;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,9 +29,8 @@ public class RestaurantOpeningHoursRepositoryAdapter implements RestaurantOpenin
   }
 
   @Override
-  public RestaurantOpeningHours save(final RestaurantOpeningHours model) {
-    final var restaurant = restaurantsRepository.findByUuid(model.getRestaurant()
-            .getUuid())
+  public RestaurantOpeningHours save(final RestaurantOpeningHours model, final UUID restaurantUuid) {
+    final var restaurant = restaurantsRepository.findByUuid(restaurantUuid)
         .orElseThrow();
 
     final var entity = repository.save(mapper.toEntity(model, restaurant));
@@ -66,29 +55,6 @@ public class RestaurantOpeningHoursRepositoryAdapter implements RestaurantOpenin
     final var entity = repository.findByUuid(uuid);
 
     return entity.map(mapper::toDomain);
-  }
-
-  @Override
-  public PageModel<List<RestaurantOpeningHours>> findAll(final UUID restaurantUuid, final Integer page, final Integer size,
-      final String sort, final String direction) {
-
-    final var pageable = PageRequest.of(page, size,
-        Sort.by(direction == null ? Sort.Direction.ASC : Sort.Direction.fromString(direction),
-            sort == null ? "id" : sort
-        )
-    );
-
-    final Specification<RestaurantOpeningHoursEntity> spec =
-        Specification.allOf(RestaurantOpeningHoursSpecification.hasRestaurantUuid(restaurantUuid));
-
-    final var entities = repository.findAll(spec, pageable);
-
-    final var result = entities.getContent()
-        .stream()
-        .map(mapper::toDomainAll)
-        .toList();
-
-    return new PageModel<>(result, entities.getTotalElements());
   }
 
   @Override

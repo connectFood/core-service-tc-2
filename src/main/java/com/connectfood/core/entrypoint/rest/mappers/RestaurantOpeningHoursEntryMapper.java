@@ -1,7 +1,7 @@
 package com.connectfood.core.entrypoint.rest.mappers;
 
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurantopeninghours.dto.RestaurantOpeningHoursOutput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
+import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursRequest;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;
 
@@ -10,10 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestaurantOpeningHoursEntryMapper {
 
-  private final RestaurantsEntryMapper restaurantsMapper;
-
-  public RestaurantOpeningHoursEntryMapper(final RestaurantsEntryMapper restaurantsMapper) {
-    this.restaurantsMapper = restaurantsMapper;
+  public RestaurantOpeningHoursEntryMapper() {
   }
 
   public RestaurantOpeningHoursInput toInput(final RestaurantOpeningHoursRequest request) {
@@ -24,8 +21,7 @@ public class RestaurantOpeningHoursEntryMapper {
     return new RestaurantOpeningHoursInput(
         request.getDayOfWeek(),
         request.getStartTime(),
-        request.getEndTime(),
-        request.getRestaurantUuid()
+        request.getEndTime()
     );
   }
 
@@ -38,8 +34,7 @@ public class RestaurantOpeningHoursEntryMapper {
         output.getUuid(),
         output.getDayOfWeek(),
         output.getStartTime(),
-        output.getEndTime(),
-        output.getRestaurant() != null ? restaurantsMapper.toResponse(output.getRestaurant()) : null
+        output.getEndTime()
     );
   }
 }
