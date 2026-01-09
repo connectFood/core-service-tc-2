@@ -152,7 +152,7 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PostMapping(path = "/{uuid}/opening_hours")
+  @PostMapping(path = "/{uuid}/opening-hours")
   @Operation(
       summary = "Create a new restaurant opening hours",
       description = "Create a new restaurant opening hours and returns the created resource"
@@ -201,7 +201,7 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PutMapping(path = "/opening_hours/{openingHoursUuid}")
+  @PutMapping(path = "/opening-hours/{openingHoursUuid}")
   @Operation(
       summary = "Update an existing restaurant opening hours",
       description = "Updates an existing restaurant opening hours identified by UUID"
@@ -247,7 +247,7 @@ public class RestaurantsController {
         .build();
   }
 
-  @DeleteMapping(path = "/opening_hours/{openingHoursUuid}")
+  @DeleteMapping(path = "/opening-hours/{openingHoursUuid}")
   @Operation(
       summary = "Delete an existing restaurant opening hours",
       description = "Deletes an existing restaurant opening hours identified by UUID"

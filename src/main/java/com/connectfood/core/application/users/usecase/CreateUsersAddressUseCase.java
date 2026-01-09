@@ -1,11 +1,11 @@
-package com.connectfood.core.application.address.usecase;
+package com.connectfood.core.application.users.usecase;
 
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
-import com.connectfood.core.application.address.dto.UsersAddressOutput;
+import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
-import com.connectfood.core.application.address.mapper.UsersAddressAppMapper;
+import com.connectfood.core.application.users.mapper.UsersAddressAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.UsersAddressRepository;
@@ -37,7 +37,7 @@ public class CreateUsersAddressUseCase {
   }
 
   @Transactional
-  public UsersAddressOutput execute(final UUID userUuid, final AddressInput input) {
+  public AddressOutput execute(final UUID userUuid, final AddressInput input) {
     final var users = usersRepository.findByUuid(userUuid)
         .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -45,6 +45,6 @@ public class CreateUsersAddressUseCase {
 
     final var usersAddress = usersAddressRepository.save(usersAddressMapper.toDomain(users, address));
 
-    return usersAddressMapper.toOutput(usersAddress);
+    return mapper.toOutput(usersAddress.getAddress());
   }
 }

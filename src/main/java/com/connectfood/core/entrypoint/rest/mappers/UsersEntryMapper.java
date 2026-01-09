@@ -29,7 +29,8 @@ public class UsersEntryMapper {
         request.getFullName(),
         request.getEmail(),
         request.getPassword(),
-        request.getUsersTypeUuid()
+        request.getUsersTypeUuid(),
+        request.getAddress() != null ? addressMapper.toInput(request.getAddress()) : null
     );
   }
 

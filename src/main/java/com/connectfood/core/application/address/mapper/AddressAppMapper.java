@@ -4,14 +4,12 @@ import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
-import com.connectfood.core.application.address.dto.UsersAddressOutput;
 import com.connectfood.core.domain.model.Address;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class AddressAppMapper {
-
 
   public AddressAppMapper() {
   }
