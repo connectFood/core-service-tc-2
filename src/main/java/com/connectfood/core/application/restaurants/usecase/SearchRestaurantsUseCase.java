@@ -26,12 +26,17 @@ public class SearchRestaurantsUseCase {
   public PageOutput<List<RestaurantsOutput>> execute(
       final String name,
       final UUID restaurantsTypeUuid,
+      final String street,
+      final String city,
+      final String state,
       final Integer page,
       final Integer size,
       final String sort,
       final String direction
   ) {
-    final var restaurants = repository.findAll(name, restaurantsTypeUuid, page, size, sort, direction);
+    final var restaurants = repository.findAll(name, restaurantsTypeUuid, street, city, state, page, size, sort,
+        direction
+    );
 
     final var results = restaurants.content()
         .stream()

@@ -3,16 +3,16 @@ package com.connectfood.core.entrypoint.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurants.usecase.CreateRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
 import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUseCase;
+import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
+import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressResponse;
@@ -102,12 +102,17 @@ public class RestaurantsController {
   public ResponseEntity<PageResponse<List<RestaurantsResponse>>> search(
       @RequestParam(required = false) final String name,
       @RequestParam(required = false) final UUID restaurantsTypeUuid,
+      @RequestParam(required = false) final String street,
+      @RequestParam(required = false) final String city,
+      @RequestParam(required = false) final String state,
       @RequestParam(defaultValue = "0") final Integer page,
       @RequestParam(defaultValue = "10") final Integer size,
       @RequestParam(required = false) final String sort,
       @RequestParam(required = false) final String direction
   ) {
-    final var result = searchUseCase.execute(name, restaurantsTypeUuid, page, size, sort, direction);
+    final var result = searchUseCase.execute(name, restaurantsTypeUuid, street, city, state, page, size, sort,
+        direction
+    );
 
     final var response = result.content()
         .stream()
