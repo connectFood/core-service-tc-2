@@ -9,6 +9,8 @@ import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOu
 import com.connectfood.core.application.restaurants.dto.RestaurantsInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
+import com.connectfood.core.application.users.dto.UsersOutput;
+import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.RestaurantsType;
 
@@ -20,14 +22,17 @@ public class RestaurantsAppMapper {
   private final RestaurantsTypeAppMapper restaurantsTypeMapper;
   private final RestaurantOpeningHoursAppMapper restaurantOpeningHoursMapper;
   private final AddressAppMapper addressMapper;
+  private final UsersAppMapper usersMapper;
 
   public RestaurantsAppMapper(
       final RestaurantsTypeAppMapper restaurantsTypeMapper,
       final RestaurantOpeningHoursAppMapper restaurantOpeningHoursMapper,
-      final AddressAppMapper addressMapper) {
+      final AddressAppMapper addressMapper,
+      final UsersAppMapper usersMapper) {
     this.restaurantsTypeMapper = restaurantsTypeMapper;
     this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
     this.addressMapper = addressMapper;
+    this.usersMapper = usersMapper;
   }
 
   public Restaurants toDomain(final RestaurantsInput input, final RestaurantsType restaurantsType) {
@@ -49,9 +54,7 @@ public class RestaurantsAppMapper {
     return new Restaurants(
         uuid,
         input.getName(),
-        restaurantsType,
-        null,
-        null
+        restaurantsType
     );
   }
 
@@ -63,9 +66,7 @@ public class RestaurantsAppMapper {
     return new RestaurantsOutput(
         model.getUuid(),
         model.getName(),
-        model.getRestaurantsType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantsType()) : null,
-        null,
-        null
+        model.getRestaurantsType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantsType()) : null
     );
   }
 
@@ -82,12 +83,13 @@ public class RestaurantsAppMapper {
             .stream()
             .map(restaurantOpeningHoursMapper::toOutput)
             .toList(),
-        model.getAddress() != null ? addressMapper.toOutput(model.getAddress()) : null
+        model.getAddress() != null ? addressMapper.toOutput(model.getAddress()) : null,
+        model.getUsers() != null ? usersMapper.toOutput(model.getUsers()) : null
     );
   }
 
   public RestaurantsOutput toOutput(final Restaurants model, final List<RestaurantOpeningHoursOutput> openingHours,
-      final AddressOutput address) {
+      final AddressOutput address, final UsersOutput users) {
     if (model == null) {
       return null;
     }
@@ -97,7 +99,8 @@ public class RestaurantsAppMapper {
         model.getName(),
         model.getRestaurantsType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantsType()) : null,
         openingHours,
-        address
+        address,
+        users
     );
   }
 }

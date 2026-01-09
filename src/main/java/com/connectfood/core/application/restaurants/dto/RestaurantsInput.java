@@ -14,12 +14,14 @@ public class RestaurantsInput {
   private final UUID restaurantsTypeUuid;
   private final List<RestaurantOpeningHoursInput> openingHours;
   private final AddressInput address;
+  private final UUID usersUuid;
 
   public RestaurantsInput(final String name, final UUID restaurantsTypeUuid,
-      final List<RestaurantOpeningHoursInput> openingHours, final AddressInput address) {
+      final List<RestaurantOpeningHoursInput> openingHours, final AddressInput address, final UUID usersUuid) {
     this.name = name;
     this.restaurantsTypeUuid = restaurantsTypeUuid;
     this.openingHours = openingHours;
     this.address = address;
+    this.usersUuid = usersUuid;
   }
 }

@@ -37,6 +37,13 @@ public class RestaurantsRequest {
   @NotNull(message = "Restaurant type UUID is required")
   private UUID restaurantsTypeUuid;
 
+  @Schema(
+      description = "UUID of the user",
+      example = "a912c110-3b3d-4fd7-bf00-8f77c15fd9ab",
+      requiredMode = Schema.RequiredMode.REQUIRED
+  )
+  @NotNull(message = "User UUID is required")
+  private UUID usersUuid;
 
   @Schema(
       description = "List of opening hours for the restaurant, including days of the week and time ranges",

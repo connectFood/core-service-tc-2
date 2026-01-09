@@ -13,13 +13,16 @@ public class RestaurantsEntryMapper {
   private final RestaurantsTypeEntryMapper restaurantsTypeMapper;
   private final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper;
   private final AddressEntryMapper addressMapper;
+  private final UsersEntryMapper usersMapper;
 
   public RestaurantsEntryMapper(final RestaurantsTypeEntryMapper restaurantsTypeMapper,
       final RestaurantOpeningHoursEntryMapper restaurantOpeningHoursMapper,
-      final AddressEntryMapper addressMapper) {
+      final AddressEntryMapper addressMapper,
+      final UsersEntryMapper usersMapper) {
     this.restaurantsTypeMapper = restaurantsTypeMapper;
     this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
     this.addressMapper = addressMapper;
+    this.usersMapper = usersMapper;
   }
 
   public RestaurantsInput toInput(final RestaurantsRequest request) {
@@ -34,7 +37,8 @@ public class RestaurantsEntryMapper {
             .stream()
             .map(restaurantOpeningHoursMapper::toInput)
             .toList(),
-        addressMapper.toInput(request.getAddress())
+        addressMapper.toInput(request.getAddress()),
+        request.getUsersUuid()
     );
   }
 
@@ -51,7 +55,8 @@ public class RestaurantsEntryMapper {
             .stream()
             .map(restaurantOpeningHoursMapper::toResponse)
             .toList() : null,
-        output.getAddress() != null ? addressMapper.toResponse(output.getAddress()) : null
+        output.getAddress() != null ? addressMapper.toResponse(output.getAddress()) : null,
+        output.getUsers() != null ? usersMapper.toResponse(output.getUsers()) : null
     );
   }
 }

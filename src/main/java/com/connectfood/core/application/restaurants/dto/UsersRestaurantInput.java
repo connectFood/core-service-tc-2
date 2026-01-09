@@ -1,4 +1,4 @@
-package com.connectfood.core.application.usersrestaurant.dto;
+package com.connectfood.core.application.restaurants.dto;
 
 import java.util.UUID;
 

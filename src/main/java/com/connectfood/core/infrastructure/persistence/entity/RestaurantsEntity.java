@@ -41,4 +41,10 @@ public class RestaurantsEntity extends BaseEntity {
       joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id"))
   private AddressEntity address;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "users_restaurant",
+      joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+  private UsersEntity users;
 }

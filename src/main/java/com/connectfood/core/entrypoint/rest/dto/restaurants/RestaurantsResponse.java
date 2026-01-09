@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.restaurantopeninghours.RestaurantOpeningHoursResponse;
 import com.connectfood.core.entrypoint.rest.dto.restaurantstype.RestaurantsTypeResponse;
+import com.connectfood.core.entrypoint.rest.dto.users.UsersResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,14 +40,18 @@ public class RestaurantsResponse {
   private RestaurantsTypeResponse restaurantsType;
 
   @Schema(
-      description = "List of opening hours configured for the restaurant, grouped by day of the week",
-      requiredMode = Schema.RequiredMode.NOT_REQUIRED
+      description = "List of opening hours configured for the restaurant, grouped by day of the week"
   )
   private List<RestaurantOpeningHoursResponse> openingHours;
 
   @Schema(
-      description = "Address details of the restaurant",
-      requiredMode = Schema.RequiredMode.NOT_REQUIRED
+      description = "Address details of the restaurant"
   )
   private AddressResponse address;
+
+  @Schema(
+      description = "User associated with the restaurant",
+      implementation = UsersResponse.class
+  )
+  private UsersResponse usersResponse;
 }

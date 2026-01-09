@@ -1,11 +1,11 @@
-package com.connectfood.core.application.usersrestaurant.mapper;
+package com.connectfood.core.application.restaurants.mapper;
 
 import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.connectfood.core.application.usersrestaurant.dto.UsersRestaurantOutput;
+import com.connectfood.core.application.restaurants.dto.UsersRestaurantOutput;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersRestaurant;

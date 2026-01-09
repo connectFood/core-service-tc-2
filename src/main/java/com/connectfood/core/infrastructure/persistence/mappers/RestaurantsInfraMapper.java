@@ -12,14 +12,17 @@ public class RestaurantsInfraMapper {
   private final RestaurantsTypeInfraMapper restaurantsTypeMapper;
   private final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper;
   private final AddressInfraMapper addressMapper;
+  private final UsersInfraMapper usersMapper;
 
   public RestaurantsInfraMapper(
       final RestaurantsTypeInfraMapper restaurantsTypeMapper,
       final RestaurantOpeningHoursInfraMapper restaurantOpeningHoursMapper,
-      final AddressInfraMapper addressMapper) {
+      final AddressInfraMapper addressMapper,
+      final UsersInfraMapper usersMapper) {
     this.restaurantsTypeMapper = restaurantsTypeMapper;
     this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
     this.addressMapper = addressMapper;
+    this.usersMapper = usersMapper;
   }
 
   public Restaurants toDomain(final RestaurantsEntity entity) {
@@ -35,7 +38,8 @@ public class RestaurantsInfraMapper {
             .stream()
             .map(restaurantOpeningHoursMapper::toDomain)
             .toList(),
-        entity.getAddress() != null ? addressMapper.toDomain(entity.getAddress()) : null
+        entity.getAddress() != null ? addressMapper.toDomain(entity.getAddress()) : null,
+        entity.getUsers() != null ? usersMapper.toDomain(entity.getUsers()) : null
     );
   }
 
