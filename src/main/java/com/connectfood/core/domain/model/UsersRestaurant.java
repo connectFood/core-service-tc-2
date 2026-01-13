@@ -14,7 +14,6 @@ public class UsersRestaurant {
     private final Restaurants restaurant;
 
     public UsersRestaurant(final UUID uuid, final Users user, final Restaurants restaurant) {
-
         if (user == null) {
             throw new BadRequestException("User is required");
         }

@@ -1,9 +1,12 @@
 package com.connectfood.core.domain.model;
 
+import lombok.Getter;
+
 import com.connectfood.core.domain.exception.BadRequestException;
 
 import java.util.UUID;
 
+@Getter
 public class RestaurantsAddress {
 
   private final UUID uuid;
@@ -28,15 +31,4 @@ public class RestaurantsAddress {
     this(null, restaurants, address);
   }
 
-  public UUID getUuid() {
-    return uuid;
-  }
-
-  public Restaurants getRestaurants() {
-    return restaurants;
-  }
-
-  public Address getAddress() {
-    return address;
-  }
 }

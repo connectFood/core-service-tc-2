@@ -36,19 +36,14 @@ public class AddressInfraMapper {
     }
 
     var entity = new AddressEntity();
-    entity.setUuid(model.getUuid());
-    entity.setStreet(model.getStreet());
-    entity.setNumber(model.getNumber());
-    entity.setComplement(model.getComplement());
-    entity.setNeighborhood(model.getNeighborhood());
-    entity.setCity(model.getCity());
-    entity.setState(model.getState());
-    entity.setCountry(model.getCountry());
-    entity.setZipCode(model.getZipCode());
-    return entity;
+    return setEntity(entity, model);
   }
 
   public AddressEntity toEntity(final Address model, final AddressEntity entity) {
+    return setEntity(entity, model);
+  }
+
+  private AddressEntity setEntity(final AddressEntity entity, final Address model) {
     entity.setStreet(model.getStreet());
     entity.setNumber(model.getNumber());
     entity.setComplement(model.getComplement());
