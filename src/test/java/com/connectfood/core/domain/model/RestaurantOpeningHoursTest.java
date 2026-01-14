@@ -9,7 +9,6 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class RestaurantOpeningHoursTest {
 
@@ -20,41 +19,6 @@ class RestaurantOpeningHoursTest {
     final var dayWeek = DayOfWeek.MONDAY;
     final var startTime = LocalTime.of(9, 0);
     final var endTime = LocalTime.of(18, 0);
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
-
-    final var openingHours = new RestaurantOpeningHours(uuid, dayWeek, startTime, endTime, restaurant);
-
-    Assertions.assertEquals(uuid, openingHours.getUuid());
-    Assertions.assertEquals(dayWeek, openingHours.getDayWeek());
-    Assertions.assertEquals(startTime, openingHours.getStartTime());
-    Assertions.assertEquals(endTime, openingHours.getEndTime());
-    Assertions.assertEquals(restaurant, openingHours.getRestaurant());
-  }
-
-  @Test
-  @DisplayName("Deve criar um horário de funcionamento sem UUID explícito e dados válidos")
-  void shouldCreateRestaurantOpeningHoursWithoutExplicitUuid() {
-    final var dayWeek = DayOfWeek.MONDAY;
-    final var startTime = LocalTime.of(9, 0);
-    final var endTime = LocalTime.of(18, 0);
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
-
-    final var openingHours = new RestaurantOpeningHours(dayWeek, startTime, endTime, restaurant);
-
-    Assertions.assertNotNull(openingHours.getUuid());
-    Assertions.assertEquals(dayWeek, openingHours.getDayWeek());
-    Assertions.assertEquals(startTime, openingHours.getStartTime());
-    Assertions.assertEquals(endTime, openingHours.getEndTime());
-    Assertions.assertEquals(restaurant, openingHours.getRestaurant());
-  }
-
-  @Test
-  @DisplayName("Deve criar um horário de funcionamento com construtor que não recebe restaurant")
-  void shouldCreateRestaurantOpeningHoursWithoutRestaurant() {
-    final var uuid = UUID.randomUUID();
-    final var dayWeek = DayOfWeek.SATURDAY;
-    final var startTime = LocalTime.of(10, 0);
-    final var endTime = LocalTime.of(22, 0);
 
     final var openingHours = new RestaurantOpeningHours(uuid, dayWeek, startTime, endTime);
 
@@ -62,11 +26,25 @@ class RestaurantOpeningHoursTest {
     Assertions.assertEquals(dayWeek, openingHours.getDayWeek());
     Assertions.assertEquals(startTime, openingHours.getStartTime());
     Assertions.assertEquals(endTime, openingHours.getEndTime());
-    Assertions.assertNull(openingHours.getRestaurant());
   }
 
   @Test
-  @DisplayName("Não deve criar um horário de funcionamento sem dayWeek e lançar BadRequestException")
+  @DisplayName("Deve criar um horário de funcionamento sem UUID explícito e gerar UUID automaticamente")
+  void shouldCreateRestaurantOpeningHoursWithoutExplicitUuid() {
+    final var dayWeek = DayOfWeek.MONDAY;
+    final var startTime = LocalTime.of(9, 0);
+    final var endTime = LocalTime.of(18, 0);
+
+    final var openingHours = new RestaurantOpeningHours(dayWeek, startTime, endTime);
+
+    Assertions.assertNotNull(openingHours.getUuid());
+    Assertions.assertEquals(dayWeek, openingHours.getDayWeek());
+    Assertions.assertEquals(startTime, openingHours.getStartTime());
+    Assertions.assertEquals(endTime, openingHours.getEndTime());
+  }
+
+  @Test
+  @DisplayName("Não deve criar um horário de funcionamento sem dayWeek e deve lançar BadRequestException")
   void shouldNotCreateRestaurantOpeningHoursWithoutDayWeekAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
@@ -74,8 +52,7 @@ class RestaurantOpeningHoursTest {
             UUID.randomUUID(),
             null,
             LocalTime.of(9, 0),
-            LocalTime.of(18, 0),
-            Mockito.mock(Restaurants.class)
+            LocalTime.of(18, 0)
         )
     );
 
@@ -83,7 +60,7 @@ class RestaurantOpeningHoursTest {
   }
 
   @Test
-  @DisplayName("Não deve criar um horário de funcionamento sem startTime e lançar BadRequestException")
+  @DisplayName("Não deve criar um horário de funcionamento sem startTime e deve lançar BadRequestException")
   void shouldNotCreateRestaurantOpeningHoursWithoutStartTimeAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
@@ -91,8 +68,7 @@ class RestaurantOpeningHoursTest {
             UUID.randomUUID(),
             DayOfWeek.MONDAY,
             null,
-            LocalTime.of(18, 0),
-            Mockito.mock(Restaurants.class)
+            LocalTime.of(18, 0)
         )
     );
 
@@ -100,7 +76,7 @@ class RestaurantOpeningHoursTest {
   }
 
   @Test
-  @DisplayName("Não deve criar um horário de funcionamento sem endTime e lançar BadRequestException")
+  @DisplayName("Não deve criar um horário de funcionamento sem endTime e deve lançar BadRequestException")
   void shouldNotCreateRestaurantOpeningHoursWithoutEndTimeAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
@@ -108,8 +84,7 @@ class RestaurantOpeningHoursTest {
             UUID.randomUUID(),
             DayOfWeek.MONDAY,
             LocalTime.of(9, 0),
-            null,
-            Mockito.mock(Restaurants.class)
+            null
         )
     );
 

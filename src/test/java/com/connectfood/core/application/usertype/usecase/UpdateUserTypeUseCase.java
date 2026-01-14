@@ -36,39 +36,28 @@ class UpdateUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve atualizar tipo de usuário com sucesso quando existir")
   void shouldUpdateUserTypeSuccessfully() {
-    // Arrange
     final var uuid = UUID.randomUUID();
     final var input = new UsersTypeInput("ADMIN_UPDATE", "Administrador Atualizado");
 
-    // Dados antigos (simulando que existe no banco)
     final var existingUserType = new UsersType(uuid, "ADMIN", "Admin Antigo");
 
-    // Dados novos (objeto de domínio atualizado)
     final var updatedUserType = new UsersType(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
 
-    // Output esperado
     final var output = new UsersTypeOutput(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
 
-    // Mocks
-    // 1. Verifica se existe
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(existingUserType));
 
-    // 2. Converte Input -> Domain
     when(mapper.toDomain(uuid, input)).thenReturn(updatedUserType);
 
-    // 3. Atualiza no Banco
     when(repository.update(uuid, updatedUserType)).thenReturn(updatedUserType);
 
-    // 4. Converte Domain -> Output
     when(mapper.toOutput(updatedUserType)).thenReturn(output);
 
-    // Act
     final var result = useCase.execute(uuid, input);
 
-    // Assert
     Assertions.assertNotNull(result);
     Assertions.assertEquals(output.getUuid(), result.getUuid());
-    Assertions.assertEquals("ADMIN_UPDATE", result.getName()); // Use .name() se for Record
+    Assertions.assertEquals("ADMIN_UPDATE", result.getName());
 
     verify(repository, times(1)).findByUuid(uuid);
     verify(repository, times(1)).update(uuid, updatedUserType);
@@ -77,19 +66,15 @@ class UpdateUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve lançar NotFoundException ao tentar atualizar registro inexistente")
   void shouldThrowNotFoundWhenUserTypeDoesNotExist() {
-    // Arrange
     final var uuid = UUID.randomUUID();
     final var input = new UsersTypeInput("Nome", "Desc");
 
-    // Simula que não encontrou nada
     when(repository.findByUuid(uuid)).thenReturn(Optional.empty());
 
-    // Act & Assert
     Assertions.assertThrows(NotFoundException.class, () -> {
       useCase.execute(uuid, input);
     });
 
-    // Garante que NUNCA chamou o update
     verify(repository, never()).update(any(), any());
     verify(mapper, never()).toDomain(any(), any());
   }

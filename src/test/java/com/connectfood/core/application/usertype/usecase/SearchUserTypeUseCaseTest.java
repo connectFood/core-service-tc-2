@@ -35,7 +35,6 @@ class SearchUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve retornar lista paginada de tipos de usuário com sucesso")
   void shouldReturnPagedUserTypesSuccessfully() {
-    // Arrange
     final var name = "CLIENT";
     final var page = 0;
     final var size = 10;
@@ -46,17 +45,13 @@ class SearchUserTypeUseCaseTest {
     final var usersType = new UsersType(uuid, "CLIENT", "Cliente do sistema");
     final var usersTypeOutput = new UsersTypeOutput(uuid, "CLIENT", "Cliente do sistema");
 
-
     final var pageModel = new PageModel<>(List.of(usersType), 1L);
 
-    // Mocks
     when(repository.findAll(name, page, size, sort, direction)).thenReturn(pageModel);
     when(mapper.toOutput(usersType)).thenReturn(usersTypeOutput);
 
-    // Act
     final var result = useCase.execute(name, page, size, sort, direction);
 
-    // Assert
     Assertions.assertNotNull(result);
     Assertions.assertEquals(1L, result.total());
     Assertions.assertEquals(1, result.content().size());
@@ -69,16 +64,12 @@ class SearchUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve retornar página vazia quando não encontrar resultados")
   void shouldReturnEmptyPageWhenNoResults() {
-    // Arrange
     final var pageModel = new PageModel<List<UsersType>>(Collections.emptyList(), 0L);
-
 
     when(repository.findAll(any(), any(), any(), any(), any())).thenReturn(pageModel);
 
-    // Act
     final var result = useCase.execute("NOME_INEXISTENTE", 0, 10, "id", "asc");
 
-    // Assert
     Assertions.assertNotNull(result);
     Assertions.assertEquals(0L, result.total());
     Assertions.assertTrue(result.content().isEmpty());

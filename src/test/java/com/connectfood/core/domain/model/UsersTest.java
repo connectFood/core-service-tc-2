@@ -1,11 +1,12 @@
 package com.connectfood.core.domain.model;
 
+import java.util.UUID;
+
 import com.connectfood.core.domain.exception.BadRequestException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 class UsersTest {
 
@@ -15,7 +16,6 @@ class UsersTest {
     final var uuid = UUID.randomUUID();
     final var userType = new UsersType(UUID.randomUUID(), "CLIENT", "Cliente");
 
-    // A entidade Users valida os dados no construtor
     final var user = new Users(uuid, "Pilar Calderon", "pilarcalderon@gmail.com", "hashSenha123", userType);
 
     Assertions.assertNotNull(user);
@@ -28,8 +28,9 @@ class UsersTest {
   void shouldThrowExceptionWhenEmailIsNull() {
     final var userType = new UsersType("CLIENT", "Cliente");
 
-    // O construtor deve lançar BadRequestException se o e-mail for nulo ou vazio
-    Assertions.assertThrows(BadRequestException.class, () -> new Users(UUID.randomUUID(), "Pilar", null, "senha", userType));
+    Assertions.assertThrows(BadRequestException.class,
+        () -> new Users(UUID.randomUUID(), "Pilar", null, "senha", userType)
+    );
   }
 
   @Test
@@ -37,7 +38,6 @@ class UsersTest {
   void shouldGenerateUuidAutomatically() {
     final var userType = new UsersType("CLIENT", "Cliente");
 
-    // Passando UUID null para testar a geração automática
     final var user = new Users(null, "Pilar", "pilarcalderon@gmail.com", "senha", userType);
 
     Assertions.assertNotNull(user.getUuid());

@@ -1,12 +1,12 @@
-package com.connectfood.core.application.address.usecase;
+package com.connectfood.core.application.users.usecase;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
+import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.users.mapper.UsersAddressAppMapper;
-import com.connectfood.core.application.users.usecase.CreateUsersAddressUseCase;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Users;
@@ -54,14 +54,17 @@ class CreateUsersAddressUseCaseTest {
     Mockito.when(usersRepository.findByUuid(userUuid))
         .thenReturn(Optional.empty());
 
-    final var ex = Assertions.assertThrows(NotFoundException.class,
+    final var ex = Assertions.assertThrows(
+        NotFoundException.class,
         () -> useCase.execute(userUuid, input)
     );
 
     Assertions.assertEquals("User not found", ex.getMessage());
+
     Mockito.verify(usersRepository, Mockito.times(1))
         .findByUuid(userUuid);
     Mockito.verifyNoInteractions(repository, mapper, usersAddressRepository, usersAddressMapper);
+    Mockito.verifyNoMoreInteractions(usersRepository);
   }
 
   @Test
@@ -90,9 +93,11 @@ class CreateUsersAddressUseCaseTest {
     Mockito.when(usersAddressRepository.save(usersAddressToSave))
         .thenReturn(savedUsersAddress);
 
-    final UsersAddressOutput expectedOutput = Mockito.mock(UsersAddressOutput.class);
-//    Mockito.when(usersAddressMapper.toOutput(savedUsersAddress))
-//        .thenReturn(expectedOutput);
+    final AddressOutput expectedOutput = Mockito.mock(AddressOutput.class);
+    Mockito.when(savedUsersAddress.getAddress())
+        .thenReturn(savedAddress);
+    Mockito.when(mapper.toOutput(savedAddress))
+        .thenReturn(expectedOutput);
 
     final var result = useCase.execute(userUuid, input);
 
@@ -109,7 +114,18 @@ class CreateUsersAddressUseCaseTest {
         .toDomain(users, savedAddress);
     Mockito.verify(usersAddressRepository, Mockito.times(1))
         .save(usersAddressToSave);
-//    Mockito.verify(usersAddressMapper, Mockito.times(1))
-//        .toOutput(savedUsersAddress);
+    Mockito.verify(savedUsersAddress, Mockito.times(1))
+        .getAddress();
+    Mockito.verify(mapper, Mockito.times(1))
+        .toOutput(savedAddress);
+
+    Mockito.verifyNoMoreInteractions(
+        usersRepository,
+        mapper,
+        repository,
+        usersAddressMapper,
+        usersAddressRepository,
+        savedUsersAddress
+    );
   }
 }

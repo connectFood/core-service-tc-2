@@ -31,7 +31,6 @@ class CreateUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve criar UserType com sucesso")
   void shouldCreateUserTypeSuccessfully() {
-
     final var input = new UsersTypeInput("ADMIN", "Administrador");
     final var domainObj = new UsersType(UUID.randomUUID(), "ADMIN", "Administrador");
     final var output = new UsersTypeOutput(domainObj.getUuid(), "ADMIN", "Administrador");
@@ -40,14 +39,11 @@ class CreateUserTypeUseCaseTest {
     Mockito.when(repository.save(domainObj)).thenReturn(domainObj);
     Mockito.when(mapper.toOutput(domainObj)).thenReturn(output);
 
-    // Ação
     final var result = useCase.execute(input);
 
-    // Verificação (Assert)
     Assertions.assertNotNull(result);
     Assertions.assertEquals(output.getUuid(), result.getUuid());
 
-    // Verifica se o método save foi chamado exatamente 1 vez
     Mockito.verify(repository, Mockito.times(1)).save(domainObj);
   }
 }

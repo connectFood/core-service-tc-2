@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
@@ -337,6 +339,8 @@ class RestaurantsRepositoryAdapterTest {
     final Page<RestaurantsEntity> pageResult =
         new PageImpl<>(List.of(entity1, entity2), Pageable.unpaged(), 2);
 
+    final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+
     Mockito.when(repository.findAll(
             ArgumentMatchers.<Specification<RestaurantsEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
@@ -344,7 +348,17 @@ class RestaurantsRepositoryAdapterTest {
         .thenReturn(pageResult);
 
     final PageModel<List<Restaurants>> result =
-        adapter.findAll("abc", uuidType, 0, 10, null, null);
+        adapter.findAll(
+            "abc",
+            uuidType,
+            "Rua A",
+            "São Paulo",
+            "SP",
+            0,
+            10,
+            null,
+            null
+        );
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(2, result.content()
@@ -354,7 +368,13 @@ class RestaurantsRepositoryAdapterTest {
     Assertions.assertEquals(2L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<RestaurantsEntity>>any(), ArgumentMatchers.any(Pageable.class));
+        .findAll(ArgumentMatchers.<Specification<RestaurantsEntity>>any(), pageableCaptor.capture());
+
+    final Pageable usedPageable = pageableCaptor.getValue();
+    Assertions.assertEquals(0, usedPageable.getPageNumber());
+    Assertions.assertEquals(10, usedPageable.getPageSize());
+    Assertions.assertEquals(Sort.by(Sort.Direction.ASC, "id"), usedPageable.getSort());
+
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(entity1);
     Mockito.verify(mapper, Mockito.times(1))
@@ -374,6 +394,8 @@ class RestaurantsRepositoryAdapterTest {
     final Page<RestaurantsEntity> pageResult =
         new PageImpl<>(List.of(entity), Pageable.unpaged(), 1);
 
+    final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+
     Mockito.when(repository.findAll(
             ArgumentMatchers.<Specification<RestaurantsEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
@@ -381,7 +403,17 @@ class RestaurantsRepositoryAdapterTest {
         .thenReturn(pageResult);
 
     final PageModel<List<Restaurants>> result =
-        adapter.findAll(null, null, 1, 5, "name", "DESC");
+        adapter.findAll(
+            null,
+            null,
+            null,
+            null,
+            null,
+            1,
+            5,
+            "name",
+            "DESC"
+        );
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(1, result.content()
@@ -391,7 +423,13 @@ class RestaurantsRepositoryAdapterTest {
     Assertions.assertEquals(1L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<RestaurantsEntity>>any(), ArgumentMatchers.any(Pageable.class));
+        .findAll(ArgumentMatchers.<Specification<RestaurantsEntity>>any(), pageableCaptor.capture());
+
+    final Pageable usedPageable = pageableCaptor.getValue();
+    Assertions.assertEquals(1, usedPageable.getPageNumber());
+    Assertions.assertEquals(5, usedPageable.getPageSize());
+    Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "name"), usedPageable.getSort());
+
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(entity);
     Mockito.verifyNoMoreInteractions(repository, mapper, restaurantsTypeRepository);

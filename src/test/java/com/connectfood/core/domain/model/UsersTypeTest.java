@@ -68,7 +68,7 @@ class UsersTypeTest {
   }
 
   @Test
-  @DisplayName("Não deve criar un tipo de usuário com nome menor que 3 caracteres e deve lançar uma BadRequest")
+  @DisplayName("Não deve criar um tipo de usuário com nome menor que 3 caracteres e deve lançar uma BadRequest")
   void shouldNotCreateUsersTypeWithNameShorterThan3CharactersAndShouldThrowBadRequest() {
     final var uuid = UUID.randomUUID();
     final var name = "TE";

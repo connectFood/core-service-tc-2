@@ -20,7 +20,6 @@ class AddressInfraMapperTest {
   @DisplayName("Deve criar o mapper pelo construtor padrão")
   void shouldCreateMapperUsingDefaultConstructor() {
     final var instance = new AddressInfraMapper();
-
     Assertions.assertNotNull(instance);
   }
 
@@ -28,7 +27,6 @@ class AddressInfraMapperTest {
   @DisplayName("Deve retornar null ao converter entity null para domínio")
   void shouldReturnNullWhenToDomainReceivesNull() {
     final Address result = mapper.toDomain(null);
-
     Assertions.assertNull(result);
   }
 
@@ -66,17 +64,14 @@ class AddressInfraMapperTest {
   @DisplayName("Deve retornar null ao converter model null para entity")
   void shouldReturnNullWhenToEntityReceivesNull() {
     final AddressEntity result = mapper.toEntity((Address) null);
-
     Assertions.assertNull(result);
   }
 
   @Test
-  @DisplayName("Deve converter model para entity corretamente")
+  @DisplayName("Deve converter model para entity corretamente (sem sobrescrever UUID)")
   void shouldConvertModelToEntityCorrectly() {
-    final var uuid = UUID.randomUUID();
-
     final var model = new Address(
-        uuid,
+        UUID.randomUUID(),
         "Rua A",
         "10",
         "Casa",
@@ -90,7 +85,9 @@ class AddressInfraMapperTest {
     final AddressEntity result = mapper.toEntity(model);
 
     Assertions.assertNotNull(result);
-    Assertions.assertEquals(uuid, result.getUuid());
+
+    Assertions.assertNull(result.getUuid());
+
     Assertions.assertEquals("Rua A", result.getStreet());
     Assertions.assertEquals("10", result.getNumber());
     Assertions.assertEquals("Casa", result.getComplement());
@@ -102,9 +99,10 @@ class AddressInfraMapperTest {
   }
 
   @Test
-  @DisplayName("Deve atualizar a entity existente com base no model")
+  @DisplayName("Deve atualizar a entity existente preservando o UUID do banco")
   void shouldUpdateExistingEntityUsingModel() {
     final var uuidOriginal = UUID.randomUUID();
+
     final var entity = new AddressEntity();
     entity.setUuid(uuidOriginal);
     entity.setStreet("Old Street");
@@ -132,6 +130,7 @@ class AddressInfraMapperTest {
 
     Assertions.assertSame(entity, result);
     Assertions.assertEquals(uuidOriginal, result.getUuid());
+
     Assertions.assertEquals("New Street", result.getStreet());
     Assertions.assertEquals("999", result.getNumber());
     Assertions.assertEquals("New Complement", result.getComplement());

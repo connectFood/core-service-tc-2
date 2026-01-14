@@ -32,12 +32,10 @@ class RemoveUsersUseCaseTest {
     final var uuid = UUID.randomUUID();
     final var user = new Users(uuid, "Pilar", "email", "senha", new UsersType(UUID.randomUUID(), "ADMIN", "Admin"));
 
-    // Simula que encontrou o usuário
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(user));
 
     useCase.execute(uuid);
 
-    // Verifica se chamou o delete passando o objeto usuário
     verify(repository, times(1)).delete(uuid);
   }
 

@@ -1,4 +1,4 @@
-package com.connectfood.core.application.restaurantopeninghours.usecase;
+package com.connectfood.core.application.restaurants.usecase;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -6,10 +6,8 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHoursAppMapper;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
-import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
 
 import org.junit.jupiter.api.Assertions;
@@ -40,17 +38,12 @@ class UpdateRestaurantOpeningHoursUseCaseTest {
 
     final var input = Mockito.mock(RestaurantOpeningHoursInput.class);
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
-
     final RestaurantOpeningHours existing = Mockito.mock(RestaurantOpeningHours.class);
-    Mockito.when(existing.getRestaurant())
-        .thenReturn(restaurants);
-
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(existing));
 
     final RestaurantOpeningHours domainToUpdate = Mockito.mock(RestaurantOpeningHours.class);
-    Mockito.when(mapper.toDomain(uuid, input, restaurants))
+    Mockito.when(mapper.toDomain(uuid, input))
         .thenReturn(domainToUpdate);
 
     final RestaurantOpeningHours updated = Mockito.mock(RestaurantOpeningHours.class);
@@ -68,15 +61,13 @@ class UpdateRestaurantOpeningHoursUseCaseTest {
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
-    Mockito.verify(existing, Mockito.times(1))
-        .getRestaurant();
     Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(uuid, input, restaurants);
+        .toDomain(uuid, input);
     Mockito.verify(repository, Mockito.times(1))
         .update(uuid, domainToUpdate);
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updated);
-    Mockito.verifyNoMoreInteractions(repository, mapper, existing);
+    Mockito.verifyNoMoreInteractions(repository, mapper);
   }
 
   @Test
