@@ -28,38 +28,28 @@ class RemoveUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve remover tipo de usuário com sucesso quando existir")
   void shouldRemoveUserTypeSuccessfully() {
-    // Arrange
     final var uuid = UUID.randomUUID();
-    // Precisamos simular que o tipo existe para passar da validação orElseThrow
     final var usersType = new UsersType(uuid, "CLIENT", "Cliente");
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(usersType));
 
-    // Act
     useCase.execute(uuid);
 
-    // Assert
-    // Verifica se chamou o findByUuid
     verify(repository, times(1)).findByUuid(uuid);
-    // Verifica se chamou o delete passando o UUID
     verify(repository, times(1)).delete(uuid);
   }
 
   @Test
   @DisplayName("Deve lançar NotFoundException ao tentar remover registo inexistente")
   void shouldThrowNotFoundWhenUserTypeDoesNotExist() {
-    // Arrange
     final var uuid = UUID.randomUUID();
 
-    // Simula que não encontrou nada (Optional.empty)
     when(repository.findByUuid(uuid)).thenReturn(Optional.empty());
 
-    // Act & Assert
     Assertions.assertThrows(NotFoundException.class, () -> {
       useCase.execute(uuid);
     });
 
-    // Garante que o delete NUNCA foi chamado (segurança)
     verify(repository, never()).delete(any());
   }
 }

@@ -25,6 +25,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith(MockitoExtension.class)
 class RestaurantsInfraMapperTest {
 
@@ -104,7 +106,8 @@ class RestaurantsInfraMapperTest {
     Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals(name, result.getName());
     Assertions.assertSame(typeDomain, result.getRestaurantsType());
-    Assertions.assertEquals(List.of(ohDomain1, ohDomain2), result.getOpeningHours());
+    assertThat(result.getOpeningHours())
+        .containsExactlyInAnyOrder(ohDomain1, ohDomain2);
     Assertions.assertSame(addressDomain, result.getAddress());
     Assertions.assertSame(usersDomain, result.getUsers());
 
@@ -140,7 +143,6 @@ class RestaurantsInfraMapperTest {
     Mockito.when(entity.getRestaurantsType())
         .thenReturn(typeEntity);
 
-    // crucial: evita NPE no stream()
     Mockito.when(entity.getOpeningHours())
         .thenReturn(Set.of());
 
@@ -176,7 +178,6 @@ class RestaurantsInfraMapperTest {
     Mockito.when(entity.getRestaurantsType())
         .thenReturn(null);
 
-    // crucial: evita NPE no stream()
     Mockito.when(entity.getOpeningHours())
         .thenReturn(Set.of());
 

@@ -38,7 +38,6 @@ class FindUsersUseCaseTest {
   @Test
   @DisplayName("Deve retornar UsersOutput quando usuário existir")
   void shouldReturnUserWhenExists() {
-    // Arrange
     final var uuid = UUID.randomUUID();
     final var userType = new UsersType(UUID.randomUUID(), "ADMIN", "Admin");
     final var user = new Users(uuid, "Pilar", "pilar@test.com", "senha", userType);
@@ -47,9 +46,7 @@ class FindUsersUseCaseTest {
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(user));
     when(mapper.toOutput(user)).thenReturn(output);
 
-
     final var result = useCase.execute(uuid);
-
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());

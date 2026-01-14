@@ -71,13 +71,11 @@ class UsersInfraMapperTest {
   }
 
   @Test
-  @DisplayName("Deve mapear entity para domain quando usersType for null")
-  void toDomainShouldMapEntityToDomainWhenUsersTypeIsNull() {
-    final var uuid = UUID.randomUUID();
-
+  @DisplayName("Deve lançar BadRequestException quando usersType for null")
+  void toDomainShouldThrowBadRequestExceptionWhenUsersTypeIsNull() {
     final UsersEntity entity = Mockito.mock(UsersEntity.class);
     Mockito.when(entity.getUuid())
-        .thenReturn(uuid);
+        .thenReturn(UUID.randomUUID());
     Mockito.when(entity.getFullName())
         .thenReturn("Lucas Santos");
     Mockito.when(entity.getEmail())
@@ -87,15 +85,12 @@ class UsersInfraMapperTest {
     Mockito.when(entity.getUsersType())
         .thenReturn(null);
 
-    final Users result = mapper.toDomain(entity);
+    final var ex = Assertions.assertThrows(
+        com.connectfood.core.domain.exception.BadRequestException.class,
+        () -> mapper.toDomain(entity)
+    );
 
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertEquals("Lucas Santos", result.getFullName());
-    Assertions.assertEquals("lucas@email.com", result.getEmail());
-    Assertions.assertEquals("hashed-password", result.getPasswordHash());
-    Assertions.assertNull(result.getUsersType());
-
+    Assertions.assertEquals("Users type is required", ex.getMessage());
     Mockito.verifyNoInteractions(usersTypeMapper);
   }
 

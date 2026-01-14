@@ -1,10 +1,7 @@
-package com.connectfood.core.application.restaurantopeninghours.dto;
+package com.connectfood.core.application.restaurants.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.UUID;
-
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,19 +15,16 @@ class RestaurantOpeningHoursInputTest {
     final var dayOfWeek = DayOfWeek.MONDAY;
     final var startTime = LocalTime.of(9, 0);
     final var endTime = LocalTime.of(18, 0);
-    final var restaurantUuid = UUID.randomUUID();
 
     final var input = new RestaurantOpeningHoursInput(
         dayOfWeek,
         startTime,
-        endTime,
-        restaurantUuid
+        endTime
     );
 
     Assertions.assertEquals(dayOfWeek, input.getDayOfWeek());
     Assertions.assertEquals(startTime, input.getStartTime());
     Assertions.assertEquals(endTime, input.getEndTime());
-    Assertions.assertEquals(restaurantUuid, input.getRestaurantUuid());
   }
 
   @Test
@@ -39,13 +33,11 @@ class RestaurantOpeningHoursInputTest {
     final var input = new RestaurantOpeningHoursInput(
         null,
         null,
-        null,
         null
     );
 
     Assertions.assertNull(input.getDayOfWeek());
     Assertions.assertNull(input.getStartTime());
     Assertions.assertNull(input.getEndTime());
-    Assertions.assertNull(input.getRestaurantUuid());
   }
 }

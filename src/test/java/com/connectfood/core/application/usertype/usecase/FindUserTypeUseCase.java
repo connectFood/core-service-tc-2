@@ -33,22 +33,18 @@ class FindUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve retornar tipo de usuário com sucesso quando existir")
   void shouldFindUserTypeSuccessfully() {
-    // Arrange
     final var uuid = UUID.randomUUID();
     final var usersType = new UsersType(uuid, "ADMIN", "Administrador");
     final var output = new UsersTypeOutput(uuid, "ADMIN", "Administrador");
 
-    // Mocks
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(usersType));
     when(mapper.toOutput(usersType)).thenReturn(output);
 
-    // Act
     final var result = useCase.execute(uuid);
 
-    // Assert
     Assertions.assertNotNull(result);
     Assertions.assertEquals(output.getUuid(), result.getUuid());
-    Assertions.assertEquals(output.getName(), result.getName()); // Se for Record, use .name()
+    Assertions.assertEquals(output.getName(), result.getName());
 
     verify(repository, times(1)).findByUuid(uuid);
     verify(mapper, times(1)).toOutput(usersType);
@@ -57,17 +53,13 @@ class FindUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve lançar NotFoundException quando id não existir")
   void shouldThrowNotFoundWhenIdDoesNotExist() {
-    // Arrange
     final var uuid = UUID.randomUUID();
-    // Simula que não encontrou nada
     when(repository.findByUuid(uuid)).thenReturn(Optional.empty());
 
-    // Act & Assert
     Assertions.assertThrows(NotFoundException.class, () -> {
       useCase.execute(uuid);
     });
 
-    // Garante que o mapper nunca foi chamado
     verify(mapper, never()).toOutput(any());
   }
 }

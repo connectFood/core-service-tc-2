@@ -53,5 +53,5 @@ public class RestaurantsResponse {
       description = "User associated with the restaurant",
       implementation = UsersResponse.class
   )
-  private UsersResponse usersResponse;
+  private UsersResponse users;
 }
