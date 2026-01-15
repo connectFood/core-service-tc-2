@@ -6,9 +6,12 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurants.dto.RestaurantsInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantsRepository;
 import com.connectfood.core.domain.repository.RestaurantsTypeRepository;
 
@@ -31,6 +34,9 @@ class UpdateRestaurantsUseCaseTest {
   private RestaurantsAppMapper mapper;
 
   @Mock
+  private RequestUserGuard guard;
+
+  @Mock
   private RestaurantsTypeRepository restaurantsTypeRepository;
 
   @InjectMocks
@@ -39,6 +45,9 @@ class UpdateRestaurantsUseCaseTest {
   @Test
   @DisplayName("Deve atualizar restaurante mantendo o tipo quando restaurantsTypeUuid for o mesmo")
   void shouldUpdateKeepingRestaurantsTypeWhenUuidIsTheSame() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantUuid = UUID.randomUUID();
     final var restaurantsTypeUuid = UUID.randomUUID();
 
@@ -69,15 +78,21 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.when(mapper.toOutput(updatedRestaurant))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(restaurantUuid, input);
+    final var result = useCase.execute(requestUser, restaurantUuid, input);
 
     Assertions.assertNotNull(result);
     Assertions.assertSame(expectedOutput, result);
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(restaurantUuid);
+
+    // Implementação chama getRestaurantsType() 2x (uma pra atribuir, outra pra comparar)
     Mockito.verify(existingRestaurant, Mockito.times(2))
         .getRestaurantsType();
+
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
 
@@ -85,17 +100,24 @@ class UpdateRestaurantsUseCaseTest {
 
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(restaurantUuid, input, currentType);
+
     Mockito.verify(repository, Mockito.times(1))
         .update(restaurantUuid, mappedDomain);
+
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedRestaurant);
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, existingRestaurant, currentType);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, mapper, existingRestaurant, currentType
+    );
   }
 
   @Test
   @DisplayName("Deve atualizar restaurante buscando novo tipo quando restaurantsTypeUuid for diferente")
   void shouldUpdateFetchingNewRestaurantsTypeWhenUuidIsDifferent() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantUuid = UUID.randomUUID();
     final var currentTypeUuid = UUID.randomUUID();
     final var newTypeUuid = UUID.randomUUID();
@@ -131,15 +153,20 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.when(mapper.toOutput(updatedRestaurant))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(restaurantUuid, input);
+    final var result = useCase.execute(requestUser, restaurantUuid, input);
 
     Assertions.assertNotNull(result);
     Assertions.assertSame(expectedOutput, result);
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(restaurantUuid);
+
     Mockito.verify(existingRestaurant, Mockito.times(2))
         .getRestaurantsType();
+
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
 
@@ -148,19 +175,25 @@ class UpdateRestaurantsUseCaseTest {
 
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(restaurantUuid, input, newType);
+
     Mockito.verify(repository, Mockito.times(1))
         .update(restaurantUuid, mappedDomain);
+
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedRestaurant);
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantsTypeRepository, existingRestaurant, currentType);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, mapper, restaurantsTypeRepository, existingRestaurant, currentType
+    );
   }
 
   @Test
   @DisplayName("Não deve atualizar restaurante quando restaurante não existir")
   void shouldThrowWhenRestaurantDoesNotExist() {
-    final var restaurantUuid = UUID.randomUUID();
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
 
+    final var restaurantUuid = UUID.randomUUID();
     final RestaurantsInput input = Mockito.mock(RestaurantsInput.class);
 
     Mockito.when(repository.findByUuid(restaurantUuid))
@@ -168,10 +201,13 @@ class UpdateRestaurantsUseCaseTest {
 
     final var ex = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(restaurantUuid, input)
+        () -> useCase.execute(requestUser, restaurantUuid, input)
     );
 
     Assertions.assertEquals("Restaurants not found", ex.getMessage());
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(restaurantUuid);
@@ -181,12 +217,15 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.verify(repository, Mockito.never())
         .update(Mockito.any(), Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository);
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
   @Test
   @DisplayName("Não deve atualizar restaurante quando tipo informado não existir e uuid for diferente")
   void shouldThrowWhenRestaurantsTypeDoesNotExistAndUuidIsDifferent() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantUuid = UUID.randomUUID();
     final var currentTypeUuid = UUID.randomUUID();
     final var newTypeUuid = UUID.randomUUID();
@@ -211,15 +250,20 @@ class UpdateRestaurantsUseCaseTest {
 
     final var ex = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(restaurantUuid, input)
+        () -> useCase.execute(requestUser, restaurantUuid, input)
     );
 
     Assertions.assertEquals("Restaurant type not found", ex.getMessage());
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(restaurantUuid);
+
     Mockito.verify(existingRestaurant, Mockito.times(2))
         .getRestaurantsType();
+
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
 
@@ -231,6 +275,8 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.verify(repository, Mockito.never())
         .update(Mockito.any(), Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository, restaurantsTypeRepository, existingRestaurant, currentType);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, restaurantsTypeRepository, existingRestaurant, currentType
+    );
   }
 }

@@ -14,6 +14,7 @@ import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUse
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
+import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressRequest;
 import com.connectfood.core.entrypoint.rest.dto.address.AddressResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.BaseResponse;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -143,9 +145,10 @@ public class RestaurantsController {
       description = "Create a new restaurant and returns the created resource"
   )
   public ResponseEntity<BaseResponse<RestaurantsResponse>> create(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @Valid @RequestBody final RestaurantsRequest request) {
 
-    final var result = createUseCase.execute(mapper.toInput(request));
+    final var result = createUseCase.execute(new RequestUser(requestUserUuid), mapper.toInput(request));
     final var response = mapper.toResponse(result);
 
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -158,10 +161,13 @@ public class RestaurantsController {
       description = "Create a new restaurant opening hours and returns the created resource"
   )
   public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> createOpeningHours(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @PathVariable final UUID uuid,
       @Valid @RequestBody final RestaurantOpeningHoursRequest request) {
 
-    final var result = createRestaurantOpeningHoursUseCase.execute(uuid, restaurantOpeningHoursMapper.toInput(request));
+    final var result = createRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), uuid,
+        restaurantOpeningHoursMapper.toInput(request)
+    );
     final var response = restaurantOpeningHoursMapper.toResponse(result);
 
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -174,10 +180,13 @@ public class RestaurantsController {
       description = "Create a new restaurant address and returns the created resource"
   )
   public ResponseEntity<BaseResponse<AddressResponse>> createAddress(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @PathVariable final UUID uuid,
       @Valid @RequestBody final AddressRequest request) {
 
-    final var result = createRestaurantsAddressUseCase.execute(uuid, addressMapper.toInput(request));
+    final var result = createRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
+        addressMapper.toInput(request)
+    );
     final var response = addressMapper.toResponse(result);
 
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -190,11 +199,12 @@ public class RestaurantsController {
       description = "Updates an existing restaurants identified by UUID"
   )
   public ResponseEntity<BaseResponse<RestaurantsResponse>> update(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @PathVariable final UUID uuid,
       @Valid @RequestBody final RestaurantsRequest request
   ) {
 
-    final var result = updateUseCase.execute(uuid, mapper.toInput(request));
+    final var result = updateUseCase.execute(new RequestUser(requestUserUuid), uuid, mapper.toInput(request));
     final var response = mapper.toResponse(result);
 
     return ResponseEntity.ok()
@@ -207,10 +217,11 @@ public class RestaurantsController {
       description = "Updates an existing restaurant opening hours identified by UUID"
   )
   public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> update(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @PathVariable final UUID openingHoursUuid,
       @Valid @RequestBody final RestaurantOpeningHoursRequest request
   ) {
-    final var result = updateRestaurantOpeningHoursUseCase.execute(openingHoursUuid,
+    final var result = updateRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid,
         restaurantOpeningHoursMapper.toInput(request)
     );
     final var response = restaurantOpeningHoursMapper.toResponse(result);
@@ -225,10 +236,13 @@ public class RestaurantsController {
       description = "Updates an existing restaurants address identified by UUID"
   )
   public ResponseEntity<BaseResponse<AddressResponse>> updateAddress(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @PathVariable final UUID uuid,
       @Valid @RequestBody final AddressRequest request) {
 
-    final var result = updateRestaurantsAddressUseCase.execute(uuid, addressMapper.toInput(request));
+    final var result = updateRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
+        addressMapper.toInput(request)
+    );
     final var response = addressMapper.toResponse(result);
 
     return ResponseEntity.ok()
@@ -240,8 +254,10 @@ public class RestaurantsController {
       summary = "Delete an existing restaurant",
       description = "Delete and existing restaurant identified by UUID"
   )
-  public ResponseEntity<Void> delete(@PathVariable("uuid") final UUID uuid) {
-    removeUseCase.execute(uuid);
+  public ResponseEntity<Void> delete(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
+      @PathVariable final UUID uuid) {
+    removeUseCase.execute(new RequestUser(requestUserUuid), uuid);
 
     return ResponseEntity.noContent()
         .build();
@@ -252,8 +268,10 @@ public class RestaurantsController {
       summary = "Delete an existing restaurant opening hours",
       description = "Deletes an existing restaurant opening hours identified by UUID"
   )
-  public ResponseEntity<Void> deleteOpeningHoursUuid(@PathVariable final UUID openingHoursUuid) {
-    removeRestaurantOpeningHoursUseCase.execute(openingHoursUuid);
+  public ResponseEntity<Void> deleteOpeningHoursUuid(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
+      @PathVariable final UUID openingHoursUuid) {
+    removeRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid);
 
     return ResponseEntity.noContent()
         .build();
@@ -264,8 +282,10 @@ public class RestaurantsController {
       summary = "Delete an existing restaurant address",
       description = "Deletes an existing restaurant address identified by UUID"
   )
-  public ResponseEntity<Void> deleteAddress(@PathVariable final UUID uuid) {
-    removeRestaurantsAddressUseCase.execute(uuid);
+  public ResponseEntity<Void> deleteAddress(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
+      @PathVariable final UUID uuid) {
+    removeRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid);
 
     return ResponseEntity.noContent()
         .build();

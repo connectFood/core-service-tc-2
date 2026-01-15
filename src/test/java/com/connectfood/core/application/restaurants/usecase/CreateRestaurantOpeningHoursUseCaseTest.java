@@ -5,7 +5,10 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHoursAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
 
 import org.junit.jupiter.api.Assertions;
@@ -26,14 +29,19 @@ class CreateRestaurantOpeningHoursUseCaseTest {
   @Mock
   private RestaurantOpeningHoursAppMapper mapper;
 
+  @Mock
+  private RequestUserGuard guard;
+
   @InjectMocks
   private CreateRestaurantOpeningHoursUseCase useCase;
 
   @Test
   @DisplayName("Deve criar horário de funcionamento e retornar output mapeado")
   void shouldCreateOpeningHoursAndReturnMappedOutput() {
-    final var restaurantUuid = UUID.randomUUID();
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
 
+    final var restaurantUuid = UUID.randomUUID();
     final RestaurantOpeningHoursInput input = Mockito.mock(RestaurantOpeningHoursInput.class);
 
     final RestaurantOpeningHours domain = Mockito.mock(RestaurantOpeningHours.class);
@@ -48,17 +56,23 @@ class CreateRestaurantOpeningHoursUseCaseTest {
     Mockito.when(mapper.toOutput(saved))
         .thenReturn(output);
 
-    final var result = useCase.execute(restaurantUuid, input);
+    final var result = useCase.execute(requestUser, restaurantUuid, input);
 
     Assertions.assertNotNull(result);
     Assertions.assertSame(output, result);
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(input);
+
     Mockito.verify(repository, Mockito.times(1))
         .save(domain, restaurantUuid);
+
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(saved);
-    Mockito.verifyNoMoreInteractions(repository, mapper);
+
+    Mockito.verifyNoMoreInteractions(guard, repository, mapper);
   }
 }

@@ -5,7 +5,10 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHoursAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
 
 import org.springframework.stereotype.Component;
@@ -16,16 +19,22 @@ public class UpdateRestaurantOpeningHoursUseCase {
 
   private final RestaurantOpeningHoursRepository repository;
   private final RestaurantOpeningHoursAppMapper mapper;
+  private final RequestUserGuard guard;
 
   public UpdateRestaurantOpeningHoursUseCase(
       final RestaurantOpeningHoursRepository repository,
-      final RestaurantOpeningHoursAppMapper mapper) {
+      final RestaurantOpeningHoursAppMapper mapper,
+      final RequestUserGuard guard
+  ) {
     this.repository = repository;
     this.mapper = mapper;
+    this.guard = guard;
   }
 
   @Transactional
-  public RestaurantOpeningHoursOutput execute(final UUID openingHoursUuid, final RestaurantOpeningHoursInput input) {
+  public RestaurantOpeningHoursOutput execute(final RequestUser requestUser, final UUID openingHoursUuid,
+      final RestaurantOpeningHoursInput input) {
+    guard.requireRole(requestUser, UsersType.OWNER.name());
     repository.findByUuid(openingHoursUuid)
         .orElseThrow(() -> new NotFoundException("Restaurant opening hours not found"));
 

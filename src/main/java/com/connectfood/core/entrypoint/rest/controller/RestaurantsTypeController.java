@@ -55,7 +55,7 @@ public class RestaurantsTypeController {
 
     final var response = result.content()
         .stream()
-        .map(entity -> mapper.toResponse(entity))
+        .map(mapper::toResponse)
         .toList();
 
     return ResponseEntity.ok()
@@ -63,7 +63,7 @@ public class RestaurantsTypeController {
   }
 
   @GetMapping("/{uuid}")
-  public ResponseEntity<BaseResponse<RestaurantsTypeResponse>> find(@PathVariable("uuid") final UUID uuid) {
+  public ResponseEntity<BaseResponse<RestaurantsTypeResponse>> find(@PathVariable final UUID uuid) {
     final var result = findUseCase.execute(uuid);
     final var response = mapper.toResponse(result);
 
@@ -83,7 +83,7 @@ public class RestaurantsTypeController {
 
   @PutMapping(path = "/{uuid}")
   public ResponseEntity<BaseResponse<RestaurantsTypeResponse>> update(
-      @PathVariable("uuid") final UUID uuid,
+      @PathVariable final UUID uuid,
       @Valid @RequestBody final RestaurantsTypeRequest request
   ) {
     final var result = updateUseCase.execute(uuid, mapper.toInput(request));
@@ -94,7 +94,7 @@ public class RestaurantsTypeController {
   }
 
   @DeleteMapping(path = "/{uuid}")
-  public ResponseEntity<Void> delete(@PathVariable("uuid") final UUID uuid) {
+  public ResponseEntity<Void> delete(@PathVariable final UUID uuid) {
     removeUseCase.execute(uuid);
 
     return ResponseEntity.noContent()

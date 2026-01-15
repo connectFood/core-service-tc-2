@@ -7,10 +7,13 @@ import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAddressAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsRepository;
@@ -34,6 +37,9 @@ class CreateRestaurantsAddressUseCaseTest {
   private AddressAppMapper mapper;
 
   @Mock
+  private RequestUserGuard guard;
+
+  @Mock
   private RestaurantsRepository restaurantsRepository;
 
   @Mock
@@ -48,8 +54,10 @@ class CreateRestaurantsAddressUseCaseTest {
   @Test
   @DisplayName("Deve criar endereço e vincular ao restaurante quando restaurante existir")
   void shouldCreateAddressAndLinkToRestaurantWhenRestaurantExists() {
-    final var restaurantUuid = UUID.randomUUID();
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
 
+    final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
     final Restaurants restaurants = Mockito.mock(Restaurants.class);
@@ -80,31 +88,48 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.when(mapper.toOutput(linkedAddress))
         .thenReturn(output);
 
-    final var result = useCase.execute(restaurantUuid, input);
+    final var result = useCase.execute(requestUser, restaurantUuid, input);
 
     Assertions.assertNotNull(result);
     Assertions.assertSame(output, result);
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
+
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(input);
+
     Mockito.verify(repository, Mockito.times(1))
         .save(addressDomainToSave);
+
     Mockito.verify(restaurantsAddressMapper, Mockito.times(1))
         .toDomain(restaurants, savedAddress);
+
     Mockito.verify(restaurantsAddressRepository, Mockito.times(1))
         .save(restaurantsAddressDomain);
+
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(linkedAddress);
+
     Mockito.verifyNoMoreInteractions(
-        restaurantsRepository, mapper, repository, restaurantsAddressMapper, restaurantsAddressRepository
+        guard,
+        restaurantsRepository,
+        mapper,
+        repository,
+        restaurantsAddressMapper,
+        restaurantsAddressRepository
     );
   }
 
   @Test
   @DisplayName("Deve lançar NotFoundException quando restaurante não existir")
   void shouldThrowNotFoundExceptionWhenRestaurantDoesNotExist() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
@@ -113,14 +138,18 @@ class CreateRestaurantsAddressUseCaseTest {
 
     final var ex = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(restaurantUuid, input)
+        () -> useCase.execute(requestUser, restaurantUuid, input)
     );
 
     Assertions.assertEquals("Restaurant not found", ex.getMessage());
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
+
     Mockito.verifyNoInteractions(mapper, repository, restaurantsAddressMapper, restaurantsAddressRepository);
-    Mockito.verifyNoMoreInteractions(restaurantsRepository);
+    Mockito.verifyNoMoreInteractions(guard, restaurantsRepository);
   }
 }

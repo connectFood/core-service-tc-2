@@ -6,9 +6,12 @@ import java.util.UUID;
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.address.mapper.AddressAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
 
@@ -31,6 +34,9 @@ class UpdateRestaurantsAddressUseCaseTest {
   private AddressAppMapper mapper;
 
   @Mock
+  private RequestUserGuard guard;
+
+  @Mock
   private AddressRepository addressRepository;
 
   @InjectMocks
@@ -39,8 +45,10 @@ class UpdateRestaurantsAddressUseCaseTest {
   @Test
   @DisplayName("Deve atualizar endereço quando RestaurantsAddress existir")
   void shouldUpdateAddressWhenRestaurantsAddressExists() {
-    final var restaurantUuid = UUID.randomUUID();
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
 
+    final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
     final RestaurantsAddress restaurantsAddress = Mockito.mock(RestaurantsAddress.class);
@@ -68,30 +76,43 @@ class UpdateRestaurantsAddressUseCaseTest {
     Mockito.when(mapper.toOutput(updated))
         .thenReturn(output);
 
-    final var result = useCase.execute(restaurantUuid, input);
+    final var result = useCase.execute(requestUser, restaurantUuid, input);
 
     Assertions.assertNotNull(result);
     Assertions.assertSame(output, result);
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantUuid);
+
     Mockito.verify(restaurantsAddress, Mockito.times(1))
         .getAddress();
+
     Mockito.verify(currentAddress, Mockito.times(1))
         .getUuid();
+
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(addressUuid, input);
+
     Mockito.verify(addressRepository, Mockito.times(1))
         .update(addressUuid, domainToUpdate);
+
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updated);
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, addressRepository, restaurantsAddress, currentAddress);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, mapper, addressRepository, restaurantsAddress, currentAddress
+    );
   }
 
   @Test
   @DisplayName("Deve lançar NotFoundException quando RestaurantsAddress não existir")
   void shouldThrowNotFoundExceptionWhenRestaurantsAddressDoesNotExist() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
@@ -100,14 +121,18 @@ class UpdateRestaurantsAddressUseCaseTest {
 
     final var exception = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(restaurantUuid, input)
+        () -> useCase.execute(requestUser, restaurantUuid, input)
     );
 
     Assertions.assertEquals("Restaurants Address Not Found", exception.getMessage());
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantUuid);
+
     Mockito.verifyNoInteractions(mapper, addressRepository);
-    Mockito.verifyNoMoreInteractions(repository);
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 }

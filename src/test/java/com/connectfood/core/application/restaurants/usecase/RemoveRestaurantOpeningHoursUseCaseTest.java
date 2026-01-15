@@ -3,8 +3,11 @@ package com.connectfood.core.application.restaurants.usecase;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
 
 import org.junit.jupiter.api.Assertions;
@@ -22,30 +25,44 @@ class RemoveRestaurantOpeningHoursUseCaseTest {
   @Mock
   private RestaurantOpeningHoursRepository repository;
 
+  @Mock
+  private RequestUserGuard guard;
+
   @InjectMocks
   private RemoveRestaurantOpeningHoursUseCase useCase;
 
   @Test
   @DisplayName("Deve remover horário de funcionamento quando registro existir")
   void shouldRemoveOpeningHoursWhenExists() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var uuid = UUID.randomUUID();
 
     final RestaurantOpeningHours model = Mockito.mock(RestaurantOpeningHours.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(model));
 
-    useCase.execute(uuid);
+    Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, uuid));
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
+
     Mockito.verify(repository, Mockito.times(1))
         .delete(uuid);
-    Mockito.verifyNoMoreInteractions(repository);
+
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
   @Test
   @DisplayName("Não deve remover horário de funcionamento quando registro não existir")
   void shouldThrowNotFoundExceptionWhenDoesNotExist() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var uuid = UUID.randomUUID();
 
     Mockito.when(repository.findByUuid(uuid))
@@ -53,18 +70,20 @@ class RemoveRestaurantOpeningHoursUseCaseTest {
 
     final var exception = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(uuid)
+        () -> useCase.execute(requestUser, uuid)
     );
 
-    Assertions.assertEquals(
-        "Restaurant opening hours not found",
-        exception.getMessage()
-    );
+    Assertions.assertEquals("Restaurant opening hours not found", exception.getMessage());
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
+
     Mockito.verify(repository, Mockito.never())
         .delete(Mockito.any());
-    Mockito.verifyNoMoreInteractions(repository);
+
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 }

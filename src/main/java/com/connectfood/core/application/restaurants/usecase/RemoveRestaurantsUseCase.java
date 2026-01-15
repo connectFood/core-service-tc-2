@@ -1,25 +1,34 @@
 package com.connectfood.core.application.restaurants.usecase;
 
-import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
+import java.util.UUID;
 
-import jakarta.transaction.Transactional;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
+import com.connectfood.core.domain.exception.NotFoundException;
+import com.connectfood.core.domain.model.enums.UsersType;
+import com.connectfood.core.domain.repository.RestaurantsRepository;
 
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import jakarta.transaction.Transactional;
 
 @Component
 public class RemoveRestaurantsUseCase {
 
   private final RestaurantsRepository repository;
+  private final RequestUserGuard guard;
 
-  public RemoveRestaurantsUseCase(RestaurantsRepository repository) {
+  public RemoveRestaurantsUseCase(
+      final RestaurantsRepository repository,
+      final RequestUserGuard guard
+  ) {
     this.repository = repository;
+    this.guard = guard;
   }
 
   @Transactional
-  public void execute(final UUID uuid) {
+  public void execute(final RequestUser requestUser, final UUID uuid) {
+    guard.requireRole(requestUser, UsersType.OWNER.name());
     repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurants not found"));
 

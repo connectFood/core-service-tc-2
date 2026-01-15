@@ -3,9 +3,12 @@ package com.connectfood.core.application.restaurants.usecase;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressRepository;
 import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
 
@@ -27,12 +30,18 @@ class RemoveRestaurantsAddressUseCaseTest {
   @Mock
   private AddressRepository addressRepository;
 
+  @Mock
+  private RequestUserGuard guard;
+
   @InjectMocks
   private RemoveRestaurantsAddressUseCase useCase;
 
   @Test
   @DisplayName("Deve lançar NotFoundException quando RestaurantsAddress não existir para o restaurantsUuid informado")
   void shouldThrowNotFoundExceptionWhenRestaurantsAddressNotFound() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantsUuid = UUID.randomUUID();
 
     Mockito.when(repository.findByRestaurantsUuid(restaurantsUuid))
@@ -40,20 +49,27 @@ class RemoveRestaurantsAddressUseCaseTest {
 
     final var ex = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(restaurantsUuid)
+        () -> useCase.execute(requestUser, restaurantsUuid)
     );
 
     Assertions.assertEquals("Restaurants Address Not Found", ex.getMessage());
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantsUuid);
+
     Mockito.verifyNoInteractions(addressRepository);
-    Mockito.verifyNoMoreInteractions(repository);
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
   @Test
   @DisplayName("Deve remover vínculo e remover address relacionado quando RestaurantsAddress existir")
   void shouldDeleteRestaurantsAddressAndAddressWhenFound() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var restaurantsUuid = UUID.randomUUID();
     final var restaurantsAddressUuid = UUID.randomUUID();
     final var addressUuid = UUID.randomUUID();
@@ -71,7 +87,10 @@ class RemoveRestaurantsAddressUseCaseTest {
     Mockito.when(repository.findByRestaurantsUuid(restaurantsUuid))
         .thenReturn(Optional.of(restaurantsAddress));
 
-    useCase.execute(restaurantsUuid);
+    Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, restaurantsUuid));
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
 
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantsUuid);
@@ -82,6 +101,6 @@ class RemoveRestaurantsAddressUseCaseTest {
     Mockito.verify(addressRepository, Mockito.times(1))
         .delete(addressUuid);
 
-    Mockito.verifyNoMoreInteractions(repository, addressRepository);
+    Mockito.verifyNoMoreInteractions(guard, repository, addressRepository);
   }
 }

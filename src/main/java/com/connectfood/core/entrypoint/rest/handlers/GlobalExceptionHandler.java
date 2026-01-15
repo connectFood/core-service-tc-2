@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.connectfood.core.domain.exception.BadRequestException;
 import com.connectfood.core.domain.exception.ConflictException;
+import com.connectfood.core.domain.exception.ForbiddenException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.entrypoint.rest.dto.commons.FieldErrorResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.ProblemDetailsResponse;
@@ -39,6 +40,13 @@ public class GlobalExceptionHandler {
       final ConflictException exception, final HttpServletRequest request) {
     return buildApiErrorResponse(
         exception.getMessage(), HttpStatus.CONFLICT, request.getRequestURI());
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  public ResponseEntity<ProblemDetailsResponse> handleForbiddenException(
+      final ConflictException exception, final HttpServletRequest request) {
+    return buildApiErrorResponse(
+        exception.getMessage(), HttpStatus.FORBIDDEN, request.getRequestURI());
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
