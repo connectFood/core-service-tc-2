@@ -9,6 +9,8 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsImagesAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.RestaurantItemsImages;
@@ -36,6 +38,9 @@ class CreateRestaurantItemsUseCaseTest {
   private RestaurantItemsAppMapper mapper;
 
   @Mock
+  private RequestUserGuard guard;
+
+  @Mock
   private RestaurantsRepository restaurantsRepository;
 
   @Mock
@@ -50,6 +55,7 @@ class CreateRestaurantItemsUseCaseTest {
   @Test
   @DisplayName("Deve criar item de restaurante com imagens quando restaurant existir e retornar output")
   void shouldCreateRestaurantItemsWithImagesWhenRestaurantExistsAndReturnOutput() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var restaurantUuid = UUID.randomUUID();
 
     final var imageInput1 = Mockito.mock(RestaurantItemsImagesInput.class);
@@ -94,9 +100,12 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(savedModel, List.of(persisted1, persisted2)))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(input);
+    final var result = useCase.execute(requestUser, input);
 
     Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
 
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
@@ -119,6 +128,7 @@ class CreateRestaurantItemsUseCaseTest {
         .toOutput(savedModel, List.of(persisted1, persisted2));
 
     Mockito.verifyNoMoreInteractions(
+        guard,
         restaurantsRepository,
         mapper,
         repository,
@@ -130,6 +140,7 @@ class CreateRestaurantItemsUseCaseTest {
   @Test
   @DisplayName("Deve criar item de restaurante quando images for lista vazia e retornar output")
   void shouldCreateRestaurantItemsWithEmptyImagesListAndReturnOutput() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var restaurantUuid = UUID.randomUUID();
 
     final var input = Mockito.mock(RestaurantItemsInput.class);
@@ -154,9 +165,12 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(savedModel, List.of()))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(input);
+    final var result = useCase.execute(requestUser, input);
 
     Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
 
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
@@ -168,12 +182,14 @@ class CreateRestaurantItemsUseCaseTest {
         .toOutput(savedModel, List.of());
 
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper, restaurantItemsImagesRepository);
-    Mockito.verifyNoMoreInteractions(restaurantsRepository, mapper, repository);
+
+    Mockito.verifyNoMoreInteractions(guard, restaurantsRepository, mapper, repository);
   }
 
   @Test
   @DisplayName("Deve criar item de restaurante quando images for null e retornar output sem salvar imagens")
   void shouldCreateRestaurantItemsWithNullImagesAndReturnOutput() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var restaurantUuid = UUID.randomUUID();
 
     final var input = Mockito.mock(RestaurantItemsInput.class);
@@ -198,9 +214,12 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(savedModel, List.of()))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(input);
+    final var result = useCase.execute(requestUser, input);
 
     Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
 
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
@@ -212,12 +231,14 @@ class CreateRestaurantItemsUseCaseTest {
         .toOutput(savedModel, List.of());
 
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper, restaurantItemsImagesRepository);
-    Mockito.verifyNoMoreInteractions(restaurantsRepository, mapper, repository);
+
+    Mockito.verifyNoMoreInteractions(guard, restaurantsRepository, mapper, repository);
   }
 
   @Test
   @DisplayName("Não deve criar item de restaurante quando restaurant não existir e deve lançar NotFoundException")
   void shouldThrowNotFoundExceptionWhenRestaurantDoesNotExist() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var restaurantUuid = UUID.randomUUID();
 
     final var input = Mockito.mock(RestaurantItemsInput.class);
@@ -229,13 +250,19 @@ class CreateRestaurantItemsUseCaseTest {
 
     final var exception = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(input)
+        () -> useCase.execute(requestUser, input)
     );
 
     Assertions.assertEquals("Restaurant not found", exception.getMessage());
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
+
     Mockito.verifyNoInteractions(mapper, repository, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+
+    Mockito.verifyNoMoreInteractions(guard, restaurantsRepository);
   }
 }

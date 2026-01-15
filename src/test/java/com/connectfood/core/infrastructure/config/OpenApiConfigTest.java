@@ -1,19 +1,12 @@
 package com.connectfood.core.infrastructure.config;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 
-@ExtendWith(MockitoExtension.class)
 class OpenApiConfigTest {
 
   private final OpenApiConfig config = new OpenApiConfig();
@@ -41,42 +34,37 @@ class OpenApiConfigTest {
     final OpenAPI openAPI = config.connectFoodOpenAPI();
 
     Assertions.assertNotNull(openAPI.getServers());
-    Assertions.assertEquals(1, openAPI.getServers().size());
+    Assertions.assertEquals(1, openAPI.getServers()
+        .size()
+    );
 
-    final var server = openAPI.getServers().getFirst();
+    final var server = openAPI.getServers()
+        .get(0);
     Assertions.assertEquals("http://localhost:9090", server.getUrl());
     Assertions.assertEquals("Localhost environment", server.getDescription());
   }
 
   @Test
-  @DisplayName("Deve configurar esquema de segurança Bearer JWT")
-  void shouldConfigureBearerJwtSecurityScheme() {
+  @DisplayName("Não deve configurar esquemas de segurança no OpenAPI")
+  void shouldNotConfigureSecuritySchemes() {
     final OpenAPI openAPI = config.connectFoodOpenAPI();
 
-    Assertions.assertNotNull(openAPI.getComponents());
-    Assertions.assertNotNull(openAPI.getComponents().getSecuritySchemes());
-
-    final var securitySchemes = openAPI.getComponents().getSecuritySchemes();
-    Assertions.assertTrue(securitySchemes.containsKey("bearerAuth"));
-
-    final SecurityScheme scheme = securitySchemes.get("bearerAuth");
-    Assertions.assertEquals(SecurityScheme.Type.HTTP, scheme.getType());
-    Assertions.assertEquals("bearer", scheme.getScheme());
-    Assertions.assertEquals("JWT", scheme.getBearerFormat());
-    Assertions.assertEquals(SecurityScheme.In.HEADER, scheme.getIn());
-    Assertions.assertEquals("Authorization", scheme.getName());
+    Assertions.assertTrue(
+        openAPI.getComponents() == null || openAPI.getComponents()
+            .getSecuritySchemes() == null,
+        "Security schemes should not be configured"
+    );
   }
 
   @Test
-  @DisplayName("Deve adicionar requisito de segurança global no OpenAPI")
-  void shouldAddGlobalSecurityRequirement() {
+  @DisplayName("Não deve adicionar requisito de segurança global no OpenAPI")
+  void shouldNotAddGlobalSecurityRequirement() {
     final OpenAPI openAPI = config.connectFoodOpenAPI();
 
-    Assertions.assertNotNull(openAPI.getSecurity());
-    Assertions.assertFalse(openAPI.getSecurity().isEmpty());
-
-    final var securityRequirement = openAPI.getSecurity().getFirst();
-    Assertions.assertTrue(securityRequirement.containsKey("bearerAuth"));
-    Assertions.assertEquals(List.of(), securityRequirement.get("bearerAuth"));
+    Assertions.assertTrue(
+        openAPI.getSecurity() == null || openAPI.getSecurity()
+            .isEmpty(),
+        "Global security requirements should not be configured"
+    );
   }
 }

@@ -3,6 +3,8 @@ package com.connectfood.core.application.restaurantitems.usecase;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.repository.RestaurantItemsRepository;
@@ -22,30 +24,44 @@ class RemoveRestaurantItemsUseCaseTest {
   @Mock
   private RestaurantItemsRepository repository;
 
+  @Mock
+  private RequestUserGuard guard;
+
   @InjectMocks
   private RemoveRestaurantItemsUseCase useCase;
 
   @Test
   @DisplayName("Deve remover item de restaurante quando ele existir")
   void shouldRemoveRestaurantItemsWhenExists() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var uuid = UUID.randomUUID();
 
     final RestaurantItems model = Mockito.mock(RestaurantItems.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(model));
 
-    Assertions.assertDoesNotThrow(() -> useCase.execute(uuid));
+    Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, uuid));
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
+
     Mockito.verify(repository, Mockito.times(1))
         .delete(uuid);
-    Mockito.verifyNoMoreInteractions(repository);
+
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
   @Test
   @DisplayName("Não deve remover item de restaurante quando não existir e deve lançar NotFoundException")
   void shouldThrowNotFoundExceptionWhenRestaurantItemsDoesNotExist() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
     final var uuid = UUID.randomUUID();
 
     Mockito.when(repository.findByUuid(uuid))
@@ -53,14 +69,20 @@ class RemoveRestaurantItemsUseCaseTest {
 
     final var exception = Assertions.assertThrows(
         NotFoundException.class,
-        () -> useCase.execute(uuid)
+        () -> useCase.execute(requestUser, uuid)
     );
 
     Assertions.assertEquals("Restaurant Items not found", exception.getMessage());
 
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
+
     Mockito.verify(repository, Mockito.never())
         .delete(Mockito.any());
+
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 }

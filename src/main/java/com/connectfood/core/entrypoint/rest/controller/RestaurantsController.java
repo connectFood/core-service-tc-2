@@ -130,7 +130,7 @@ public class RestaurantsController {
       summary = "Find restaurant by UUID",
       description = "Returns a restaurants for the given UUID"
   )
-  public ResponseEntity<BaseResponse<RestaurantsResponse>> findByUuid(@PathVariable("uuid") final UUID uuid) {
+  public ResponseEntity<BaseResponse<RestaurantsResponse>> findByUuid(@PathVariable final UUID uuid) {
 
     final var result = findUseCase.execute(uuid);
     final var response = mapper.toResponse(result);

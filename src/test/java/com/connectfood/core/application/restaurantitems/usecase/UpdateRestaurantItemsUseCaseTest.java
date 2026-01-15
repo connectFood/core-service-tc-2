@@ -9,6 +9,8 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsImagesAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.RestaurantItemsImages;
@@ -35,6 +37,9 @@ class UpdateRestaurantItemsUseCaseTest {
   private RestaurantItemsAppMapper mapper;
 
   @Mock
+  private RequestUserGuard guard;
+
+  @Mock
   private RestaurantItemsImagesAppMapper restaurantItemsImagesMapper;
 
   @Mock
@@ -46,24 +51,33 @@ class UpdateRestaurantItemsUseCaseTest {
   @Test
   @DisplayName("Deve lançar NotFoundException quando item não existir")
   void shouldThrowNotFoundExceptionWhenRestaurantItemsDoesNotExist() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var uuid = UUID.randomUUID();
     final var input = Mockito.mock(RestaurantItemsInput.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.empty());
 
-    final var ex = Assertions.assertThrows(NotFoundException.class, () -> useCase.execute(uuid, input));
+    final var ex = Assertions.assertThrows(
+        NotFoundException.class,
+        () -> useCase.execute(requestUser, uuid, input)
+    );
     Assertions.assertEquals("Restaurant Items not found", ex.getMessage());
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
+
     Mockito.verifyNoInteractions(mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
-    Mockito.verifyNoMoreInteractions(repository);
+    Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
   @Test
   @DisplayName("Deve atualizar quando existir, com input sem imagens e retornar output")
   void shouldUpdateRestaurantItemsWhenExistsAndReturnOutputWithoutImages() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var uuid = UUID.randomUUID();
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
@@ -92,26 +106,31 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(updatedModel, List.of()))
         .thenReturn(expected);
 
-    final var result = useCase.execute(uuid, input);
+    final var result = useCase.execute(requestUser, uuid, input);
     Assertions.assertSame(expected, result);
 
-    Mockito.verify(repository)
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
+    Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
-    Mockito.verify(mapper)
+    Mockito.verify(mapper, Mockito.times(1))
         .toDomain(uuid, input, restaurant);
-    Mockito.verify(repository)
+    Mockito.verify(repository, Mockito.times(1))
         .update(uuid, domainToUpdate);
 
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper, restaurantItemsImagesRepository);
 
-    Mockito.verify(mapper)
+    Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedModel, List.of());
-    Mockito.verifyNoMoreInteractions(repository, mapper);
+
+    Mockito.verifyNoMoreInteractions(guard, repository, mapper);
   }
 
   @Test
   @DisplayName("Deve cobrir update, keep, save e delete e não deletar uuid null")
   void shouldSyncImagesUpdateKeepSaveDeleteAndSkipNullDelete() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var itemUuid = UUID.randomUUID();
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
@@ -201,14 +220,17 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(updatedModel, expectedImages))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(itemUuid, input);
+    final var result = useCase.execute(requestUser, itemUuid, input);
     Assertions.assertSame(expectedOutput, result);
 
-    Mockito.verify(repository)
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
+    Mockito.verify(repository, Mockito.times(1))
         .findByUuid(itemUuid);
-    Mockito.verify(mapper)
+    Mockito.verify(mapper, Mockito.times(1))
         .toDomain(itemUuid, input, restaurant);
-    Mockito.verify(repository)
+    Mockito.verify(repository, Mockito.times(1))
         .update(itemUuid, domainToUpdate);
 
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(3))
@@ -228,15 +250,18 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
         .delete(Mockito.isNull());
 
-    Mockito.verify(mapper)
+    Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedModel, expectedImages);
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository
+    );
   }
 
   @Test
   @DisplayName("Deve lançar NotFoundException quando incoming uuid não existir no currentByUuid")
   void shouldThrowNotFoundExceptionWhenIncomingImageUuidNotFoundInCurrent() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var itemUuid = UUID.randomUUID();
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
@@ -274,29 +299,37 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.when(restaurantItemsImagesMapper.toDomain(incoming))
         .thenReturn(Mockito.mock(RestaurantItemsImages.class));
 
-    final var ex = Assertions.assertThrows(NotFoundException.class, () -> useCase.execute(itemUuid, input));
+    final var ex = Assertions.assertThrows(
+        NotFoundException.class,
+        () -> useCase.execute(requestUser, itemUuid, input)
+    );
     Assertions.assertEquals("Restaurant Item Images not found", ex.getMessage());
 
-    Mockito.verify(repository)
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
+    Mockito.verify(repository, Mockito.times(1))
         .findByUuid(itemUuid);
-    Mockito.verify(mapper)
+    Mockito.verify(mapper, Mockito.times(1))
         .toDomain(itemUuid, input, restaurant);
-    Mockito.verify(repository)
+    Mockito.verify(repository, Mockito.times(1))
         .update(itemUuid, domainToUpdate);
 
-    Mockito.verify(restaurantItemsImagesMapper)
+    Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1))
         .toDomain(incoming);
 
     Mockito.verifyNoInteractions(restaurantItemsImagesRepository);
+
     Mockito.verify(mapper, Mockito.never())
         .toOutput(Mockito.any(), Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper);
+    Mockito.verifyNoMoreInteractions(guard, repository, mapper, restaurantItemsImagesMapper);
   }
 
   @Test
   @DisplayName("Deve executar merge (a,b)->a quando current tiver UUID duplicado")
   void shouldUseMergeFunctionWhenCurrentHasDuplicateUuid() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var itemUuid = UUID.randomUUID();
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
@@ -356,8 +389,11 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(updatedModel, expectedImages))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(itemUuid, input);
+    final var result = useCase.execute(requestUser, itemUuid, input);
     Assertions.assertSame(expectedOutput, result);
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
 
     Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
         .update(Mockito.any(), Mockito.any());
@@ -366,12 +402,15 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
         .delete(Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository
+    );
   }
 
   @Test
   @DisplayName("Deve considerar changed quando name é igual e description é diferente")
   void shouldUpdateWhenDescriptionChangesEvenIfNameIsSame() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var itemUuid = UUID.randomUUID();
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
 
@@ -428,17 +467,21 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.when(mapper.toOutput(updatedModel, expectedImages))
         .thenReturn(expectedOutput);
 
-    final var result = useCase.execute(itemUuid, input);
-
+    final var result = useCase.execute(requestUser, itemUuid, input);
     Assertions.assertSame(expectedOutput, result);
 
-    Mockito.verify(restaurantItemsImagesRepository)
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
+    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
         .update(imageUuid, imageDomain);
     Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
         .save(Mockito.any(), Mockito.any());
     Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
         .delete(Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+    Mockito.verifyNoMoreInteractions(
+        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository
+    );
   }
 }

@@ -8,6 +8,7 @@ import com.connectfood.core.application.restaurantitems.usecase.FindRestaurantIt
 import com.connectfood.core.application.restaurantitems.usecase.RemoveRestaurantItemsUseCase;
 import com.connectfood.core.application.restaurantitems.usecase.SearchRestaurantItemsUseCase;
 import com.connectfood.core.application.restaurantitems.usecase.UpdateRestaurantItemsUseCase;
+import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.entrypoint.rest.dto.commons.BaseResponse;
 import com.connectfood.core.entrypoint.rest.dto.commons.PageResponse;
 import com.connectfood.core.entrypoint.rest.dto.restaurantitems.RestaurantItemsRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,8 +102,9 @@ public class RestaurantItemsController {
       description = "Creates a new restaurant item and returns the created resource"
   )
   public ResponseEntity<BaseResponse<RestaurantItemsResponse>> create(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @Valid @RequestBody final RestaurantItemsRequest request) {
-    final var result = createUseCase.execute(mapper.toInput(request));
+    final var result = createUseCase.execute(new RequestUser(requestUserUuid), mapper.toInput(request));
     final var response = mapper.toResponse(result);
 
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -114,10 +117,11 @@ public class RestaurantItemsController {
       description = "Updates an existing restaurant item identified by UUID"
   )
   public ResponseEntity<BaseResponse<RestaurantItemsResponse>> update(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
       @PathVariable final UUID uuid,
       @Valid @RequestBody final RestaurantItemsRequest request
   ) {
-    final var result = updateUseCase.execute(uuid, mapper.toInput(request));
+    final var result = updateUseCase.execute(new RequestUser(requestUserUuid), uuid, mapper.toInput(request));
     final var response = mapper.toResponse(result);
 
     return ResponseEntity.ok()
@@ -129,8 +133,10 @@ public class RestaurantItemsController {
       summary = "Delete an existing restaurant item",
       description = "Deletes an existing restaurant item identified by UUID"
   )
-  public ResponseEntity<Void> delete(@PathVariable final UUID uuid) {
-    removeUseCase.execute(uuid);
+  public ResponseEntity<Void> delete(
+      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
+      @PathVariable final UUID uuid) {
+    removeUseCase.execute(new RequestUser(requestUserUuid), uuid);
 
     return ResponseEntity.noContent()
         .build();

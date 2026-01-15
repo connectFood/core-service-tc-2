@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
@@ -16,8 +14,6 @@ public class OpenApiConfig {
 
   @Bean
   public OpenAPI connectFoodOpenAPI() {
-    final String securitySchemeName = "bearerAuth";
-
     return new OpenAPI()
         .info(new Info()
             .title("Restaurant Management System - ConnectFood")
@@ -26,16 +22,6 @@ public class OpenApiConfig {
         .servers(List.of(
             new Server()
                 .url("http://localhost:9090")
-                .description("Localhost environment")))
-        .components(new io.swagger.v3.oas.models.Components()
-            .addSecuritySchemes(securitySchemeName,
-                new SecurityScheme()
-                    .type(SecurityScheme.Type.HTTP)
-                    .scheme("bearer")
-                    .bearerFormat("JWT")
-                    .in(SecurityScheme.In.HEADER)
-                    .name("Authorization")
-            ))
-        .addSecurityItem(new SecurityRequirement().addList(securitySchemeName));
+                .description("Localhost environment")));
   }
 }

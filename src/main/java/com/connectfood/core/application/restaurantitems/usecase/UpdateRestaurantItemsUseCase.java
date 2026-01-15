@@ -12,6 +12,8 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsImagesAppMapper;
+import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.RestaurantItemsImages;
@@ -25,21 +27,27 @@ public class UpdateRestaurantItemsUseCase {
 
   private final RestaurantItemsRepository repository;
   private final RestaurantItemsAppMapper mapper;
+  private final RequestUserGuard guard;
   private final RestaurantItemsImagesAppMapper restaurantItemsImagesMapper;
   private final RestaurantItemsImagesRepository restaurantItemsImagesRepository;
 
   public UpdateRestaurantItemsUseCase(
       final RestaurantItemsRepository repository,
       final RestaurantItemsAppMapper mapper,
+      final RequestUserGuard guard,
       final RestaurantItemsImagesAppMapper restaurantItemsImagesMapper,
       final RestaurantItemsImagesRepository restaurantItemsImagesRepository) {
     this.repository = repository;
     this.mapper = mapper;
+    this.guard = guard;
     this.restaurantItemsImagesMapper = restaurantItemsImagesMapper;
     this.restaurantItemsImagesRepository = restaurantItemsImagesRepository;
   }
 
-  public RestaurantItemsOutput execute(final UUID uuid, final RestaurantItemsInput input) {
+  public RestaurantItemsOutput execute(final RequestUser requestUser, final UUID uuid,
+      final RestaurantItemsInput input) {
+    guard.requireRole(requestUser, "OWNER");
+
     final var model = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurant Items not found"));
 
