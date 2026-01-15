@@ -3,6 +3,7 @@ package com.connectfood.core.application.users.usecase;
 import com.connectfood.core.application.users.dto.UsersInput;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
+import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.UsersRepository;
 import com.connectfood.core.domain.repository.UsersTypeRepository;
@@ -35,6 +36,8 @@ public class CreateUsersUseCase {
 
   @Transactional
   public UsersOutput execute(final UsersInput input) {
+    validateUsersExists(input.getEmail());
+
     final var passwordHash = passwordUtils.encode(input.getPassword());
 
     final var usersType =
@@ -46,5 +49,13 @@ public class CreateUsersUseCase {
     final var address = createUsersAddressUseCase.execute(users.getUuid(), input.getAddress());
 
     return mapper.toOutput(users, address);
+  }
+
+  private void validateUsersExists(final String email) {
+    final var usersExists = repository.existsByEmail(email);
+
+    if (usersExists) {
+      throw new ConflictException("User already exists");
+    }
   }
 }

@@ -8,6 +8,7 @@ import com.connectfood.core.application.address.dto.AddressOutput;
 import com.connectfood.core.application.users.dto.UsersInput;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
+import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersType;
@@ -46,20 +47,25 @@ class CreateUsersUseCaseTest {
   private CreateUsersUseCase useCase;
 
   @Test
-  @DisplayName("Deve criar usuário com sucesso quando tipo existir")
+  @DisplayName("Deve criar usuário com sucesso quando tipo existir e usuário não existir")
   void shouldCreateUserSuccessfullyWhenUsersTypeExists() {
     final var usersTypeUuid = UUID.randomUUID();
 
     final UsersInput input = Mockito.mock(UsersInput.class);
+    Mockito.when(input.getEmail())
+        .thenReturn("user@test.com");
     Mockito.when(input.getPassword())
         .thenReturn("senha123");
     Mockito.when(input.getUsersTypeUuid())
         .thenReturn(usersTypeUuid);
 
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    Mockito.when(repository.existsByEmail("user@test.com"))
+        .thenReturn(false);
 
     Mockito.when(passwordUtils.encode("senha123"))
         .thenReturn("hashSenha");
+
+    final UsersType usersType = Mockito.mock(UsersType.class);
     Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
         .thenReturn(Optional.of(usersType));
 
@@ -92,6 +98,8 @@ class CreateUsersUseCaseTest {
     Assertions.assertNotNull(result);
     Assertions.assertSame(expectedOutput, result);
 
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByEmail("user@test.com");
     Mockito.verify(passwordUtils, Mockito.times(1))
         .encode("senha123");
     Mockito.verify(usersTypeRepository, Mockito.times(1))
@@ -123,10 +131,15 @@ class CreateUsersUseCaseTest {
     final var usersTypeUuid = UUID.randomUUID();
 
     final UsersInput input = Mockito.mock(UsersInput.class);
+    Mockito.when(input.getEmail())
+        .thenReturn("user@test.com");
     Mockito.when(input.getPassword())
         .thenReturn("senha123");
     Mockito.when(input.getUsersTypeUuid())
         .thenReturn(usersTypeUuid);
+
+    Mockito.when(repository.existsByEmail("user@test.com"))
+        .thenReturn(false);
 
     Mockito.when(passwordUtils.encode("senha123"))
         .thenReturn("hashSenha");
@@ -141,12 +154,44 @@ class CreateUsersUseCaseTest {
 
     Assertions.assertEquals("Users type not found", ex.getMessage());
 
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByEmail("user@test.com");
     Mockito.verify(passwordUtils, Mockito.times(1))
         .encode("senha123");
     Mockito.verify(usersTypeRepository, Mockito.times(1))
         .findByUuid(usersTypeUuid);
 
-    Mockito.verifyNoInteractions(repository, mapper, createUsersAddressUseCase);
-    Mockito.verifyNoMoreInteractions(usersTypeRepository, passwordUtils);
+    Mockito.verifyNoInteractions(mapper, createUsersAddressUseCase);
+    Mockito.verify(repository, Mockito.never())
+        .save(Mockito.any());
+
+    Mockito.verifyNoMoreInteractions(repository, usersTypeRepository, passwordUtils);
+  }
+
+  @Test
+  @DisplayName("Deve lançar ConflictException quando usuário já existir pelo email")
+  void shouldThrowConflictExceptionWhenUserAlreadyExists() {
+    final UsersInput input = Mockito.mock(UsersInput.class);
+    Mockito.when(input.getEmail())
+        .thenReturn("user@test.com");
+
+    Mockito.when(repository.existsByEmail("user@test.com"))
+        .thenReturn(true);
+
+    final var ex = Assertions.assertThrows(
+        ConflictException.class,
+        () -> useCase.execute(input)
+    );
+
+    Assertions.assertEquals("User already exists", ex.getMessage());
+
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByEmail("user@test.com");
+
+    Mockito.verifyNoInteractions(passwordUtils, usersTypeRepository, mapper, createUsersAddressUseCase);
+    Mockito.verify(repository, Mockito.never())
+        .save(Mockito.any());
+
+    Mockito.verifyNoMoreInteractions(repository);
   }
 }

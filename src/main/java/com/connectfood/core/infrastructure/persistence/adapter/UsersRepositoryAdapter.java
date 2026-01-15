@@ -102,4 +102,9 @@ public class UsersRepositoryAdapter implements UsersRepository {
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
   }
+
+  @Override
+  public boolean existsByEmail(final String email) {
+    return repository.existsByEmail(email);
+  }
 }
