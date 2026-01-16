@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
+import com.connectfood.core.domain.repository.RestaurantsGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class SearchRestaurantsUseCase {
 
-  private final RestaurantsRepository repository;
+  private final RestaurantsGateway repository;
   private final RestaurantsAppMapper mapper;
 
-  public SearchRestaurantsUseCase(RestaurantsRepository repository, RestaurantsAppMapper mapper) {
+  public SearchRestaurantsUseCase(RestaurantsGateway repository, RestaurantsAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }

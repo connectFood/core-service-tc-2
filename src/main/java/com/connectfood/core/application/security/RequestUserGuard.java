@@ -4,7 +4,7 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import com.connectfood.core.domain.exception.ForbiddenException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.repository.UsersRepository;
+import com.connectfood.core.domain.repository.UsersGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class RequestUserGuard {
 
-  private final UsersRepository repository;
+  private final UsersGateway repository;
 
-  public RequestUserGuard(final UsersRepository repository) {
+  public RequestUserGuard(final UsersGateway repository) {
     this.repository = repository;
   }
 

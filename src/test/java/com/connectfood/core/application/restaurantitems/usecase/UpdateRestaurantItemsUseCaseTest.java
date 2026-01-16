@@ -15,8 +15,8 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.RestaurantItemsImages;
 import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.repository.RestaurantItemsImagesRepository;
-import com.connectfood.core.domain.repository.RestaurantItemsRepository;
+import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
+import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UpdateRestaurantItemsUseCaseTest {
 
   @Mock
-  private RestaurantItemsRepository repository;
+  private RestaurantItemsGateway repository;
 
   @Mock
   private RestaurantItemsAppMapper mapper;
@@ -43,7 +43,7 @@ class UpdateRestaurantItemsUseCaseTest {
   private RestaurantItemsImagesAppMapper restaurantItemsImagesMapper;
 
   @Mock
-  private RestaurantItemsImagesRepository restaurantItemsImagesRepository;
+  private RestaurantItemsImagesGateway restaurantItemsImagesGateway;
 
   @InjectMocks
   private UpdateRestaurantItemsUseCase useCase;
@@ -70,7 +70,7 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
 
-    Mockito.verifyNoInteractions(mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+    Mockito.verifyNoInteractions(mapper, restaurantItemsImagesMapper, restaurantItemsImagesGateway);
     Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
@@ -119,7 +119,7 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .update(uuid, domainToUpdate);
 
-    Mockito.verifyNoInteractions(restaurantItemsImagesMapper, restaurantItemsImagesRepository);
+    Mockito.verifyNoInteractions(restaurantItemsImagesMapper, restaurantItemsImagesGateway);
 
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedModel, List.of());
@@ -207,11 +207,11 @@ class UpdateRestaurantItemsUseCaseTest {
 
     final RestaurantItemsImages persistedUpdated = Mockito.mock(RestaurantItemsImages.class);
     Mockito.when(
-            restaurantItemsImagesRepository.update(Mockito.eq(updateUuid), Mockito.any(RestaurantItemsImages.class)))
+            restaurantItemsImagesGateway.update(Mockito.eq(updateUuid), Mockito.any(RestaurantItemsImages.class)))
         .thenReturn(persistedUpdated);
 
     final RestaurantItemsImages persistedNew = Mockito.mock(RestaurantItemsImages.class);
-    Mockito.when(restaurantItemsImagesRepository.save(Mockito.eq(itemUuid), Mockito.any(RestaurantItemsImages.class)))
+    Mockito.when(restaurantItemsImagesGateway.save(Mockito.eq(itemUuid), Mockito.any(RestaurantItemsImages.class)))
         .thenReturn(persistedNew);
 
     final var expectedImages = List.of(currentKeep, persistedUpdated, persistedNew);
@@ -236,25 +236,25 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(3))
         .toDomain(Mockito.any(RestaurantItemsImagesInput.class));
 
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .update(Mockito.eq(keepUuid), Mockito.any(RestaurantItemsImages.class));
 
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.times(1))
         .update(Mockito.eq(updateUuid), Mockito.any(RestaurantItemsImages.class));
 
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.times(1))
         .save(Mockito.eq(itemUuid), Mockito.any(RestaurantItemsImages.class));
 
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.times(1))
         .delete(deleteUuid);
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .delete(Mockito.isNull());
 
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedModel, expectedImages);
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository
+        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesGateway
     );
   }
 
@@ -318,7 +318,7 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1))
         .toDomain(incoming);
 
-    Mockito.verifyNoInteractions(restaurantItemsImagesRepository);
+    Mockito.verifyNoInteractions(restaurantItemsImagesGateway);
 
     Mockito.verify(mapper, Mockito.never())
         .toOutput(Mockito.any(), Mockito.any());
@@ -395,15 +395,15 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, "OWNER");
 
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .update(Mockito.any(), Mockito.any());
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .save(Mockito.any(), Mockito.any());
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .delete(Mockito.any());
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository
+        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesGateway
     );
   }
 
@@ -458,7 +458,7 @@ class UpdateRestaurantItemsUseCaseTest {
         .thenReturn(imageDomain);
 
     final RestaurantItemsImages persistedUpdated = Mockito.mock(RestaurantItemsImages.class);
-    Mockito.when(restaurantItemsImagesRepository.update(imageUuid, imageDomain))
+    Mockito.when(restaurantItemsImagesGateway.update(imageUuid, imageDomain))
         .thenReturn(persistedUpdated);
 
     final var expectedImages = List.of(persistedUpdated);
@@ -473,15 +473,15 @@ class UpdateRestaurantItemsUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, "OWNER");
 
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.times(1))
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.times(1))
         .update(imageUuid, imageDomain);
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .save(Mockito.any(), Mockito.any());
-    Mockito.verify(restaurantItemsImagesRepository, Mockito.never())
+    Mockito.verify(restaurantItemsImagesGateway, Mockito.never())
         .delete(Mockito.any());
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesRepository
+        guard, repository, mapper, restaurantItemsImagesMapper, restaurantItemsImagesGateway
     );
   }
 }

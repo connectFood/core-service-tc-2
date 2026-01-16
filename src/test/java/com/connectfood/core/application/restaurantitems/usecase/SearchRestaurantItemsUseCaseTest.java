@@ -11,8 +11,8 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.core.domain.repository.RestaurantItemsRepository;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
+import com.connectfood.core.domain.repository.RestaurantItemsGateway;
+import com.connectfood.core.domain.repository.RestaurantsGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,13 +27,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class SearchRestaurantItemsUseCaseTest {
 
   @Mock
-  private RestaurantItemsRepository repository;
+  private RestaurantItemsGateway repository;
 
   @Mock
   private RestaurantItemsAppMapper mapper;
 
   @Mock
-  private RestaurantsRepository restaurantsRepository;
+  private RestaurantsGateway restaurantsGateway;
 
   @InjectMocks
   private SearchRestaurantItemsUseCase useCase;
@@ -48,7 +48,7 @@ class SearchRestaurantItemsUseCaseTest {
     final var direction = "ASC";
 
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurant));
 
     final RestaurantItems model1 = Mockito.mock(RestaurantItems.class);
@@ -72,11 +72,11 @@ class SearchRestaurantItemsUseCaseTest {
     Assertions.assertEquals(25L, result.total());
     Assertions.assertEquals(List.of(output1, output2), result.content());
 
-    Mockito.verify(restaurantsRepository, Mockito.times(1)).findByUuid(restaurantUuid);
+    Mockito.verify(restaurantsGateway, Mockito.times(1)).findByUuid(restaurantUuid);
     Mockito.verify(repository, Mockito.times(1)).findAll(restaurantUuid, page, size, sort, direction);
     Mockito.verify(mapper, Mockito.times(1)).toOutput(model1);
     Mockito.verify(mapper, Mockito.times(1)).toOutput(model2);
-    Mockito.verifyNoMoreInteractions(restaurantsRepository, repository, mapper);
+    Mockito.verifyNoMoreInteractions(restaurantsGateway, repository, mapper);
   }
 
   @Test
@@ -87,7 +87,7 @@ class SearchRestaurantItemsUseCaseTest {
     final var size = 10;
 
     final Restaurants restaurant = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurant));
 
     final var pageModel = new PageModel<>(List.<RestaurantItems>of(), 0L);
@@ -101,10 +101,10 @@ class SearchRestaurantItemsUseCaseTest {
     Assertions.assertEquals(0L, result.total());
     Assertions.assertTrue(result.content().isEmpty());
 
-    Mockito.verify(restaurantsRepository, Mockito.times(1)).findByUuid(restaurantUuid);
+    Mockito.verify(restaurantsGateway, Mockito.times(1)).findByUuid(restaurantUuid);
     Mockito.verify(repository, Mockito.times(1)).findAll(restaurantUuid, page, size, null, null);
     Mockito.verifyNoInteractions(mapper);
-    Mockito.verifyNoMoreInteractions(restaurantsRepository, repository);
+    Mockito.verifyNoMoreInteractions(restaurantsGateway, repository);
   }
 
   @Test
@@ -112,7 +112,7 @@ class SearchRestaurantItemsUseCaseTest {
   void shouldThrowNotFoundExceptionWhenRestaurantDoesNotExist() {
     final var restaurantUuid = UUID.randomUUID();
 
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 
     final var exception = Assertions.assertThrows(
@@ -122,8 +122,8 @@ class SearchRestaurantItemsUseCaseTest {
 
     Assertions.assertEquals("Restaurant not found", exception.getMessage());
 
-    Mockito.verify(restaurantsRepository, Mockito.times(1)).findByUuid(restaurantUuid);
+    Mockito.verify(restaurantsGateway, Mockito.times(1)).findByUuid(restaurantUuid);
     Mockito.verifyNoInteractions(repository, mapper);
-    Mockito.verifyNoMoreInteractions(restaurantsRepository);
+    Mockito.verifyNoMoreInteractions(restaurantsGateway);
   }
 }

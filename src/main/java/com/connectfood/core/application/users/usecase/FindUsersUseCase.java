@@ -5,8 +5,8 @@ import java.util.UUID;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.UsersAddressRepository;
-import com.connectfood.core.domain.repository.UsersRepository;
+import com.connectfood.core.domain.repository.UsersAddressGateway;
+import com.connectfood.core.domain.repository.UsersGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,17 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class FindUsersUseCase {
 
-  private final UsersRepository repository;
-  private final UsersAddressRepository usersAddressRepository;
+  private final UsersGateway repository;
+  private final UsersAddressGateway usersAddressGateway;
   private final UsersAppMapper mapper;
 
   public FindUsersUseCase(
-      final UsersRepository repository,
+      final UsersGateway repository,
       final UsersAppMapper mapper,
-      final UsersAddressRepository usersAddressRepository) {
+      final UsersAddressGateway usersAddressGateway) {
     this.repository = repository;
     this.mapper = mapper;
-    this.usersAddressRepository = usersAddressRepository;
+    this.usersAddressGateway = usersAddressGateway;
   }
 
   @Transactional(readOnly = true)
@@ -32,7 +32,7 @@ public class FindUsersUseCase {
     final var users = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Users not found"));
 
-    final var usersAddress = usersAddressRepository.findByUsersUuid(users.getUuid());
+    final var usersAddress = usersAddressGateway.findByUsersUuid(users.getUuid());
 
     if (usersAddress.isPresent()) {
       return mapper.toOutput(users, usersAddress.get()

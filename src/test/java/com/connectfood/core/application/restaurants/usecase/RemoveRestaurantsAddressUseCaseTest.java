@@ -9,8 +9,8 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.AddressRepository;
-import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
+import com.connectfood.core.domain.repository.AddressGateway;
+import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,10 +25,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RemoveRestaurantsAddressUseCaseTest {
 
   @Mock
-  private RestaurantsAddressRepository repository;
+  private RestaurantsAddressGateway repository;
 
   @Mock
-  private AddressRepository addressRepository;
+  private AddressGateway addressGateway;
 
   @Mock
   private RequestUserGuard guard;
@@ -60,7 +60,7 @@ class RemoveRestaurantsAddressUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantsUuid);
 
-    Mockito.verifyNoInteractions(addressRepository);
+    Mockito.verifyNoInteractions(addressGateway);
     Mockito.verifyNoMoreInteractions(guard, repository);
   }
 
@@ -98,9 +98,9 @@ class RemoveRestaurantsAddressUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .delete(restaurantsAddressUuid);
 
-    Mockito.verify(addressRepository, Mockito.times(1))
+    Mockito.verify(addressGateway, Mockito.times(1))
         .delete(addressUuid);
 
-    Mockito.verifyNoMoreInteractions(guard, repository, addressRepository);
+    Mockito.verifyNoMoreInteractions(guard, repository, addressGateway);
   }
 }

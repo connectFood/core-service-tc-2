@@ -3,7 +3,7 @@ package com.connectfood.core.application.restaurants.usecase;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
+import com.connectfood.core.domain.repository.RestaurantsGateway;
 
 
 import org.springframework.stereotype.Component;
@@ -14,10 +14,10 @@ import java.util.UUID;
 @Component
 public class FindRestaurantsUseCase {
 
-  private final RestaurantsRepository repository;
+  private final RestaurantsGateway repository;
   private final RestaurantsAppMapper mapper;
 
-  public FindRestaurantsUseCase(RestaurantsRepository repository, RestaurantsAppMapper mapper) {
+  public FindRestaurantsUseCase(RestaurantsGateway repository, RestaurantsAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }

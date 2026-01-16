@@ -10,9 +10,9 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersRestaurant;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
-import com.connectfood.core.domain.repository.UsersRepository;
-import com.connectfood.core.domain.repository.UsersRestaurantRepository;
+import com.connectfood.core.domain.repository.RestaurantsGateway;
+import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UsersRestaurantGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,13 +27,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateUsersRestaurantUseCaseTest {
 
   @Mock
-  private UsersRestaurantRepository repository;
+  private UsersRestaurantGateway repository;
 
   @Mock
-  private UsersRepository usersRepository;
+  private UsersGateway usersGateway;
 
   @Mock
-  private RestaurantsRepository restaurantsRepository;
+  private RestaurantsGateway restaurantsGateway;
 
   @Mock
   private UsersRestaurantAppMapper mapper;
@@ -50,7 +50,7 @@ class CreateUsersRestaurantUseCaseTest {
     final var usersUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
 
-    Mockito.when(usersRepository.findByUuid(usersUuid))
+    Mockito.when(usersGateway.findByUuid(usersUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -60,10 +60,10 @@ class CreateUsersRestaurantUseCaseTest {
 
     Assertions.assertEquals("User not found", ex.getMessage());
 
-    Mockito.verify(usersRepository, Mockito.times(1))
+    Mockito.verify(usersGateway, Mockito.times(1))
         .findByUuid(usersUuid);
-    Mockito.verifyNoInteractions(restaurantsRepository, repository, mapper, usersMapper);
-    Mockito.verifyNoMoreInteractions(usersRepository);
+    Mockito.verifyNoInteractions(restaurantsGateway, repository, mapper, usersMapper);
+    Mockito.verifyNoMoreInteractions(usersGateway);
   }
 
   @Test
@@ -73,10 +73,10 @@ class CreateUsersRestaurantUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
 
     final Users users = Mockito.mock(Users.class);
-    Mockito.when(usersRepository.findByUuid(usersUuid))
+    Mockito.when(usersGateway.findByUuid(usersUuid))
         .thenReturn(Optional.of(users));
 
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -86,13 +86,13 @@ class CreateUsersRestaurantUseCaseTest {
 
     Assertions.assertEquals("Restaurant not found", ex.getMessage());
 
-    Mockito.verify(usersRepository, Mockito.times(1))
+    Mockito.verify(usersGateway, Mockito.times(1))
         .findByUuid(usersUuid);
-    Mockito.verify(restaurantsRepository, Mockito.times(1))
+    Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
     Mockito.verifyNoInteractions(repository, mapper, usersMapper);
-    Mockito.verifyNoMoreInteractions(usersRepository, restaurantsRepository);
+    Mockito.verifyNoMoreInteractions(usersGateway, restaurantsGateway);
   }
 
   @Test
@@ -102,11 +102,11 @@ class CreateUsersRestaurantUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
 
     final Users users = Mockito.mock(Users.class);
-    Mockito.when(usersRepository.findByUuid(usersUuid))
+    Mockito.when(usersGateway.findByUuid(usersUuid))
         .thenReturn(Optional.of(users));
 
     final Restaurants restaurants = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurants));
 
     final UsersRestaurant usersRestaurantDomain = Mockito.mock(UsersRestaurant.class);
@@ -128,9 +128,9 @@ class CreateUsersRestaurantUseCaseTest {
     Assertions.assertNotNull(result);
     Assertions.assertSame(usersOutput, result);
 
-    Mockito.verify(usersRepository, Mockito.times(1))
+    Mockito.verify(usersGateway, Mockito.times(1))
         .findByUuid(usersUuid);
-    Mockito.verify(restaurantsRepository, Mockito.times(1))
+    Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(users, restaurants);
@@ -140,8 +140,8 @@ class CreateUsersRestaurantUseCaseTest {
         .toOutput(users);
 
     Mockito.verifyNoMoreInteractions(
-        usersRepository,
-        restaurantsRepository,
+        usersGateway,
+        restaurantsGateway,
         mapper,
         repository,
         usersMapper

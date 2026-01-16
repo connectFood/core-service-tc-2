@@ -7,7 +7,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.repository.RestaurantItemsRepository;
+import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RemoveRestaurantItemsUseCaseTest {
 
   @Mock
-  private RestaurantItemsRepository repository;
+  private RestaurantItemsGateway repository;
 
   @Mock
   private RequestUserGuard guard;

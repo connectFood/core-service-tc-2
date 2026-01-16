@@ -5,33 +5,32 @@ import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.UsersRepository;
-import com.connectfood.core.domain.repository.UsersTypeRepository;
-import com.connectfood.core.domain.utils.PasswordUtils;
+import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.utils.PasswordGateway;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateUsersUseCase {
 
-  private final UsersRepository repository;
+  private final UsersGateway repository;
   private final UsersAppMapper mapper;
-  private final UsersTypeRepository usersTypeRepository;
-  private final PasswordUtils passwordUtils;
+  private final UsersTypeGateway usersTypeGateway;
+  private final PasswordGateway passwordGateway;
   private final CreateUsersAddressUseCase createUsersAddressUseCase;
 
   public CreateUsersUseCase(
-      final UsersRepository repository,
+      final UsersGateway repository,
       final UsersAppMapper mapper,
-      final UsersTypeRepository usersTypeRepository,
-      final PasswordUtils passwordUtils,
+      final UsersTypeGateway usersTypeGateway,
+      final PasswordGateway passwordGateway,
       final CreateUsersAddressUseCase createUsersAddressUseCase) {
     this.repository = repository;
     this.mapper = mapper;
-    this.usersTypeRepository = usersTypeRepository;
-    this.passwordUtils = passwordUtils;
+    this.usersTypeGateway = usersTypeGateway;
+    this.passwordGateway = passwordGateway;
     this.createUsersAddressUseCase = createUsersAddressUseCase;
   }
 
@@ -39,10 +38,10 @@ public class CreateUsersUseCase {
   public UsersOutput execute(final UsersInput input) {
     validateUsersExists(input.getEmail());
 
-    final var passwordHash = passwordUtils.encode(input.getPassword());
+    final var passwordHash = passwordGateway.encode(input.getPassword());
 
     final var usersType =
-        usersTypeRepository.findByUuid(input.getUsersTypeUuid())
+        usersTypeGateway.findByUuid(input.getUsersTypeUuid())
             .orElseThrow(() -> new NotFoundException("Users type not found"));
 
     final var users = repository.save(mapper.toDomain(input, passwordHash, usersType));

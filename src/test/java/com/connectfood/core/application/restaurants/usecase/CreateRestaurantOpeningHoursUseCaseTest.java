@@ -9,7 +9,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.model.RestaurantOpeningHours;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.RestaurantOpeningHoursRepository;
+import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateRestaurantOpeningHoursUseCaseTest {
 
   @Mock
-  private RestaurantOpeningHoursRepository repository;
+  private RestaurantOpeningHoursGateway repository;
 
   @Mock
   private RestaurantOpeningHoursAppMapper mapper;

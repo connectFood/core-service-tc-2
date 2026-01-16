@@ -12,8 +12,8 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.AddressRepository;
-import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
+import com.connectfood.core.domain.repository.AddressGateway;
+import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UpdateRestaurantsAddressUseCaseTest {
 
   @Mock
-  private RestaurantsAddressRepository repository;
+  private RestaurantsAddressGateway repository;
 
   @Mock
   private AddressAppMapper mapper;
@@ -37,7 +37,7 @@ class UpdateRestaurantsAddressUseCaseTest {
   private RequestUserGuard guard;
 
   @Mock
-  private AddressRepository addressRepository;
+  private AddressGateway addressGateway;
 
   @InjectMocks
   private UpdateRestaurantsAddressUseCase useCase;
@@ -69,7 +69,7 @@ class UpdateRestaurantsAddressUseCaseTest {
         .thenReturn(domainToUpdate);
 
     final Address updated = Mockito.mock(Address.class);
-    Mockito.when(addressRepository.update(addressUuid, domainToUpdate))
+    Mockito.when(addressGateway.update(addressUuid, domainToUpdate))
         .thenReturn(updated);
 
     final AddressOutput output = Mockito.mock(AddressOutput.class);
@@ -96,14 +96,14 @@ class UpdateRestaurantsAddressUseCaseTest {
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(addressUuid, input);
 
-    Mockito.verify(addressRepository, Mockito.times(1))
+    Mockito.verify(addressGateway, Mockito.times(1))
         .update(addressUuid, domainToUpdate);
 
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updated);
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, mapper, addressRepository, restaurantsAddress, currentAddress
+        guard, repository, mapper, addressGateway, restaurantsAddress, currentAddress
     );
   }
 
@@ -132,7 +132,7 @@ class UpdateRestaurantsAddressUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantUuid);
 
-    Mockito.verifyNoInteractions(mapper, addressRepository);
+    Mockito.verifyNoInteractions(mapper, addressGateway);
     Mockito.verifyNoMoreInteractions(guard, repository);
   }
 }

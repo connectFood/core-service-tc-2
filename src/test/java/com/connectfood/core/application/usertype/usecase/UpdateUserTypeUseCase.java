@@ -5,7 +5,7 @@ import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.UsersType;
-import com.connectfood.core.domain.repository.UsersTypeRepository;
+import com.connectfood.core.domain.repository.UsersTypeGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 class UpdateUserTypeUseCaseTest {
 
   @Mock
-  private UsersTypeRepository repository;
+  private UsersTypeGateway repository;
 
   @Mock
   private UsersTypeAppMapper mapper;

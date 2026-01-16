@@ -14,9 +14,9 @@ import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Restaurants;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.AddressRepository;
-import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
-import com.connectfood.core.domain.repository.RestaurantsRepository;
+import com.connectfood.core.domain.repository.AddressGateway;
+import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
+import com.connectfood.core.domain.repository.RestaurantsGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateRestaurantsAddressUseCaseTest {
 
   @Mock
-  private AddressRepository repository;
+  private AddressGateway repository;
 
   @Mock
   private AddressAppMapper mapper;
@@ -40,10 +40,10 @@ class CreateRestaurantsAddressUseCaseTest {
   private RequestUserGuard guard;
 
   @Mock
-  private RestaurantsRepository restaurantsRepository;
+  private RestaurantsGateway restaurantsGateway;
 
   @Mock
-  private RestaurantsAddressRepository restaurantsAddressRepository;
+  private RestaurantsAddressGateway restaurantsAddressGateway;
 
   @Mock
   private RestaurantsAddressAppMapper restaurantsAddressMapper;
@@ -61,7 +61,7 @@ class CreateRestaurantsAddressUseCaseTest {
     final AddressInput input = Mockito.mock(AddressInput.class);
 
     final Restaurants restaurants = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurants));
 
     final Address addressDomainToSave = Mockito.mock(Address.class);
@@ -77,7 +77,7 @@ class CreateRestaurantsAddressUseCaseTest {
         .thenReturn(restaurantsAddressDomain);
 
     final RestaurantsAddress savedRestaurantsAddress = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantsAddressRepository.save(restaurantsAddressDomain))
+    Mockito.when(restaurantsAddressGateway.save(restaurantsAddressDomain))
         .thenReturn(savedRestaurantsAddress);
 
     final Address linkedAddress = Mockito.mock(Address.class);
@@ -96,7 +96,7 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
-    Mockito.verify(restaurantsRepository, Mockito.times(1))
+    Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
     Mockito.verify(mapper, Mockito.times(1))
@@ -108,7 +108,7 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.verify(restaurantsAddressMapper, Mockito.times(1))
         .toDomain(restaurants, savedAddress);
 
-    Mockito.verify(restaurantsAddressRepository, Mockito.times(1))
+    Mockito.verify(restaurantsAddressGateway, Mockito.times(1))
         .save(restaurantsAddressDomain);
 
     Mockito.verify(mapper, Mockito.times(1))
@@ -116,11 +116,11 @@ class CreateRestaurantsAddressUseCaseTest {
 
     Mockito.verifyNoMoreInteractions(
         guard,
-        restaurantsRepository,
+        restaurantsGateway,
         mapper,
         repository,
         restaurantsAddressMapper,
-        restaurantsAddressRepository
+        restaurantsAddressGateway
     );
   }
 
@@ -133,7 +133,7 @@ class CreateRestaurantsAddressUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
+    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -146,10 +146,10 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
-    Mockito.verify(restaurantsRepository, Mockito.times(1))
+    Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
-    Mockito.verifyNoInteractions(mapper, repository, restaurantsAddressMapper, restaurantsAddressRepository);
-    Mockito.verifyNoMoreInteractions(guard, restaurantsRepository);
+    Mockito.verifyNoInteractions(mapper, repository, restaurantsAddressMapper, restaurantsAddressGateway);
+    Mockito.verifyNoMoreInteractions(guard, restaurantsGateway);
   }
 }

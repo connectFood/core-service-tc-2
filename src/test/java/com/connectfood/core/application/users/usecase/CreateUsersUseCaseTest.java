@@ -12,9 +12,9 @@ import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersType;
-import com.connectfood.core.domain.repository.UsersRepository;
-import com.connectfood.core.domain.repository.UsersTypeRepository;
-import com.connectfood.core.domain.utils.PasswordUtils;
+import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.utils.PasswordGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,16 +29,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateUsersUseCaseTest {
 
   @Mock
-  private UsersRepository repository;
+  private UsersGateway repository;
 
   @Mock
   private UsersAppMapper mapper;
 
   @Mock
-  private UsersTypeRepository usersTypeRepository;
+  private UsersTypeGateway usersTypeGateway;
 
   @Mock
-  private PasswordUtils passwordUtils;
+  private PasswordGateway passwordGateway;
 
   @Mock
   private CreateUsersAddressUseCase createUsersAddressUseCase;
@@ -62,11 +62,11 @@ class CreateUsersUseCaseTest {
     Mockito.when(repository.existsByEmail("user@test.com"))
         .thenReturn(false);
 
-    Mockito.when(passwordUtils.encode("senha123"))
+    Mockito.when(passwordGateway.encode("senha123"))
         .thenReturn("hashSenha");
 
     final UsersType usersType = Mockito.mock(UsersType.class);
-    Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
+    Mockito.when(usersTypeGateway.findByUuid(usersTypeUuid))
         .thenReturn(Optional.of(usersType));
 
     final Users domainToSave = Mockito.mock(Users.class);
@@ -100,9 +100,9 @@ class CreateUsersUseCaseTest {
 
     Mockito.verify(repository, Mockito.times(1))
         .existsByEmail("user@test.com");
-    Mockito.verify(passwordUtils, Mockito.times(1))
+    Mockito.verify(passwordGateway, Mockito.times(1))
         .encode("senha123");
-    Mockito.verify(usersTypeRepository, Mockito.times(1))
+    Mockito.verify(usersTypeGateway, Mockito.times(1))
         .findByUuid(usersTypeUuid);
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(input, "hashSenha", usersType);
@@ -118,8 +118,8 @@ class CreateUsersUseCaseTest {
     Mockito.verifyNoMoreInteractions(
         repository,
         mapper,
-        usersTypeRepository,
-        passwordUtils,
+        usersTypeGateway,
+        passwordGateway,
         createUsersAddressUseCase,
         savedUsers
     );
@@ -141,10 +141,10 @@ class CreateUsersUseCaseTest {
     Mockito.when(repository.existsByEmail("user@test.com"))
         .thenReturn(false);
 
-    Mockito.when(passwordUtils.encode("senha123"))
+    Mockito.when(passwordGateway.encode("senha123"))
         .thenReturn("hashSenha");
 
-    Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
+    Mockito.when(usersTypeGateway.findByUuid(usersTypeUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -156,16 +156,16 @@ class CreateUsersUseCaseTest {
 
     Mockito.verify(repository, Mockito.times(1))
         .existsByEmail("user@test.com");
-    Mockito.verify(passwordUtils, Mockito.times(1))
+    Mockito.verify(passwordGateway, Mockito.times(1))
         .encode("senha123");
-    Mockito.verify(usersTypeRepository, Mockito.times(1))
+    Mockito.verify(usersTypeGateway, Mockito.times(1))
         .findByUuid(usersTypeUuid);
 
     Mockito.verifyNoInteractions(mapper, createUsersAddressUseCase);
     Mockito.verify(repository, Mockito.never())
         .save(Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository, usersTypeRepository, passwordUtils);
+    Mockito.verifyNoMoreInteractions(repository, usersTypeGateway, passwordGateway);
   }
 
   @Test
@@ -188,7 +188,7 @@ class CreateUsersUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .existsByEmail("user@test.com");
 
-    Mockito.verifyNoInteractions(passwordUtils, usersTypeRepository, mapper, createUsersAddressUseCase);
+    Mockito.verifyNoInteractions(passwordGateway, usersTypeGateway, mapper, createUsersAddressUseCase);
     Mockito.verify(repository, Mockito.never())
         .save(Mockito.any());
 

@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantsType;
-import com.connectfood.core.domain.repository.RestaurantsTypeRepository;
+import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RemoveRestaurantTypeUseCaseTest {
 
   @Mock
-  private RestaurantsTypeRepository repository;
+  private RestaurantsTypeGateway repository;
 
   @InjectMocks
   private RemoveRestaurantTypeUseCase useCase;

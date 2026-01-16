@@ -9,8 +9,8 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.AddressRepository;
-import com.connectfood.core.domain.repository.RestaurantsAddressRepository;
+import com.connectfood.core.domain.repository.AddressGateway;
+import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,21 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class UpdateRestaurantsAddressUseCase {
 
-  private final RestaurantsAddressRepository repository;
+  private final RestaurantsAddressGateway repository;
   private final AddressAppMapper mapper;
   private final RequestUserGuard guard;
-  private final AddressRepository addressRepository;
+  private final AddressGateway addressGateway;
 
   public UpdateRestaurantsAddressUseCase(
-      final RestaurantsAddressRepository repository,
+      final RestaurantsAddressGateway repository,
       final AddressAppMapper mapper,
       final RequestUserGuard guard,
-      final AddressRepository addressRepository
+      final AddressGateway addressGateway
   ) {
     this.repository = repository;
     this.mapper = mapper;
     this.guard = guard;
-    this.addressRepository = addressRepository;
+    this.addressGateway = addressGateway;
   }
 
   @Transactional
@@ -45,7 +45,7 @@ public class UpdateRestaurantsAddressUseCase {
     final var addressUuid = restaurantsAddress.getAddress()
         .getUuid();
 
-    final var addressUpdated = addressRepository.update(addressUuid, mapper.toDomain(addressUuid, addressInput));
+    final var addressUpdated = addressGateway.update(addressUuid, mapper.toDomain(addressUuid, addressInput));
 
     return mapper.toOutput(addressUpdated);
   }

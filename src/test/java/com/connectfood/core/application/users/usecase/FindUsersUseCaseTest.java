@@ -6,15 +6,14 @@ import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersType;
-import com.connectfood.core.domain.repository.UsersAddressRepository;
-import com.connectfood.core.domain.repository.UsersRepository;
+import com.connectfood.core.domain.repository.UsersAddressGateway;
+import com.connectfood.core.domain.repository.UsersGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -26,11 +25,11 @@ import static org.mockito.Mockito.*;
 class FindUsersUseCaseTest {
 
   @Mock
-  private UsersRepository repository;
+  private UsersGateway repository;
   @Mock
   private UsersAppMapper mapper;
   @Mock
-  private UsersAddressRepository usersAddressRepository;
+  private UsersAddressGateway usersAddressGateway;
 
   @InjectMocks
   private FindUsersUseCase useCase;

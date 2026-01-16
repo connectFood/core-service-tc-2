@@ -11,9 +11,9 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Users;
 import com.connectfood.core.domain.model.UsersAddress;
-import com.connectfood.core.domain.repository.AddressRepository;
-import com.connectfood.core.domain.repository.UsersAddressRepository;
-import com.connectfood.core.domain.repository.UsersRepository;
+import com.connectfood.core.domain.repository.AddressGateway;
+import com.connectfood.core.domain.repository.UsersAddressGateway;
+import com.connectfood.core.domain.repository.UsersGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,16 +28,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateUsersAddressUseCaseTest {
 
   @Mock
-  private AddressRepository repository;
+  private AddressGateway repository;
 
   @Mock
   private AddressAppMapper mapper;
 
   @Mock
-  private UsersRepository usersRepository;
+  private UsersGateway usersGateway;
 
   @Mock
-  private UsersAddressRepository usersAddressRepository;
+  private UsersAddressGateway usersAddressGateway;
 
   @Mock
   private UsersAddressAppMapper usersAddressMapper;
@@ -51,7 +51,7 @@ class CreateUsersAddressUseCaseTest {
     final var userUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    Mockito.when(usersRepository.findByUuid(userUuid))
+    Mockito.when(usersGateway.findByUuid(userUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -61,10 +61,10 @@ class CreateUsersAddressUseCaseTest {
 
     Assertions.assertEquals("User not found", ex.getMessage());
 
-    Mockito.verify(usersRepository, Mockito.times(1))
+    Mockito.verify(usersGateway, Mockito.times(1))
         .findByUuid(userUuid);
-    Mockito.verifyNoInteractions(repository, mapper, usersAddressRepository, usersAddressMapper);
-    Mockito.verifyNoMoreInteractions(usersRepository);
+    Mockito.verifyNoInteractions(repository, mapper, usersAddressGateway, usersAddressMapper);
+    Mockito.verifyNoMoreInteractions(usersGateway);
   }
 
   @Test
@@ -74,7 +74,7 @@ class CreateUsersAddressUseCaseTest {
     final AddressInput input = Mockito.mock(AddressInput.class);
 
     final Users users = Mockito.mock(Users.class);
-    Mockito.when(usersRepository.findByUuid(userUuid))
+    Mockito.when(usersGateway.findByUuid(userUuid))
         .thenReturn(Optional.of(users));
 
     final Address addressToSave = Mockito.mock(Address.class);
@@ -90,7 +90,7 @@ class CreateUsersAddressUseCaseTest {
         .thenReturn(usersAddressToSave);
 
     final UsersAddress savedUsersAddress = Mockito.mock(UsersAddress.class);
-    Mockito.when(usersAddressRepository.save(usersAddressToSave))
+    Mockito.when(usersAddressGateway.save(usersAddressToSave))
         .thenReturn(savedUsersAddress);
 
     final AddressOutput expectedOutput = Mockito.mock(AddressOutput.class);
@@ -104,7 +104,7 @@ class CreateUsersAddressUseCaseTest {
     Assertions.assertNotNull(result);
     Assertions.assertSame(expectedOutput, result);
 
-    Mockito.verify(usersRepository, Mockito.times(1))
+    Mockito.verify(usersGateway, Mockito.times(1))
         .findByUuid(userUuid);
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(input);
@@ -112,7 +112,7 @@ class CreateUsersAddressUseCaseTest {
         .save(addressToSave);
     Mockito.verify(usersAddressMapper, Mockito.times(1))
         .toDomain(users, savedAddress);
-    Mockito.verify(usersAddressRepository, Mockito.times(1))
+    Mockito.verify(usersAddressGateway, Mockito.times(1))
         .save(usersAddressToSave);
     Mockito.verify(savedUsersAddress, Mockito.times(1))
         .getAddress();
@@ -120,11 +120,11 @@ class CreateUsersAddressUseCaseTest {
         .toOutput(savedAddress);
 
     Mockito.verifyNoMoreInteractions(
-        usersRepository,
+        usersGateway,
         mapper,
         repository,
         usersAddressMapper,
-        usersAddressRepository,
+        usersAddressGateway,
         savedUsersAddress
     );
   }

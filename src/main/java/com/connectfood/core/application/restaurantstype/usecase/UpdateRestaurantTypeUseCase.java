@@ -4,7 +4,7 @@ import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantsTypeRepository;
+import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +14,10 @@ import java.util.UUID;
 @Component
 public class UpdateRestaurantTypeUseCase {
 
-  private final RestaurantsTypeRepository repository;
+  private final RestaurantsTypeGateway repository;
   private final RestaurantsTypeAppMapper mapper;
 
-  public UpdateRestaurantTypeUseCase(RestaurantsTypeRepository repository, RestaurantsTypeAppMapper mapper) {
+  public UpdateRestaurantTypeUseCase(RestaurantsTypeGateway repository, RestaurantsTypeAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }
