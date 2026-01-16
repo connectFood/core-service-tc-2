@@ -3,17 +3,17 @@ package com.connectfood.infrastructure.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
+import com.connectfood.core.application.restaurant.usecase.CreateRestaurantOpeningHourUseCase;
+import com.connectfood.core.application.restaurant.usecase.CreateRestaurantAddressUseCase;
+import com.connectfood.core.application.restaurant.usecase.CreateRestaurantUseCase;
+import com.connectfood.core.application.restaurant.usecase.FindRestaurantUseCase;
+import com.connectfood.core.application.restaurant.usecase.RemoveRestaurantOpeningHourUseCase;
+import com.connectfood.core.application.restaurant.usecase.RemoveRestaurantAddressUseCase;
+import com.connectfood.core.application.restaurant.usecase.RemoveRestaurantUseCase;
+import com.connectfood.core.application.restaurant.usecase.SearchRestaurantsUseCase;
+import com.connectfood.core.application.restaurant.usecase.UpdateRestaurantOpeningHourUseCase;
+import com.connectfood.core.application.restaurant.usecase.UpdateRestaurantAddressUseCase;
+import com.connectfood.core.application.restaurant.usecase.UpdateRestaurantUseCase;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.infrastructure.rest.controller.docs.RestaurantControllerApi;
 import com.connectfood.infrastructure.rest.dto.address.AddressRequest;
@@ -36,34 +36,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestaurantController implements RestaurantControllerApi {
 
   private final SearchRestaurantsUseCase searchUseCase;
-  private final FindRestaurantsUseCase findUseCase;
-  private final CreateRestaurantsUseCase createUseCase;
-  private final UpdateRestaurantsUseCase updateUseCase;
-  private final RemoveRestaurantsUseCase removeUseCase;
+  private final FindRestaurantUseCase findUseCase;
+  private final CreateRestaurantUseCase createUseCase;
+  private final UpdateRestaurantUseCase updateUseCase;
+  private final RemoveRestaurantUseCase removeUseCase;
   private final RestaurantEntryMapper mapper;
-  private final CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase;
-  private final UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase;
-  private final RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase;
+  private final CreateRestaurantOpeningHourUseCase createRestaurantOpeningHourUseCase;
+  private final UpdateRestaurantOpeningHourUseCase updateRestaurantOpeningHourUseCase;
+  private final RemoveRestaurantOpeningHourUseCase removeRestaurantOpeningHourUseCase;
   private final RestaurantOpeningHourEntryMapper restaurantOpeningHoursMapper;
-  private final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase;
-  private final UpdateRestaurantsAddressUseCase updateRestaurantsAddressUseCase;
-  private final RemoveRestaurantsAddressUseCase removeRestaurantsAddressUseCase;
+  private final CreateRestaurantAddressUseCase createRestaurantAddressUseCase;
+  private final UpdateRestaurantAddressUseCase updateRestaurantAddressUseCase;
+  private final RemoveRestaurantAddressUseCase removeRestaurantAddressUseCase;
   private final AddressEntryMapper addressMapper;
 
   public RestaurantController(
       final SearchRestaurantsUseCase searchUseCase,
-      final FindRestaurantsUseCase findUseCase,
-      final CreateRestaurantsUseCase createUseCase,
-      final UpdateRestaurantsUseCase updateUseCase,
-      final RemoveRestaurantsUseCase removeUseCase,
+      final FindRestaurantUseCase findUseCase,
+      final CreateRestaurantUseCase createUseCase,
+      final UpdateRestaurantUseCase updateUseCase,
+      final RemoveRestaurantUseCase removeUseCase,
       final RestaurantEntryMapper mapper,
-      final CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase,
-      final UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase,
-      final RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase,
+      final CreateRestaurantOpeningHourUseCase createRestaurantOpeningHourUseCase,
+      final UpdateRestaurantOpeningHourUseCase updateRestaurantOpeningHourUseCase,
+      final RemoveRestaurantOpeningHourUseCase removeRestaurantOpeningHourUseCase,
       final RestaurantOpeningHourEntryMapper restaurantOpeningHoursMapper,
-      final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase,
-      final UpdateRestaurantsAddressUseCase updateRestaurantsAddressUseCase,
-      final RemoveRestaurantsAddressUseCase removeRestaurantsAddressUseCase,
+      final CreateRestaurantAddressUseCase createRestaurantAddressUseCase,
+      final UpdateRestaurantAddressUseCase updateRestaurantAddressUseCase,
+      final RemoveRestaurantAddressUseCase removeRestaurantAddressUseCase,
       final AddressEntryMapper addressMapper
   ) {
     this.searchUseCase = searchUseCase;
@@ -72,13 +72,13 @@ public class RestaurantController implements RestaurantControllerApi {
     this.updateUseCase = updateUseCase;
     this.removeUseCase = removeUseCase;
     this.mapper = mapper;
-    this.createRestaurantOpeningHoursUseCase = createRestaurantOpeningHoursUseCase;
-    this.updateRestaurantOpeningHoursUseCase = updateRestaurantOpeningHoursUseCase;
-    this.removeRestaurantOpeningHoursUseCase = removeRestaurantOpeningHoursUseCase;
+    this.createRestaurantOpeningHourUseCase = createRestaurantOpeningHourUseCase;
+    this.updateRestaurantOpeningHourUseCase = updateRestaurantOpeningHourUseCase;
+    this.removeRestaurantOpeningHourUseCase = removeRestaurantOpeningHourUseCase;
     this.restaurantOpeningHoursMapper = restaurantOpeningHoursMapper;
-    this.createRestaurantsAddressUseCase = createRestaurantsAddressUseCase;
-    this.updateRestaurantsAddressUseCase = updateRestaurantsAddressUseCase;
-    this.removeRestaurantsAddressUseCase = removeRestaurantsAddressUseCase;
+    this.createRestaurantAddressUseCase = createRestaurantAddressUseCase;
+    this.updateRestaurantAddressUseCase = updateRestaurantAddressUseCase;
+    this.removeRestaurantAddressUseCase = removeRestaurantAddressUseCase;
     this.addressMapper = addressMapper;
   }
 
@@ -134,7 +134,7 @@ public class RestaurantController implements RestaurantControllerApi {
       final UUID uuid,
       final RestaurantOpeningHourRequest request) {
 
-    final var result = createRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), uuid,
+    final var result = createRestaurantOpeningHourUseCase.execute(new RequestUser(requestUserUuid), uuid,
         restaurantOpeningHoursMapper.toInput(request)
     );
     final var response = restaurantOpeningHoursMapper.toResponse(result);
@@ -149,7 +149,7 @@ public class RestaurantController implements RestaurantControllerApi {
       final UUID uuid,
       final AddressRequest request) {
 
-    final var result = createRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
+    final var result = createRestaurantAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
         addressMapper.toInput(request)
     );
     final var response = addressMapper.toResponse(result);
@@ -178,7 +178,7 @@ public class RestaurantController implements RestaurantControllerApi {
       final UUID openingHoursUuid,
       final RestaurantOpeningHourRequest request
   ) {
-    final var result = updateRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid,
+    final var result = updateRestaurantOpeningHourUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid,
         restaurantOpeningHoursMapper.toInput(request)
     );
     final var response = restaurantOpeningHoursMapper.toResponse(result);
@@ -194,7 +194,7 @@ public class RestaurantController implements RestaurantControllerApi {
       final AddressRequest request
   ) {
 
-    final var result = updateRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
+    final var result = updateRestaurantAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
         addressMapper.toInput(request)
     );
     final var response = addressMapper.toResponse(result);
@@ -219,7 +219,7 @@ public class RestaurantController implements RestaurantControllerApi {
       final UUID requestUserUuid,
       final UUID openingHoursUuid
   ) {
-    removeRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid);
+    removeRestaurantOpeningHourUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid);
 
     return ResponseEntity.noContent()
         .build();
@@ -230,7 +230,7 @@ public class RestaurantController implements RestaurantControllerApi {
       final UUID requestUserUuid,
       final UUID uuid
   ) {
-    removeRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid);
+    removeRestaurantAddressUseCase.execute(new RequestUser(requestUserUuid), uuid);
 
     return ResponseEntity.noContent()
         .build();

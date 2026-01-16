@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.application.dto.commons.PageOutput;
-import com.connectfood.core.application.users.dto.UsersInput;
-import com.connectfood.core.application.users.dto.UsersOutput;
-import com.connectfood.core.application.users.usecase.CreateUsersUseCase;
-import com.connectfood.core.application.users.usecase.FindUsersUseCase;
-import com.connectfood.core.application.users.usecase.RemoveUsersUseCase;
-import com.connectfood.core.application.users.usecase.SearchUsersUseCase;
-import com.connectfood.core.application.users.usecase.UpdateUsersUseCase;
+import com.connectfood.core.application.user.dto.UserInput;
+import com.connectfood.core.application.user.dto.UserOutput;
+import com.connectfood.core.application.user.usecase.CreateUserUseCase;
+import com.connectfood.core.application.user.usecase.FindUserUseCase;
+import com.connectfood.core.application.user.usecase.RemoveUserUseCase;
+import com.connectfood.core.application.user.usecase.SearchUsersUseCase;
+import com.connectfood.core.application.user.usecase.UpdateUserUseCase;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
 import com.connectfood.infrastructure.rest.dto.commons.PageResponse;
 import com.connectfood.infrastructure.rest.dto.user.UserRequest;
@@ -36,16 +36,16 @@ class UserControllerTest {
   private SearchUsersUseCase searchUseCase;
 
   @Mock
-  private FindUsersUseCase findUseCase;
+  private FindUserUseCase findUseCase;
 
   @Mock
-  private CreateUsersUseCase createUseCase;
+  private CreateUserUseCase createUseCase;
 
   @Mock
-  private UpdateUsersUseCase updateUseCase;
+  private UpdateUserUseCase updateUseCase;
 
   @Mock
-  private RemoveUsersUseCase removeUseCase;
+  private RemoveUserUseCase removeUseCase;
 
   @Mock
   private UserEntryMapper mapper;
@@ -64,8 +64,8 @@ class UserControllerTest {
     final var sort = "fullName";
     final var direction = "ASC";
 
-    final UsersOutput out1 = Mockito.mock(UsersOutput.class);
-    final UsersOutput out2 = Mockito.mock(UsersOutput.class);
+    final UserOutput out1 = Mockito.mock(UserOutput.class);
+    final UserOutput out2 = Mockito.mock(UserOutput.class);
 
     Mockito.when(searchUseCase.execute(fullName, email, usersTypeUuid, page, size, sort, direction))
         .thenReturn(new PageOutput<>(List.of(out1, out2), 2L));
@@ -138,7 +138,7 @@ class UserControllerTest {
   void shouldReturnOkWithBaseResponseWhenFindByUuid() {
     final var uuid = UUID.randomUUID();
 
-    final UsersOutput out = Mockito.mock(UsersOutput.class);
+    final UserOutput out = Mockito.mock(UserOutput.class);
     Mockito.when(findUseCase.execute(uuid)).thenReturn(out);
 
     final UserResponse resp = Mockito.mock(UserResponse.class);
@@ -166,10 +166,10 @@ class UserControllerTest {
   void shouldReturnCreatedWithBaseResponseWhenCreate() {
     final UserRequest request = Mockito.mock(UserRequest.class);
 
-    final UsersInput input = Mockito.mock(UsersInput.class);
+    final UserInput input = Mockito.mock(UserInput.class);
     Mockito.when(mapper.toInput(request)).thenReturn(input);
 
-    final UsersOutput out = Mockito.mock(UsersOutput.class);
+    final UserOutput out = Mockito.mock(UserOutput.class);
     Mockito.when(createUseCase.execute(input)).thenReturn(out);
 
     final UserResponse resp = Mockito.mock(UserResponse.class);
@@ -199,10 +199,10 @@ class UserControllerTest {
     final var uuid = UUID.randomUUID();
     final UserRequest request = Mockito.mock(UserRequest.class);
 
-    final UsersInput input = Mockito.mock(UsersInput.class);
+    final UserInput input = Mockito.mock(UserInput.class);
     Mockito.when(mapper.toInput(request)).thenReturn(input);
 
-    final UsersOutput out = Mockito.mock(UsersOutput.class);
+    final UserOutput out = Mockito.mock(UserOutput.class);
     Mockito.when(updateUseCase.execute(uuid, input)).thenReturn(out);
 
     final UserResponse resp = Mockito.mock(UserResponse.class);

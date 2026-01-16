@@ -3,11 +3,11 @@ package com.connectfood.infrastructure.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantitems.usecase.CreateRestaurantItemsUseCase;
-import com.connectfood.core.application.restaurantitems.usecase.FindRestaurantItemsUseCase;
-import com.connectfood.core.application.restaurantitems.usecase.RemoveRestaurantItemsUseCase;
-import com.connectfood.core.application.restaurantitems.usecase.SearchRestaurantItemsUseCase;
-import com.connectfood.core.application.restaurantitems.usecase.UpdateRestaurantItemsUseCase;
+import com.connectfood.core.application.restaurantitem.usecase.CreateRestaurantItemUseCase;
+import com.connectfood.core.application.restaurantitem.usecase.FindRestaurantItemUseCase;
+import com.connectfood.core.application.restaurantitem.usecase.RemoveRestaurantItemUseCase;
+import com.connectfood.core.application.restaurantitem.usecase.SearchRestaurantItemsUseCase;
+import com.connectfood.core.application.restaurantitem.usecase.UpdateRestaurantItemUseCase;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.infrastructure.rest.controller.docs.RestaurantItemControllerApi;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
@@ -24,18 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestaurantItemController implements RestaurantItemControllerApi {
 
   private final SearchRestaurantItemsUseCase searchUseCase;
-  private final FindRestaurantItemsUseCase findUseCase;
-  private final CreateRestaurantItemsUseCase createUseCase;
-  private final UpdateRestaurantItemsUseCase updateUseCase;
-  private final RemoveRestaurantItemsUseCase removeUseCase;
+  private final FindRestaurantItemUseCase findUseCase;
+  private final CreateRestaurantItemUseCase createUseCase;
+  private final UpdateRestaurantItemUseCase updateUseCase;
+  private final RemoveRestaurantItemUseCase removeUseCase;
   private final RestaurantItemEntryMapper mapper;
 
   public RestaurantItemController(
       final SearchRestaurantItemsUseCase searchUseCase,
-      final FindRestaurantItemsUseCase findUseCase,
-      final CreateRestaurantItemsUseCase createUseCase,
-      final UpdateRestaurantItemsUseCase updateUseCase,
-      final RemoveRestaurantItemsUseCase removeUseCase,
+      final FindRestaurantItemUseCase findUseCase,
+      final CreateRestaurantItemUseCase createUseCase,
+      final UpdateRestaurantItemUseCase updateUseCase,
+      final RemoveRestaurantItemUseCase removeUseCase,
       final RestaurantItemEntryMapper mapper
   ) {
     this.searchUseCase = searchUseCase;

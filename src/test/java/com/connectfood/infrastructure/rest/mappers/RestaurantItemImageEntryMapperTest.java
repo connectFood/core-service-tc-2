@@ -2,8 +2,8 @@ package com.connectfood.infrastructure.rest.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesInput;
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesOutput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemImageInput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemImageOutput;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemImageRequest;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemImageResponse;
 
@@ -19,7 +19,7 @@ class RestaurantItemImageEntryMapperTest {
   @Test
   @DisplayName("Não deve converter para input quando request for null")
   void shouldReturnNullWhenRequestIsNull() {
-    final RestaurantItemsImagesInput result = mapper.toInput(null);
+    final RestaurantItemImageInput result = mapper.toInput(null);
 
     Assertions.assertNull(result);
   }
@@ -35,7 +35,7 @@ class RestaurantItemImageEntryMapperTest {
             "/path/image.png"
         );
 
-    final RestaurantItemsImagesInput result = mapper.toInput(request);
+    final RestaurantItemImageInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertNull(result.getUuid());
@@ -57,7 +57,7 @@ class RestaurantItemImageEntryMapperTest {
             "/path/image.png"
         );
 
-    final RestaurantItemsImagesInput result = mapper.toInput(request);
+    final RestaurantItemImageInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -79,8 +79,8 @@ class RestaurantItemImageEntryMapperTest {
   void shouldConvertToResponseWhenOutputIsProvided() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantItemsImagesOutput output =
-        new RestaurantItemsImagesOutput(
+    final RestaurantItemImageOutput output =
+        new RestaurantItemImageOutput(
             uuid,
             "IMAGE",
             "Image description",

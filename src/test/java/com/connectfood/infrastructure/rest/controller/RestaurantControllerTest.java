@@ -4,21 +4,21 @@ import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.application.dto.commons.PageOutput;
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
-import com.connectfood.core.application.restaurants.dto.RestaurantsInput;
-import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.CreateRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.FindRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.RemoveRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.SearchRestaurantsUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpeningHoursUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
-import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
+import com.connectfood.core.application.restaurant.usecase.CreateRestaurantOpeningHourUseCase;
+import com.connectfood.core.application.restaurant.usecase.CreateRestaurantAddressUseCase;
+import com.connectfood.core.application.restaurant.usecase.CreateRestaurantUseCase;
+import com.connectfood.core.application.restaurant.usecase.FindRestaurantUseCase;
+import com.connectfood.core.application.restaurant.usecase.RemoveRestaurantOpeningHourUseCase;
+import com.connectfood.core.application.restaurant.usecase.RemoveRestaurantAddressUseCase;
+import com.connectfood.core.application.restaurant.usecase.RemoveRestaurantUseCase;
+import com.connectfood.core.application.restaurant.usecase.SearchRestaurantsUseCase;
+import com.connectfood.core.application.restaurant.usecase.UpdateRestaurantOpeningHourUseCase;
+import com.connectfood.core.application.restaurant.usecase.UpdateRestaurantAddressUseCase;
+import com.connectfood.core.application.restaurant.usecase.UpdateRestaurantUseCase;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.infrastructure.rest.dto.address.AddressRequest;
 import com.connectfood.infrastructure.rest.dto.address.AddressResponse;
@@ -50,40 +50,40 @@ class RestaurantControllerTest {
   private SearchRestaurantsUseCase searchUseCase;
 
   @Mock
-  private FindRestaurantsUseCase findUseCase;
+  private FindRestaurantUseCase findUseCase;
 
   @Mock
-  private CreateRestaurantsUseCase createUseCase;
+  private CreateRestaurantUseCase createUseCase;
 
   @Mock
-  private UpdateRestaurantsUseCase updateUseCase;
+  private UpdateRestaurantUseCase updateUseCase;
 
   @Mock
-  private RemoveRestaurantsUseCase removeUseCase;
+  private RemoveRestaurantUseCase removeUseCase;
 
   @Mock
   private RestaurantEntryMapper mapper;
 
   @Mock
-  private CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase;
+  private CreateRestaurantOpeningHourUseCase createRestaurantOpeningHourUseCase;
 
   @Mock
-  private UpdateRestaurantOpeningHoursUseCase updateRestaurantOpeningHoursUseCase;
+  private UpdateRestaurantOpeningHourUseCase updateRestaurantOpeningHourUseCase;
 
   @Mock
-  private RemoveRestaurantOpeningHoursUseCase removeRestaurantOpeningHoursUseCase;
+  private RemoveRestaurantOpeningHourUseCase removeRestaurantOpeningHourUseCase;
 
   @Mock
   private RestaurantOpeningHourEntryMapper restaurantOpeningHoursMapper;
 
   @Mock
-  private CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase;
+  private CreateRestaurantAddressUseCase createRestaurantAddressUseCase;
 
   @Mock
-  private UpdateRestaurantsAddressUseCase updateRestaurantsAddressUseCase;
+  private UpdateRestaurantAddressUseCase updateRestaurantAddressUseCase;
 
   @Mock
-  private RemoveRestaurantsAddressUseCase removeRestaurantsAddressUseCase;
+  private RemoveRestaurantAddressUseCase removeRestaurantAddressUseCase;
 
   @Mock
   private AddressEntryMapper addressMapper;
@@ -104,8 +104,8 @@ class RestaurantControllerTest {
     final var sort = "name";
     final var direction = "ASC";
 
-    final RestaurantsOutput out1 = Mockito.mock(RestaurantsOutput.class);
-    final RestaurantsOutput out2 = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput out1 = Mockito.mock(RestaurantOutput.class);
+    final RestaurantOutput out2 = Mockito.mock(RestaurantOutput.class);
 
     Mockito.when(searchUseCase.execute(name, restaurantsTypeUuid, street, city, state, page, size, sort, direction))
         .thenReturn(new PageOutput<>(List.of(out1, out2), 2L));
@@ -143,13 +143,13 @@ class RestaurantControllerTest {
         createUseCase,
         updateUseCase,
         removeUseCase,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -194,13 +194,13 @@ class RestaurantControllerTest {
         createUseCase,
         updateUseCase,
         removeUseCase,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -210,7 +210,7 @@ class RestaurantControllerTest {
   void shouldReturnOkWithBaseResponseWhenFindByUuid() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsOutput out = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput out = Mockito.mock(RestaurantOutput.class);
     Mockito.when(findUseCase.execute(uuid))
         .thenReturn(out);
 
@@ -238,13 +238,13 @@ class RestaurantControllerTest {
         createUseCase,
         updateUseCase,
         removeUseCase,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -255,11 +255,11 @@ class RestaurantControllerTest {
     final var requestUserUuid = UUID.randomUUID();
     final RestaurantRequest request = Mockito.mock(RestaurantRequest.class);
 
-    final RestaurantsInput input = Mockito.mock(RestaurantsInput.class);
+    final RestaurantInput input = Mockito.mock(RestaurantInput.class);
     Mockito.when(mapper.toInput(request))
         .thenReturn(input);
 
-    final RestaurantsOutput out = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput out = Mockito.mock(RestaurantOutput.class);
     Mockito.when(createUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(input)))
         .thenReturn(out);
 
@@ -294,13 +294,13 @@ class RestaurantControllerTest {
         findUseCase,
         updateUseCase,
         removeUseCase,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -312,11 +312,11 @@ class RestaurantControllerTest {
     final var uuid = UUID.randomUUID();
     final RestaurantRequest request = Mockito.mock(RestaurantRequest.class);
 
-    final RestaurantsInput input = Mockito.mock(RestaurantsInput.class);
+    final RestaurantInput input = Mockito.mock(RestaurantInput.class);
     Mockito.when(mapper.toInput(request))
         .thenReturn(input);
 
-    final RestaurantsOutput out = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput out = Mockito.mock(RestaurantOutput.class);
     Mockito.when(updateUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(uuid), Mockito.eq(input)))
         .thenReturn(out);
 
@@ -351,13 +351,13 @@ class RestaurantControllerTest {
         findUseCase,
         createUseCase,
         removeUseCase,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -388,13 +388,13 @@ class RestaurantControllerTest {
         createUseCase,
         updateUseCase,
         mapper,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -406,12 +406,12 @@ class RestaurantControllerTest {
     final var restaurantUuid = UUID.randomUUID();
     final RestaurantOpeningHourRequest request = Mockito.mock(RestaurantOpeningHourRequest.class);
 
-    final RestaurantOpeningHoursInput input = Mockito.mock(RestaurantOpeningHoursInput.class);
+    final RestaurantOpeningHourInput input = Mockito.mock(RestaurantOpeningHourInput.class);
     Mockito.when(restaurantOpeningHoursMapper.toInput(request))
         .thenReturn(input);
 
-    final RestaurantOpeningHoursOutput out = Mockito.mock(RestaurantOpeningHoursOutput.class);
-    Mockito.when(createRestaurantOpeningHoursUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(restaurantUuid),
+    final RestaurantOpeningHourOutput out = Mockito.mock(RestaurantOpeningHourOutput.class);
+    Mockito.when(createRestaurantOpeningHourUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(restaurantUuid),
             Mockito.eq(input)
         ))
         .thenReturn(out);
@@ -430,7 +430,7 @@ class RestaurantControllerTest {
     );
 
     final var requestUserCaptor = ArgumentCaptor.forClass(RequestUser.class);
-    Mockito.verify(createRestaurantOpeningHoursUseCase, Mockito.times(1))
+    Mockito.verify(createRestaurantOpeningHourUseCase, Mockito.times(1))
         .execute(requestUserCaptor.capture(), Mockito.eq(restaurantUuid), Mockito.eq(input));
     Assertions.assertEquals(requestUserUuid, requestUserCaptor.getValue()
         .uuid()
@@ -441,7 +441,7 @@ class RestaurantControllerTest {
     Mockito.verify(restaurantOpeningHoursMapper, Mockito.times(1))
         .toResponse(out);
 
-    Mockito.verifyNoMoreInteractions(createRestaurantOpeningHoursUseCase, restaurantOpeningHoursMapper);
+    Mockito.verifyNoMoreInteractions(createRestaurantOpeningHourUseCase, restaurantOpeningHoursMapper);
     Mockito.verifyNoInteractions(
         searchUseCase,
         findUseCase,
@@ -449,11 +449,11 @@ class RestaurantControllerTest {
         updateUseCase,
         removeUseCase,
         mapper,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -465,13 +465,13 @@ class RestaurantControllerTest {
     final var openingHoursUuid = UUID.randomUUID();
     final RestaurantOpeningHourRequest request = Mockito.mock(RestaurantOpeningHourRequest.class);
 
-    final RestaurantOpeningHoursInput input = Mockito.mock(RestaurantOpeningHoursInput.class);
+    final RestaurantOpeningHourInput input = Mockito.mock(RestaurantOpeningHourInput.class);
     Mockito.when(restaurantOpeningHoursMapper.toInput(request))
         .thenReturn(input);
 
-    final RestaurantOpeningHoursOutput out = Mockito.mock(RestaurantOpeningHoursOutput.class);
+    final RestaurantOpeningHourOutput out = Mockito.mock(RestaurantOpeningHourOutput.class);
     Mockito.when(
-            updateRestaurantOpeningHoursUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(openingHoursUuid),
+            updateRestaurantOpeningHourUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(openingHoursUuid),
                 Mockito.eq(input)
             ))
         .thenReturn(out);
@@ -490,7 +490,7 @@ class RestaurantControllerTest {
     );
 
     final var requestUserCaptor = ArgumentCaptor.forClass(RequestUser.class);
-    Mockito.verify(updateRestaurantOpeningHoursUseCase, Mockito.times(1))
+    Mockito.verify(updateRestaurantOpeningHourUseCase, Mockito.times(1))
         .execute(requestUserCaptor.capture(), Mockito.eq(openingHoursUuid), Mockito.eq(input));
     Assertions.assertEquals(requestUserUuid, requestUserCaptor.getValue()
         .uuid()
@@ -501,7 +501,7 @@ class RestaurantControllerTest {
     Mockito.verify(restaurantOpeningHoursMapper, Mockito.times(1))
         .toResponse(out);
 
-    Mockito.verifyNoMoreInteractions(updateRestaurantOpeningHoursUseCase, restaurantOpeningHoursMapper);
+    Mockito.verifyNoMoreInteractions(updateRestaurantOpeningHourUseCase, restaurantOpeningHoursMapper);
     Mockito.verifyNoInteractions(
         searchUseCase,
         findUseCase,
@@ -509,11 +509,11 @@ class RestaurantControllerTest {
         updateUseCase,
         removeUseCase,
         mapper,
-        createRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -531,13 +531,13 @@ class RestaurantControllerTest {
     Assertions.assertNull(result.getBody());
 
     final var requestUserCaptor = ArgumentCaptor.forClass(RequestUser.class);
-    Mockito.verify(removeRestaurantOpeningHoursUseCase, Mockito.times(1))
+    Mockito.verify(removeRestaurantOpeningHourUseCase, Mockito.times(1))
         .execute(requestUserCaptor.capture(), Mockito.eq(openingHoursUuid));
     Assertions.assertEquals(requestUserUuid, requestUserCaptor.getValue()
         .uuid()
     );
 
-    Mockito.verifyNoMoreInteractions(removeRestaurantOpeningHoursUseCase);
+    Mockito.verifyNoMoreInteractions(removeRestaurantOpeningHourUseCase);
     Mockito.verifyNoInteractions(
         searchUseCase,
         findUseCase,
@@ -545,12 +545,12 @@ class RestaurantControllerTest {
         updateUseCase,
         removeUseCase,
         mapper,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase,
         addressMapper
     );
   }
@@ -567,7 +567,7 @@ class RestaurantControllerTest {
         .thenReturn(addressInput);
 
     final var addressOutput = Mockito.mock(com.connectfood.core.application.address.dto.AddressOutput.class);
-    Mockito.when(createRestaurantsAddressUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(restaurantUuid),
+    Mockito.when(createRestaurantAddressUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(restaurantUuid),
             Mockito.eq(addressInput)
         ))
         .thenReturn(addressOutput);
@@ -586,7 +586,7 @@ class RestaurantControllerTest {
     );
 
     final var requestUserCaptor = ArgumentCaptor.forClass(RequestUser.class);
-    Mockito.verify(createRestaurantsAddressUseCase, Mockito.times(1))
+    Mockito.verify(createRestaurantAddressUseCase, Mockito.times(1))
         .execute(requestUserCaptor.capture(), Mockito.eq(restaurantUuid), Mockito.eq(addressInput));
     Assertions.assertEquals(requestUserUuid, requestUserCaptor.getValue()
         .uuid()
@@ -597,7 +597,7 @@ class RestaurantControllerTest {
     Mockito.verify(addressMapper, Mockito.times(1))
         .toResponse(addressOutput);
 
-    Mockito.verifyNoMoreInteractions(createRestaurantsAddressUseCase, addressMapper);
+    Mockito.verifyNoMoreInteractions(createRestaurantAddressUseCase, addressMapper);
     Mockito.verifyNoInteractions(
         searchUseCase,
         findUseCase,
@@ -605,12 +605,12 @@ class RestaurantControllerTest {
         updateUseCase,
         removeUseCase,
         mapper,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        updateRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase
+        updateRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase
     );
   }
 
@@ -626,7 +626,7 @@ class RestaurantControllerTest {
         .thenReturn(addressInput);
 
     final var addressOutput = Mockito.mock(com.connectfood.core.application.address.dto.AddressOutput.class);
-    Mockito.when(updateRestaurantsAddressUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(restaurantUuid),
+    Mockito.when(updateRestaurantAddressUseCase.execute(Mockito.any(RequestUser.class), Mockito.eq(restaurantUuid),
             Mockito.eq(addressInput)
         ))
         .thenReturn(addressOutput);
@@ -645,7 +645,7 @@ class RestaurantControllerTest {
     );
 
     final var requestUserCaptor = ArgumentCaptor.forClass(RequestUser.class);
-    Mockito.verify(updateRestaurantsAddressUseCase, Mockito.times(1))
+    Mockito.verify(updateRestaurantAddressUseCase, Mockito.times(1))
         .execute(requestUserCaptor.capture(), Mockito.eq(restaurantUuid), Mockito.eq(addressInput));
     Assertions.assertEquals(requestUserUuid, requestUserCaptor.getValue()
         .uuid()
@@ -656,7 +656,7 @@ class RestaurantControllerTest {
     Mockito.verify(addressMapper, Mockito.times(1))
         .toResponse(addressOutput);
 
-    Mockito.verifyNoMoreInteractions(updateRestaurantsAddressUseCase, addressMapper);
+    Mockito.verifyNoMoreInteractions(updateRestaurantAddressUseCase, addressMapper);
     Mockito.verifyNoInteractions(
         searchUseCase,
         findUseCase,
@@ -664,12 +664,12 @@ class RestaurantControllerTest {
         updateUseCase,
         removeUseCase,
         mapper,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        removeRestaurantsAddressUseCase
+        createRestaurantAddressUseCase,
+        removeRestaurantAddressUseCase
     );
   }
 
@@ -686,13 +686,13 @@ class RestaurantControllerTest {
     Assertions.assertNull(result.getBody());
 
     final var requestUserCaptor = ArgumentCaptor.forClass(RequestUser.class);
-    Mockito.verify(removeRestaurantsAddressUseCase, Mockito.times(1))
+    Mockito.verify(removeRestaurantAddressUseCase, Mockito.times(1))
         .execute(requestUserCaptor.capture(), Mockito.eq(restaurantUuid));
     Assertions.assertEquals(requestUserUuid, requestUserCaptor.getValue()
         .uuid()
     );
 
-    Mockito.verifyNoMoreInteractions(removeRestaurantsAddressUseCase);
+    Mockito.verifyNoMoreInteractions(removeRestaurantAddressUseCase);
     Mockito.verifyNoInteractions(
         searchUseCase,
         findUseCase,
@@ -700,12 +700,12 @@ class RestaurantControllerTest {
         updateUseCase,
         removeUseCase,
         mapper,
-        createRestaurantOpeningHoursUseCase,
-        updateRestaurantOpeningHoursUseCase,
-        removeRestaurantOpeningHoursUseCase,
+        createRestaurantOpeningHourUseCase,
+        updateRestaurantOpeningHourUseCase,
+        removeRestaurantOpeningHourUseCase,
         restaurantOpeningHoursMapper,
-        createRestaurantsAddressUseCase,
-        updateRestaurantsAddressUseCase,
+        createRestaurantAddressUseCase,
+        updateRestaurantAddressUseCase,
         addressMapper
     );
   }

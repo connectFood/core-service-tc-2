@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.application.dto.commons.PageOutput;
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput;
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
-import com.connectfood.core.application.restaurantstype.usecase.CreateRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.FindRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.RemoveRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.SearchRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.UpdateRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeInput;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeOutput;
+import com.connectfood.core.application.restauranttype.usecase.CreateRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.FindRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.RemoveRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.SearchRestaurantsTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.UpdateRestaurantTypeUseCase;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
 import com.connectfood.infrastructure.rest.dto.commons.PageResponse;
 import com.connectfood.infrastructure.rest.dto.restauranttype.RestaurantTypeRequest;
@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus;
 class RestaurantTypeControllerTest {
 
   @Mock
-  private SearchRestaurantTypeUseCase searchUseCase;
+  private SearchRestaurantsTypeUseCase searchUseCase;
 
   @Mock
   private FindRestaurantTypeUseCase findUseCase;
@@ -60,8 +60,8 @@ class RestaurantTypeControllerTest {
     final var sort = "name";
     final var direction = "ASC";
 
-    final RestaurantsTypeOutput out1 = Mockito.mock(RestaurantsTypeOutput.class);
-    final RestaurantsTypeOutput out2 = Mockito.mock(RestaurantsTypeOutput.class);
+    final RestaurantTypeOutput out1 = Mockito.mock(RestaurantTypeOutput.class);
+    final RestaurantTypeOutput out2 = Mockito.mock(RestaurantTypeOutput.class);
 
     final var useCaseResult = new PageOutput<>(List.of(out1, out2), 2L);
 
@@ -109,7 +109,7 @@ class RestaurantTypeControllerTest {
     final String sort = null;
     final String direction = null;
 
-    final PageOutput<List<RestaurantsTypeOutput>> useCaseResult = new PageOutput<>(List.of(), 0L);
+    final PageOutput<List<RestaurantTypeOutput>> useCaseResult = new PageOutput<>(List.of(), 0L);
 
     Mockito.when(searchUseCase.execute(name, page, size, sort, direction))
         .thenReturn(useCaseResult);
@@ -141,7 +141,7 @@ class RestaurantTypeControllerTest {
   void shouldReturnOkWithBaseResponseWhenFindByUuid() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsTypeOutput out = Mockito.mock(RestaurantsTypeOutput.class);
+    final RestaurantTypeOutput out = Mockito.mock(RestaurantTypeOutput.class);
     Mockito.when(findUseCase.execute(uuid))
         .thenReturn(out);
 
@@ -172,11 +172,11 @@ class RestaurantTypeControllerTest {
   void shouldReturnCreatedWithBaseResponseWhenCreate() {
     final RestaurantTypeRequest request = Mockito.mock(RestaurantTypeRequest.class);
 
-    final RestaurantsTypeInput input = Mockito.mock(RestaurantsTypeInput.class);
+    final RestaurantTypeInput input = Mockito.mock(RestaurantTypeInput.class);
     Mockito.when(mapper.toInput(request))
         .thenReturn(input);
 
-    final RestaurantsTypeOutput out = Mockito.mock(RestaurantsTypeOutput.class);
+    final RestaurantTypeOutput out = Mockito.mock(RestaurantTypeOutput.class);
     Mockito.when(createUseCase.execute(input))
         .thenReturn(out);
 
@@ -211,11 +211,11 @@ class RestaurantTypeControllerTest {
     final var uuid = UUID.randomUUID();
     final RestaurantTypeRequest request = Mockito.mock(RestaurantTypeRequest.class);
 
-    final RestaurantsTypeInput input = Mockito.mock(RestaurantsTypeInput.class);
+    final RestaurantTypeInput input = Mockito.mock(RestaurantTypeInput.class);
     Mockito.when(mapper.toInput(request))
         .thenReturn(input);
 
-    final RestaurantsTypeOutput out = Mockito.mock(RestaurantsTypeOutput.class);
+    final RestaurantTypeOutput out = Mockito.mock(RestaurantTypeOutput.class);
     Mockito.when(updateUseCase.execute(uuid, input))
         .thenReturn(out);
 

@@ -1,7 +1,7 @@
 package com.connectfood.infrastructure.rest.mappers;
 
-import com.connectfood.core.application.usertype.dto.UsersTypeInput;
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
+import com.connectfood.core.application.usertype.dto.UserTypeInput;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
 import com.connectfood.infrastructure.rest.dto.usertype.UserTypeRequest;
 import com.connectfood.infrastructure.rest.dto.usertype.UserTypeResponse;
 
@@ -13,18 +13,18 @@ public class UserTypeEntryMapper {
   public UserTypeEntryMapper() {
   }
 
-  public UsersTypeInput toInput(final UserTypeRequest request) {
+  public UserTypeInput toInput(final UserTypeRequest request) {
     if (request == null) {
       return null;
     }
 
-    return new UsersTypeInput(
+    return new UserTypeInput(
         request.getName(),
         request.getDescription()
     );
   }
 
-  public UserTypeResponse toResponse(final UsersTypeOutput output) {
+  public UserTypeResponse toResponse(final UserTypeOutput output) {
     if (output == null) {
       return null;
     }

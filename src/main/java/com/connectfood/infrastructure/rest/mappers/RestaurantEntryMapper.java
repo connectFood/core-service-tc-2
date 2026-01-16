@@ -1,7 +1,7 @@
 package com.connectfood.infrastructure.rest.mappers;
 
-import com.connectfood.core.application.restaurants.dto.RestaurantsInput;
-import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
 import com.connectfood.infrastructure.rest.dto.restaurant.RestaurantRequest;
 import com.connectfood.infrastructure.rest.dto.restaurant.RestaurantResponse;
 
@@ -25,12 +25,12 @@ public class RestaurantEntryMapper {
     this.usersMapper = usersMapper;
   }
 
-  public RestaurantsInput toInput(final RestaurantRequest request) {
+  public RestaurantInput toInput(final RestaurantRequest request) {
     if (request == null) {
       return null;
     }
 
-    return new RestaurantsInput(
+    return new RestaurantInput(
         request.getName(),
         request.getRestaurantsTypeUuid(),
         request.getOpeningHours()
@@ -42,7 +42,7 @@ public class RestaurantEntryMapper {
     );
   }
 
-  public RestaurantResponse toResponse(final RestaurantsOutput output) {
+  public RestaurantResponse toResponse(final RestaurantOutput output) {
     if (output == null) {
       return null;
     }

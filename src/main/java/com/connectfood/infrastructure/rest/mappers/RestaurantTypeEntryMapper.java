@@ -1,8 +1,8 @@
 package com.connectfood.infrastructure.rest.mappers;
 
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeInput;
 
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeOutput;
 import com.connectfood.infrastructure.rest.dto.restauranttype.RestaurantTypeRequest;
 import com.connectfood.infrastructure.rest.dto.restauranttype.RestaurantTypeResponse;
 
@@ -14,19 +14,19 @@ public class RestaurantTypeEntryMapper {
   public RestaurantTypeEntryMapper() {
   }
 
-  public RestaurantsTypeInput toInput(final RestaurantTypeRequest request) {
+  public RestaurantTypeInput toInput(final RestaurantTypeRequest request) {
 
     if (request == null) {
       return null;
     }
 
-    return new RestaurantsTypeInput(
+    return new RestaurantTypeInput(
         request.getName(),
         request.getDescription()
     );
   }
 
-  public RestaurantTypeResponse toResponse(final RestaurantsTypeOutput output) {
+  public RestaurantTypeResponse toResponse(final RestaurantTypeOutput output) {
     if (output == null) {
       return null;
     }

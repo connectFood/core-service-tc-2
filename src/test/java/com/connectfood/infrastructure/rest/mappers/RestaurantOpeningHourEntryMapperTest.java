@@ -4,8 +4,8 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourOutput;
 import com.connectfood.infrastructure.rest.dto.restaurantopeninghour.RestaurantOpeningHourRequest;
 import com.connectfood.infrastructure.rest.dto.restaurantopeninghour.RestaurantOpeningHourResponse;
 
@@ -20,7 +20,7 @@ class RestaurantOpeningHourEntryMapperTest {
   @Test
   @DisplayName("Não deve converter para input quando request for null")
   void shouldReturnNullWhenRequestIsNull() {
-    final RestaurantOpeningHoursInput result = mapper.toInput(null);
+    final RestaurantOpeningHourInput result = mapper.toInput(null);
 
     Assertions.assertNull(result);
   }
@@ -34,7 +34,7 @@ class RestaurantOpeningHourEntryMapperTest {
         LocalTime.of(18, 0)
     );
 
-    final RestaurantOpeningHoursInput result = mapper.toInput(request);
+    final RestaurantOpeningHourInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(DayOfWeek.MONDAY, result.getDayOfWeek());
@@ -55,7 +55,7 @@ class RestaurantOpeningHourEntryMapperTest {
   void shouldConvertToResponseWhenOutputIsProvided() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantOpeningHoursOutput output = new RestaurantOpeningHoursOutput(
+    final RestaurantOpeningHourOutput output = new RestaurantOpeningHourOutput(
         uuid,
         DayOfWeek.FRIDAY,
         LocalTime.of(10, 0),

@@ -1,7 +1,7 @@
 package com.connectfood.infrastructure.rest.mappers;
 
-import com.connectfood.core.application.users.dto.UsersInput;
-import com.connectfood.core.application.users.dto.UsersOutput;
+import com.connectfood.core.application.user.dto.UserInput;
+import com.connectfood.core.application.user.dto.UserOutput;
 import com.connectfood.infrastructure.rest.dto.user.UserRequest;
 import com.connectfood.infrastructure.rest.dto.user.UserResponse;
 
@@ -20,12 +20,12 @@ public class UserEntryMapper {
     this.addressMapper = addressMapper;
   }
 
-  public UsersInput toInput(final UserRequest request) {
+  public UserInput toInput(final UserRequest request) {
     if (request == null) {
       return null;
     }
 
-    return new UsersInput(
+    return new UserInput(
         request.getFullName(),
         request.getEmail(),
         request.getPassword(),
@@ -34,7 +34,7 @@ public class UserEntryMapper {
     );
   }
 
-  public UserResponse toResponse(final UsersOutput output) {
+  public UserResponse toResponse(final UserOutput output) {
     if (output == null) {
       return null;
     }

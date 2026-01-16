@@ -1,7 +1,7 @@
 package com.connectfood.infrastructure.rest.mappers;
 
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput;
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemInput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemOutput;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemRequest;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemResponse;
 
@@ -19,12 +19,12 @@ public class RestaurantItemEntryMapper {
     this.restaurantItemsImagesMapper = restaurantItemsImagesMapper;
   }
 
-  public RestaurantItemsInput toInput(final RestaurantItemRequest request) {
+  public RestaurantItemInput toInput(final RestaurantItemRequest request) {
     if (request == null) {
       return null;
     }
 
-    return new RestaurantItemsInput(
+    return new RestaurantItemInput(
         request.getName(),
         request.getDescription(),
         request.getValue(),
@@ -37,7 +37,7 @@ public class RestaurantItemEntryMapper {
     );
   }
 
-  public RestaurantItemResponse toResponse(final RestaurantItemsOutput output) {
+  public RestaurantItemResponse toResponse(final RestaurantItemOutput output) {
     if (output == null) {
       return null;
     }

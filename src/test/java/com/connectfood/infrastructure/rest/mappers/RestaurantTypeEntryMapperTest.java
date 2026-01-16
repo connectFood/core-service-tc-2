@@ -2,8 +2,8 @@ package com.connectfood.infrastructure.rest.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput;
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeInput;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeOutput;
 import com.connectfood.infrastructure.rest.dto.restauranttype.RestaurantTypeRequest;
 import com.connectfood.infrastructure.rest.dto.restauranttype.RestaurantTypeResponse;
 
@@ -18,7 +18,7 @@ class RestaurantTypeEntryMapperTest {
   @Test
   @DisplayName("Não deve converter para input quando request for null")
   void shouldReturnNullWhenRequestIsNull() {
-    final RestaurantsTypeInput result = mapper.toInput(null);
+    final RestaurantTypeInput result = mapper.toInput(null);
 
     Assertions.assertNull(result);
   }
@@ -29,7 +29,7 @@ class RestaurantTypeEntryMapperTest {
     final RestaurantTypeRequest request =
         new RestaurantTypeRequest("Fast Food", "Quick meals");
 
-    final RestaurantsTypeInput result = mapper.toInput(request);
+    final RestaurantTypeInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("Fast Food", result.getName());
@@ -49,8 +49,8 @@ class RestaurantTypeEntryMapperTest {
   void shouldConvertToResponseWhenOutputIsProvided() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsTypeOutput output =
-        new RestaurantsTypeOutput(uuid, "Italian", "Pasta and pizza");
+    final RestaurantTypeOutput output =
+        new RestaurantTypeOutput(uuid, "Italian", "Pasta and pizza");
 
     final RestaurantTypeResponse result = mapper.toResponse(output);
 

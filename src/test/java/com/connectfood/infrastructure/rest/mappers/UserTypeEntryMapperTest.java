@@ -2,8 +2,8 @@ package com.connectfood.infrastructure.rest.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.application.usertype.dto.UsersTypeInput;
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
+import com.connectfood.core.application.usertype.dto.UserTypeInput;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
 import com.connectfood.infrastructure.rest.dto.usertype.UserTypeRequest;
 import com.connectfood.infrastructure.rest.dto.usertype.UserTypeResponse;
 
@@ -18,7 +18,7 @@ class UserTypeEntryMapperTest {
   @Test
   @DisplayName("Não deve converter para input quando request for null")
   void shouldReturnNullWhenRequestIsNull() {
-    final UsersTypeInput result = mapper.toInput(null);
+    final UserTypeInput result = mapper.toInput(null);
 
     Assertions.assertNull(result);
   }
@@ -33,7 +33,7 @@ class UserTypeEntryMapperTest {
     org.mockito.Mockito.when(request.getDescription())
         .thenReturn("Administrator");
 
-    final UsersTypeInput result = mapper.toInput(request);
+    final UserTypeInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("ADMIN", result.getName());
@@ -53,7 +53,7 @@ class UserTypeEntryMapperTest {
   void shouldConvertToResponseWhenOutputIsProvided() {
     final var uuid = UUID.randomUUID();
 
-    final UsersTypeOutput output = org.mockito.Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput output = org.mockito.Mockito.mock(UserTypeOutput.class);
     org.mockito.Mockito.when(output.getUuid())
         .thenReturn(uuid);
     org.mockito.Mockito.when(output.getName())

@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import com.connectfood.core.application.dto.commons.PageOutput;
-import com.connectfood.core.application.usertype.dto.UsersTypeInput;
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
+import com.connectfood.core.application.usertype.dto.UserTypeInput;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
 import com.connectfood.core.application.usertype.usecase.CreateUserTypeUseCase;
 import com.connectfood.core.application.usertype.usecase.FindUserTypeUseCase;
 import com.connectfood.core.application.usertype.usecase.RemoveUserTypeUseCase;
-import com.connectfood.core.application.usertype.usecase.SearchUserTypeUseCase;
+import com.connectfood.core.application.usertype.usecase.SearchUsersTypeUseCase;
 import com.connectfood.core.application.usertype.usecase.UpdateUserTypeUseCase;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
 import com.connectfood.infrastructure.rest.dto.commons.PageResponse;
@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus;
 class UserTypeControllerTest {
 
   @Mock
-  private SearchUserTypeUseCase searchUseCase;
+  private SearchUsersTypeUseCase searchUseCase;
 
   @Mock
   private FindUserTypeUseCase findUseCase;
@@ -60,8 +60,8 @@ class UserTypeControllerTest {
     final var sort = "name";
     final var direction = "ASC";
 
-    final UsersTypeOutput out1 = Mockito.mock(UsersTypeOutput.class);
-    final UsersTypeOutput out2 = Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput out1 = Mockito.mock(UserTypeOutput.class);
+    final UserTypeOutput out2 = Mockito.mock(UserTypeOutput.class);
 
     Mockito.when(searchUseCase.execute(name, page, size, sort, direction))
         .thenReturn(new PageOutput<>(List.of(out1, out2), 2L));
@@ -138,7 +138,7 @@ class UserTypeControllerTest {
   void shouldReturnOkWithBaseResponseWhenFindByUuid() {
     final var uuid = UUID.randomUUID();
 
-    final UsersTypeOutput out = Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput out = Mockito.mock(UserTypeOutput.class);
     Mockito.when(findUseCase.execute(uuid))
         .thenReturn(out);
 
@@ -170,11 +170,11 @@ class UserTypeControllerTest {
   void shouldReturnCreatedWithBaseResponseWhenCreate() {
     final UserTypeRequest request = Mockito.mock(UserTypeRequest.class);
 
-    final UsersTypeInput input = Mockito.mock(UsersTypeInput.class);
+    final UserTypeInput input = Mockito.mock(UserTypeInput.class);
     Mockito.when(mapper.toInput(request))
         .thenReturn(input);
 
-    final UsersTypeOutput out = Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput out = Mockito.mock(UserTypeOutput.class);
     Mockito.when(createUseCase.execute(input))
         .thenReturn(out);
 
@@ -209,11 +209,11 @@ class UserTypeControllerTest {
     final var uuid = UUID.randomUUID();
     final UserTypeRequest request = Mockito.mock(UserTypeRequest.class);
 
-    final UsersTypeInput input = Mockito.mock(UsersTypeInput.class);
+    final UserTypeInput input = Mockito.mock(UserTypeInput.class);
     Mockito.when(mapper.toInput(request))
         .thenReturn(input);
 
-    final UsersTypeOutput out = Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput out = Mockito.mock(UserTypeOutput.class);
     Mockito.when(updateUseCase.execute(uuid, input))
         .thenReturn(out);
 

@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
-import com.connectfood.core.application.users.dto.UsersInput;
-import com.connectfood.core.application.users.dto.UsersOutput;
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
+import com.connectfood.core.application.user.dto.UserInput;
+import com.connectfood.core.application.user.dto.UserOutput;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
 import com.connectfood.infrastructure.rest.dto.address.AddressRequest;
 import com.connectfood.infrastructure.rest.dto.address.AddressResponse;
 import com.connectfood.infrastructure.rest.dto.user.UserRequest;
@@ -37,7 +37,7 @@ class UserEntryMapperTest {
   @Test
   @DisplayName("Não deve converter para input quando request for null")
   void shouldReturnNullWhenRequestIsNull() {
-    final UsersInput result = mapper.toInput(null);
+    final UserInput result = mapper.toInput(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(usersTypeMapper, addressMapper);
@@ -60,7 +60,7 @@ class UserEntryMapperTest {
     Mockito.when(request.getAddress())
         .thenReturn(null);
 
-    final UsersInput result = mapper.toInput(request);
+    final UserInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("Maria Pilar", result.getFullName());
@@ -95,7 +95,7 @@ class UserEntryMapperTest {
     Mockito.when(request.getAddress())
         .thenReturn(addressRequest);
 
-    final UsersInput result = mapper.toInput(request);
+    final UserInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("Maria Pilar", result.getFullName());
@@ -124,7 +124,7 @@ class UserEntryMapperTest {
   void shouldConvertToResponseWhenUsersTypeAndAddressAreNull() {
     final var uuid = UUID.randomUUID();
 
-    final UsersOutput output = Mockito.mock(UsersOutput.class);
+    final UserOutput output = Mockito.mock(UserOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getFullName())
@@ -153,12 +153,12 @@ class UserEntryMapperTest {
   void shouldConvertToResponseWhenUsersTypeIsPresentAndAddressIsNull() {
     final var uuid = UUID.randomUUID();
 
-    final UsersTypeOutput usersTypeOutput = Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput userTypeOutput = Mockito.mock(UserTypeOutput.class);
     final UserTypeResponse userTypeResponse = Mockito.mock(UserTypeResponse.class);
-    Mockito.when(usersTypeMapper.toResponse(usersTypeOutput))
+    Mockito.when(usersTypeMapper.toResponse(userTypeOutput))
         .thenReturn(userTypeResponse);
 
-    final UsersOutput output = Mockito.mock(UsersOutput.class);
+    final UserOutput output = Mockito.mock(UserOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getFullName())
@@ -166,7 +166,7 @@ class UserEntryMapperTest {
     Mockito.when(output.getEmail())
         .thenReturn("b@test.com");
     Mockito.when(output.getUsersType())
-        .thenReturn(usersTypeOutput);
+        .thenReturn(userTypeOutput);
     Mockito.when(output.getAddress())
         .thenReturn(null);
 
@@ -180,7 +180,7 @@ class UserEntryMapperTest {
     Assertions.assertNull(result.getAddress());
 
     Mockito.verify(usersTypeMapper, Mockito.times(1))
-        .toResponse(usersTypeOutput);
+        .toResponse(userTypeOutput);
     Mockito.verifyNoInteractions(addressMapper);
     Mockito.verifyNoMoreInteractions(usersTypeMapper);
   }
@@ -195,7 +195,7 @@ class UserEntryMapperTest {
     Mockito.when(addressMapper.toResponse(addressOutput))
         .thenReturn(addressResponse);
 
-    final UsersOutput output = Mockito.mock(UsersOutput.class);
+    final UserOutput output = Mockito.mock(UserOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getFullName())
@@ -227,9 +227,9 @@ class UserEntryMapperTest {
   void shouldConvertToResponseWhenUsersTypeAndAddressArePresent() {
     final var uuid = UUID.randomUUID();
 
-    final UsersTypeOutput usersTypeOutput = Mockito.mock(UsersTypeOutput.class);
+    final UserTypeOutput userTypeOutput = Mockito.mock(UserTypeOutput.class);
     final UserTypeResponse userTypeResponse = Mockito.mock(UserTypeResponse.class);
-    Mockito.when(usersTypeMapper.toResponse(usersTypeOutput))
+    Mockito.when(usersTypeMapper.toResponse(userTypeOutput))
         .thenReturn(userTypeResponse);
 
     final AddressOutput addressOutput = Mockito.mock(AddressOutput.class);
@@ -237,7 +237,7 @@ class UserEntryMapperTest {
     Mockito.when(addressMapper.toResponse(addressOutput))
         .thenReturn(addressResponse);
 
-    final UsersOutput output = Mockito.mock(UsersOutput.class);
+    final UserOutput output = Mockito.mock(UserOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getFullName())
@@ -245,7 +245,7 @@ class UserEntryMapperTest {
     Mockito.when(output.getEmail())
         .thenReturn("d@test.com");
     Mockito.when(output.getUsersType())
-        .thenReturn(usersTypeOutput);
+        .thenReturn(userTypeOutput);
     Mockito.when(output.getAddress())
         .thenReturn(addressOutput);
 
@@ -259,7 +259,7 @@ class UserEntryMapperTest {
     Assertions.assertSame(addressResponse, result.getAddress());
 
     Mockito.verify(usersTypeMapper, Mockito.times(1))
-        .toResponse(usersTypeOutput);
+        .toResponse(userTypeOutput);
     Mockito.verify(addressMapper, Mockito.times(1))
         .toResponse(addressOutput);
     Mockito.verifyNoMoreInteractions(usersTypeMapper, addressMapper);

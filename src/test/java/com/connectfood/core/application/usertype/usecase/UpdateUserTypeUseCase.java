@@ -1,8 +1,8 @@
 package com.connectfood.core.application.usertype.usecase;
 
-import com.connectfood.core.application.usertype.dto.UsersTypeInput;
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
-import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
+import com.connectfood.core.application.usertype.dto.UserTypeInput;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
+import com.connectfood.core.application.usertype.mapper.UserTypeAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UserTypeGateway;
@@ -28,7 +28,7 @@ class UpdateUserTypeUseCaseTest {
   private UserTypeGateway repository;
 
   @Mock
-  private UsersTypeAppMapper mapper;
+  private UserTypeAppMapper mapper;
 
   @InjectMocks
   private UpdateUserTypeUseCase useCase;
@@ -37,13 +37,13 @@ class UpdateUserTypeUseCaseTest {
   @DisplayName("Deve atualizar tipo de usuário com sucesso quando existir")
   void shouldUpdateUserTypeSuccessfully() {
     final var uuid = UUID.randomUUID();
-    final var input = new UsersTypeInput("ADMIN_UPDATE", "Administrador Atualizado");
+    final var input = new UserTypeInput("ADMIN_UPDATE", "Administrador Atualizado");
 
     final var existingUserType = new UserType(uuid, "ADMIN", "Admin Antigo");
 
     final var updatedUserType = new UserType(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
 
-    final var output = new UsersTypeOutput(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
+    final var output = new UserTypeOutput(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(existingUserType));
 
@@ -67,7 +67,7 @@ class UpdateUserTypeUseCaseTest {
   @DisplayName("Deve lançar NotFoundException ao tentar atualizar registro inexistente")
   void shouldThrowNotFoundWhenUserTypeDoesNotExist() {
     final var uuid = UUID.randomUUID();
-    final var input = new UsersTypeInput("Nome", "Desc");
+    final var input = new UserTypeInput("Nome", "Desc");
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.empty());
 

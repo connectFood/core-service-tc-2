@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
-import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
-import com.connectfood.core.application.restaurants.dto.RestaurantsInput;
-import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
-import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
-import com.connectfood.core.application.users.dto.UsersOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
+import com.connectfood.core.application.restauranttype.dto.RestaurantTypeOutput;
+import com.connectfood.core.application.user.dto.UserOutput;
 import com.connectfood.infrastructure.rest.dto.address.AddressRequest;
 import com.connectfood.infrastructure.rest.dto.address.AddressResponse;
 import com.connectfood.infrastructure.rest.dto.restaurantopeninghour.RestaurantOpeningHourRequest;
@@ -50,7 +50,7 @@ class RestaurantEntryMapperTest {
   @Test
   @DisplayName("Não deve converter para input quando request for null")
   void shouldReturnNullWhenRequestIsNull() {
-    final RestaurantsInput result = mapper.toInput(null);
+    final RestaurantInput result = mapper.toInput(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(restaurantsTypeMapper, restaurantOpeningHoursMapper, addressMapper, usersMapper);
@@ -65,8 +65,8 @@ class RestaurantEntryMapperTest {
     final RestaurantOpeningHourRequest opening1 = Mockito.mock(RestaurantOpeningHourRequest.class);
     final RestaurantOpeningHourRequest opening2 = Mockito.mock(RestaurantOpeningHourRequest.class);
 
-    final RestaurantOpeningHoursInput openingInput1 = Mockito.mock(RestaurantOpeningHoursInput.class);
-    final RestaurantOpeningHoursInput openingInput2 = Mockito.mock(RestaurantOpeningHoursInput.class);
+    final RestaurantOpeningHourInput openingInput1 = Mockito.mock(RestaurantOpeningHourInput.class);
+    final RestaurantOpeningHourInput openingInput2 = Mockito.mock(RestaurantOpeningHourInput.class);
 
     Mockito.when(restaurantOpeningHoursMapper.toInput(opening1))
         .thenReturn(openingInput1);
@@ -90,7 +90,7 @@ class RestaurantEntryMapperTest {
     Mockito.when(request.getUsersUuid())
         .thenReturn(usersUuid);
 
-    final RestaurantsInput result = mapper.toInput(request);
+    final RestaurantInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("Restaurant A", result.getName());
@@ -131,7 +131,7 @@ class RestaurantEntryMapperTest {
     Mockito.when(request.getUsersUuid())
         .thenReturn(usersUuid);
 
-    final RestaurantsInput result = mapper.toInput(request);
+    final RestaurantInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("Restaurant A", result.getName());
@@ -161,13 +161,13 @@ class RestaurantEntryMapperTest {
   void shouldConvertToResponseWhenAllFieldsArePresent() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsTypeOutput typeOutput = Mockito.mock(RestaurantsTypeOutput.class);
+    final RestaurantTypeOutput typeOutput = Mockito.mock(RestaurantTypeOutput.class);
     final RestaurantTypeResponse typeResponse = Mockito.mock(RestaurantTypeResponse.class);
     Mockito.when(restaurantsTypeMapper.toResponse(typeOutput))
         .thenReturn(typeResponse);
 
-    final RestaurantOpeningHoursOutput openingOut1 = Mockito.mock(RestaurantOpeningHoursOutput.class);
-    final RestaurantOpeningHoursOutput openingOut2 = Mockito.mock(RestaurantOpeningHoursOutput.class);
+    final RestaurantOpeningHourOutput openingOut1 = Mockito.mock(RestaurantOpeningHourOutput.class);
+    final RestaurantOpeningHourOutput openingOut2 = Mockito.mock(RestaurantOpeningHourOutput.class);
 
     final RestaurantOpeningHourResponse openingResp1 = Mockito.mock(RestaurantOpeningHourResponse.class);
     final RestaurantOpeningHourResponse openingResp2 = Mockito.mock(RestaurantOpeningHourResponse.class);
@@ -182,12 +182,12 @@ class RestaurantEntryMapperTest {
     Mockito.when(addressMapper.toResponse(addressOutput))
         .thenReturn(addressResponse);
 
-    final UsersOutput usersOutput = Mockito.mock(UsersOutput.class);
+    final UserOutput userOutput = Mockito.mock(UserOutput.class);
     final UserResponse userResponse = Mockito.mock(UserResponse.class);
-    Mockito.when(usersMapper.toResponse(usersOutput))
+    Mockito.when(usersMapper.toResponse(userOutput))
         .thenReturn(userResponse);
 
-    final RestaurantsOutput output = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput output = Mockito.mock(RestaurantOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getName())
@@ -199,7 +199,7 @@ class RestaurantEntryMapperTest {
     Mockito.when(output.getAddress())
         .thenReturn(addressOutput);
     Mockito.when(output.getUsers())
-        .thenReturn(usersOutput);
+        .thenReturn(userOutput);
 
     final RestaurantResponse result = mapper.toResponse(output);
 
@@ -220,7 +220,7 @@ class RestaurantEntryMapperTest {
     Mockito.verify(addressMapper, Mockito.times(1))
         .toResponse(addressOutput);
     Mockito.verify(usersMapper, Mockito.times(1))
-        .toResponse(usersOutput);
+        .toResponse(userOutput);
     Mockito.verifyNoMoreInteractions(restaurantsTypeMapper, restaurantOpeningHoursMapper, addressMapper, usersMapper);
   }
 
@@ -229,7 +229,7 @@ class RestaurantEntryMapperTest {
   void shouldConvertToResponseWithNullOptionalFieldsWhenTheyAreNull() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsOutput output = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput output = Mockito.mock(RestaurantOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getName())
@@ -261,7 +261,7 @@ class RestaurantEntryMapperTest {
   void shouldConvertToResponseWithEmptyOpeningHoursList() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsOutput output = Mockito.mock(RestaurantsOutput.class);
+    final RestaurantOutput output = Mockito.mock(RestaurantOutput.class);
     Mockito.when(output.getUuid())
         .thenReturn(uuid);
     Mockito.when(output.getName())

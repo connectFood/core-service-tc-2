@@ -1,7 +1,7 @@
 package com.connectfood.infrastructure.rest.mappers;
 
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesInput;
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesOutput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemImageInput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemImageOutput;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemImageRequest;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemImageResponse;
 
@@ -13,12 +13,12 @@ public class RestaurantItemImageEntryMapper {
   public RestaurantItemImageEntryMapper() {
   }
 
-  public RestaurantItemsImagesInput toInput(final RestaurantItemImageRequest request) {
+  public RestaurantItemImageInput toInput(final RestaurantItemImageRequest request) {
     if (request == null) {
       return null;
     }
 
-    return new RestaurantItemsImagesInput(
+    return new RestaurantItemImageInput(
         request.getUuid() != null ? request.getUuid() : null,
         request.getName(),
         request.getDescription(),
@@ -26,7 +26,7 @@ public class RestaurantItemImageEntryMapper {
     );
   }
 
-  public RestaurantItemImageResponse toResponse(final RestaurantItemsImagesOutput output) {
+  public RestaurantItemImageResponse toResponse(final RestaurantItemImageOutput output) {
     if (output == null) {
       return null;
     }

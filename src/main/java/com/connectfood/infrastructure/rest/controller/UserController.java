@@ -3,11 +3,11 @@ package com.connectfood.infrastructure.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.users.usecase.CreateUsersUseCase;
-import com.connectfood.core.application.users.usecase.FindUsersUseCase;
-import com.connectfood.core.application.users.usecase.RemoveUsersUseCase;
-import com.connectfood.core.application.users.usecase.SearchUsersUseCase;
-import com.connectfood.core.application.users.usecase.UpdateUsersUseCase;
+import com.connectfood.core.application.user.usecase.CreateUserUseCase;
+import com.connectfood.core.application.user.usecase.FindUserUseCase;
+import com.connectfood.core.application.user.usecase.RemoveUserUseCase;
+import com.connectfood.core.application.user.usecase.SearchUsersUseCase;
+import com.connectfood.core.application.user.usecase.UpdateUserUseCase;
 import com.connectfood.infrastructure.rest.controller.docs.UsersControllerApi;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
 import com.connectfood.infrastructure.rest.dto.commons.PageResponse;
@@ -23,18 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController implements UsersControllerApi {
 
   private final SearchUsersUseCase searchUseCase;
-  private final FindUsersUseCase findUseCase;
-  private final CreateUsersUseCase createUseCase;
-  private final UpdateUsersUseCase updateUseCase;
-  private final RemoveUsersUseCase removeUseCase;
+  private final FindUserUseCase findUseCase;
+  private final CreateUserUseCase createUseCase;
+  private final UpdateUserUseCase updateUseCase;
+  private final RemoveUserUseCase removeUseCase;
   private final UserEntryMapper mapper;
 
   public UserController(
       final SearchUsersUseCase searchUseCase,
-      final FindUsersUseCase findUseCase,
-      final CreateUsersUseCase createUseCase,
-      final UpdateUsersUseCase updateUseCase,
-      final RemoveUsersUseCase removeUseCase,
+      final FindUserUseCase findUseCase,
+      final CreateUserUseCase createUseCase,
+      final UpdateUserUseCase updateUseCase,
+      final RemoveUserUseCase removeUseCase,
       final UserEntryMapper mapper) {
     this.searchUseCase = searchUseCase;
     this.findUseCase = findUseCase;

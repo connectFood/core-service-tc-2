@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.usertype.usecase.CreateUserTypeUseCase;
 import com.connectfood.core.application.usertype.usecase.FindUserTypeUseCase;
 import com.connectfood.core.application.usertype.usecase.RemoveUserTypeUseCase;
-import com.connectfood.core.application.usertype.usecase.SearchUserTypeUseCase;
+import com.connectfood.core.application.usertype.usecase.SearchUsersTypeUseCase;
 import com.connectfood.core.application.usertype.usecase.UpdateUserTypeUseCase;
 import com.connectfood.infrastructure.rest.controller.docs.UsersTypeControllerApi;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserTypeController implements UsersTypeControllerApi {
 
-  private final SearchUserTypeUseCase searchUseCase;
+  private final SearchUsersTypeUseCase searchUseCase;
   private final FindUserTypeUseCase findUseCase;
   private final CreateUserTypeUseCase createUseCase;
   private final UpdateUserTypeUseCase updateUseCase;
@@ -31,7 +31,7 @@ public class UserTypeController implements UsersTypeControllerApi {
   private final UserTypeEntryMapper mapper;
 
   public UserTypeController(
-      final SearchUserTypeUseCase searchUseCase,
+      final SearchUsersTypeUseCase searchUseCase,
       final FindUserTypeUseCase findUseCase,
       final CreateUserTypeUseCase createUseCase,
       final UpdateUserTypeUseCase updateUseCase,

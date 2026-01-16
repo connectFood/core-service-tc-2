@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesInput;
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesOutput;
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput;
-import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
-import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemImageInput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemImageOutput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemInput;
+import com.connectfood.core.application.restaurantitem.dto.RestaurantItemOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemImageRequest;
 import com.connectfood.infrastructure.rest.dto.restaurantitem.RestaurantItemImageResponse;
@@ -59,7 +59,7 @@ class RestaurantItemEntryMapperTest {
     Mockito.when(request.getRestaurantUuid()).thenReturn(restaurantUuid);
     Mockito.when(request.getImages()).thenReturn(List.of());
 
-    final RestaurantItemsInput result = mapper.toInput(request);
+    final RestaurantItemInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals("ITEM", result.getName());
@@ -80,7 +80,7 @@ class RestaurantItemEntryMapperTest {
     final var restaurantUuid = UUID.randomUUID();
 
     final RestaurantItemImageRequest imageRequest = Mockito.mock(RestaurantItemImageRequest.class);
-    final RestaurantItemsImagesInput imageInput = Mockito.mock(RestaurantItemsImagesInput.class);
+    final RestaurantItemImageInput imageInput = Mockito.mock(RestaurantItemImageInput.class);
     Mockito.when(restaurantItemsImagesMapper.toInput(imageRequest)).thenReturn(imageInput);
 
     final var request = Mockito.mock(RestaurantItemRequest.class);
@@ -91,7 +91,7 @@ class RestaurantItemEntryMapperTest {
     Mockito.when(request.getRestaurantUuid()).thenReturn(restaurantUuid);
     Mockito.when(request.getImages()).thenReturn(List.of(imageRequest));
 
-    final RestaurantItemsInput result = mapper.toInput(request);
+    final RestaurantItemInput result = mapper.toInput(request);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(1, result.getImages().size());
@@ -114,17 +114,17 @@ class RestaurantItemEntryMapperTest {
   @Test
   @DisplayName("Deve mapear o output para response com restaurante e imagens")
   void shouldMapOutputToResponseWithRestaurantAndImages() {
-    final var restaurantOutput = Mockito.mock(RestaurantsOutput.class);
+    final var restaurantOutput = Mockito.mock(RestaurantOutput.class);
     final var restaurantResponse = Mockito.mock(RestaurantResponse.class);
     Mockito.when(restaurantsMapper.toResponse(restaurantOutput)).thenReturn(restaurantResponse);
 
-    final RestaurantItemsImagesOutput imageOutput = Mockito.mock(RestaurantItemsImagesOutput.class);
+    final RestaurantItemImageOutput imageOutput = Mockito.mock(RestaurantItemImageOutput.class);
     final RestaurantItemImageResponse imageResponse = Mockito.mock(RestaurantItemImageResponse.class);
     Mockito.when(restaurantItemsImagesMapper.toResponse(imageOutput)).thenReturn(imageResponse);
 
     final var uuid = UUID.randomUUID();
 
-    final var output = Mockito.mock(RestaurantItemsOutput.class);
+    final var output = Mockito.mock(RestaurantItemOutput.class);
     Mockito.when(output.getUuid()).thenReturn(uuid);
     Mockito.when(output.getName()).thenReturn("ITEM");
     Mockito.when(output.getDescription()).thenReturn("DESC");
@@ -156,7 +156,7 @@ class RestaurantItemEntryMapperTest {
   void shouldMapOutputToResponseWithoutRestaurantAndImages() {
     final var uuid = UUID.randomUUID();
 
-    final var output = Mockito.mock(RestaurantItemsOutput.class);
+    final var output = Mockito.mock(RestaurantItemOutput.class);
     Mockito.when(output.getUuid()).thenReturn(uuid);
     Mockito.when(output.getName()).thenReturn("ITEM");
     Mockito.when(output.getDescription()).thenReturn("DESC");

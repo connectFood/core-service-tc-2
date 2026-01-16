@@ -3,11 +3,11 @@ package com.connectfood.infrastructure.rest.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.application.restaurantstype.usecase.CreateRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.FindRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.RemoveRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.SearchRestaurantTypeUseCase;
-import com.connectfood.core.application.restaurantstype.usecase.UpdateRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.CreateRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.FindRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.RemoveRestaurantTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.SearchRestaurantsTypeUseCase;
+import com.connectfood.core.application.restauranttype.usecase.UpdateRestaurantTypeUseCase;
 import com.connectfood.infrastructure.rest.controller.docs.RestaurantTypeControllerApi;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
 import com.connectfood.infrastructure.rest.dto.commons.PageResponse;
@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RestaurantTypeController implements RestaurantTypeControllerApi {
 
-  private final SearchRestaurantTypeUseCase searchUseCase;
+  private final SearchRestaurantsTypeUseCase searchUseCase;
   private final FindRestaurantTypeUseCase findUseCase;
   private final CreateRestaurantTypeUseCase createUseCase;
   private final UpdateRestaurantTypeUseCase updateUseCase;

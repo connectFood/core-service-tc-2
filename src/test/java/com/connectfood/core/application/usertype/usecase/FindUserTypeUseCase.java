@@ -1,7 +1,7 @@
 package com.connectfood.core.application.usertype.usecase;
 
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
-import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
+import com.connectfood.core.application.usertype.mapper.UserTypeAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UserTypeGateway;
@@ -25,7 +25,7 @@ class FindUserTypeUseCaseTest {
   private UserTypeGateway repository;
 
   @Mock
-  private UsersTypeAppMapper mapper;
+  private UserTypeAppMapper mapper;
 
   @InjectMocks
   private FindUserTypeUseCase useCase;
@@ -35,7 +35,7 @@ class FindUserTypeUseCaseTest {
   void shouldFindUserTypeSuccessfully() {
     final var uuid = UUID.randomUUID();
     final var usersType = new UserType(uuid, "ADMIN", "Administrador");
-    final var output = new UsersTypeOutput(uuid, "ADMIN", "Administrador");
+    final var output = new UserTypeOutput(uuid, "ADMIN", "Administrador");
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(usersType));
     when(mapper.toOutput(usersType)).thenReturn(output);
