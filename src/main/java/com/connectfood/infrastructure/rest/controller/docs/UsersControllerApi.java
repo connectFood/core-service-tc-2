@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
 import com.connectfood.infrastructure.rest.dto.commons.PageResponse;
-import com.connectfood.infrastructure.rest.dto.users.UsersRequest;
-import com.connectfood.infrastructure.rest.dto.users.UsersResponse;
+import com.connectfood.infrastructure.rest.dto.user.UserRequest;
+import com.connectfood.infrastructure.rest.dto.user.UserResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +31,7 @@ public interface UsersControllerApi {
       summary = "Search users with filters and pagination",
       description = "Returns a paginated list of users filtered by the given parameters"
   )
-  ResponseEntity<PageResponse<List<UsersResponse>>> search(
+  ResponseEntity<PageResponse<List<UserResponse>>> search(
       @RequestParam(required = false) final String fullName,
       @RequestParam(required = false) final String email,
       @RequestParam(required = false) final UUID usersTypeUuid,
@@ -45,22 +45,22 @@ public interface UsersControllerApi {
       summary = "Find user by UUID",
       description = "Returns a user for the given UUID"
   )
-  ResponseEntity<BaseResponse<UsersResponse>> findByUuid(@PathVariable final UUID uuid);
+  ResponseEntity<BaseResponse<UserResponse>> findByUuid(@PathVariable final UUID uuid);
 
   @PostMapping
   @Operation(
       summary = "Create a new user",
       description = "Creates a new user and returns the created resource"
   )
-  ResponseEntity<BaseResponse<UsersResponse>> create(@Valid @RequestBody final UsersRequest request);
+  ResponseEntity<BaseResponse<UserResponse>> create(@Valid @RequestBody final UserRequest request);
 
   @PutMapping(path = "/{uuid}")
   @Operation(
       summary = "Update an existing user",
       description = "Updates an existing user identified by UUID"
   )
-  ResponseEntity<BaseResponse<UsersResponse>> update(
-      @PathVariable final UUID uuid, @Valid @RequestBody final UsersRequest request);
+  ResponseEntity<BaseResponse<UserResponse>> update(
+      @PathVariable final UUID uuid, @Valid @RequestBody final UserRequest request);
 
   @DeleteMapping(path = "/{uuid}")
   @Operation(
