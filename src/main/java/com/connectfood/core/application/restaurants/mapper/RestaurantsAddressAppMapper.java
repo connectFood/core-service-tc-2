@@ -1,7 +1,7 @@
 package com.connectfood.core.application.restaurants.mapper;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 
 import org.springframework.stereotype.Component;
@@ -12,14 +12,14 @@ public class RestaurantsAddressAppMapper {
   public RestaurantsAddressAppMapper() {
   }
 
-  public RestaurantsAddress toDomain(final Restaurants restaurants, final Address address) {
+  public RestaurantsAddress toDomain(final Restaurant restaurant, final Address address) {
 
-    if (restaurants == null || address == null) {
+    if (restaurant == null || address == null) {
       return null;
     }
 
     return new RestaurantsAddress(
-        restaurants,
+        restaurant,
         address
     );
   }

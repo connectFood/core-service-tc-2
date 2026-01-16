@@ -5,9 +5,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.infrastructure.persistence.adapter.RestaurantsTypeGatewayAdapter;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
 import com.connectfood.infrastructure.persistence.mappers.RestaurantsTypeInfraMapper;
@@ -41,12 +40,12 @@ class RestaurantsTypeGatewayAdapterTest {
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")
   void saveShouldPersistAndReturnMappedModel() {
-    final RestaurantsType model = Mockito.mock(RestaurantsType.class);
+    final RestaurantType model = Mockito.mock(RestaurantType.class);
 
     final RestaurantsTypeEntity entityToSave = Mockito.mock(RestaurantsTypeEntity.class);
     final RestaurantsTypeEntity savedEntity = Mockito.mock(RestaurantsTypeEntity.class);
 
-    final RestaurantsType mappedDomain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(mapper.toEntity(model))
         .thenReturn(entityToSave);
@@ -73,13 +72,13 @@ class RestaurantsTypeGatewayAdapterTest {
   void updateShouldPersistAndReturnMappedModel() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsType model = Mockito.mock(RestaurantsType.class);
+    final RestaurantType model = Mockito.mock(RestaurantType.class);
 
     final RestaurantsTypeEntity foundEntity = Mockito.mock(RestaurantsTypeEntity.class);
     final RestaurantsTypeEntity entityToSave = Mockito.mock(RestaurantsTypeEntity.class);
     final RestaurantsTypeEntity savedEntity = Mockito.mock(RestaurantsTypeEntity.class);
 
-    final RestaurantsType mappedDomain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(foundEntity));
@@ -109,7 +108,7 @@ class RestaurantsTypeGatewayAdapterTest {
   @DisplayName("Deve lançar exceção quando uuid não existir ao atualizar")
   void updateShouldThrowWhenNotFound() {
     final var uuid = UUID.randomUUID();
-    final RestaurantsType model = Mockito.mock(RestaurantsType.class);
+    final RestaurantType model = Mockito.mock(RestaurantType.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.empty());
@@ -147,7 +146,7 @@ class RestaurantsTypeGatewayAdapterTest {
     final var uuid = UUID.randomUUID();
 
     final RestaurantsTypeEntity foundEntity = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsType mappedDomain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(foundEntity));
@@ -172,8 +171,8 @@ class RestaurantsTypeGatewayAdapterTest {
     final RestaurantsTypeEntity entity1 = Mockito.mock(RestaurantsTypeEntity.class);
     final RestaurantsTypeEntity entity2 = Mockito.mock(RestaurantsTypeEntity.class);
 
-    final RestaurantsType domain1 = Mockito.mock(RestaurantsType.class);
-    final RestaurantsType domain2 = Mockito.mock(RestaurantsType.class);
+    final RestaurantType domain1 = Mockito.mock(RestaurantType.class);
+    final RestaurantType domain2 = Mockito.mock(RestaurantType.class);
 
     Mockito.when(mapper.toDomain(entity1))
         .thenReturn(domain1);
@@ -189,7 +188,7 @@ class RestaurantsTypeGatewayAdapterTest {
         ))
         .thenReturn(pageResult);
 
-    final PageModel<List<RestaurantsType>> result =
+    final PageModel<List<RestaurantType>> result =
         adapter.findAll("abc", 0, 10, null, null);
 
     Assertions.assertNotNull(result);
@@ -210,7 +209,7 @@ class RestaurantsTypeGatewayAdapterTest {
   @DisplayName("Deve listar paginado respeitando sort e direction informados")
   void findAllShouldReturnPagedResultUsingProvidedSortAndDirection() {
     final RestaurantsTypeEntity entity = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsType domain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType domain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(mapper.toDomain(entity))
         .thenReturn(domain);
@@ -224,7 +223,7 @@ class RestaurantsTypeGatewayAdapterTest {
         ))
         .thenReturn(pageResult);
 
-    final PageModel<List<RestaurantsType>> result =
+    final PageModel<List<RestaurantType>> result =
         adapter.findAll(null, 1, 5, "name", "DESC");
 
     Assertions.assertNotNull(result);

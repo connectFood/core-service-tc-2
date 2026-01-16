@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ class RemoveRestaurantTypeUseCaseTest {
   @DisplayName("Deve remover o tipo de restaurante quando existir")
   void shouldRemoveRestaurantsTypeWhenExists() {
     final var uuid = UUID.randomUUID();
-    final RestaurantsType domain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType domain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(repository.findById(uuid))
         .thenReturn(Optional.of(domain));

@@ -7,13 +7,13 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import lombok.Getter;
 
 @Getter
-public class UsersRestaurant {
+public class UserRestaurant {
 
     private final UUID uuid;
-    private final Users user;
-    private final Restaurants restaurant;
+    private final User user;
+    private final Restaurant restaurant;
 
-    public UsersRestaurant(final UUID uuid, final Users user, final Restaurants restaurant) {
+    public UserRestaurant(final UUID uuid, final User user, final Restaurant restaurant) {
         if (user == null) {
             throw new BadRequestException("User is required");
         }
@@ -27,7 +27,7 @@ public class UsersRestaurant {
         this.restaurant = restaurant;
     }
 
-    public UsersRestaurant(final Users user, final Restaurants restaurant) {
+    public UserRestaurant(final User user, final Restaurant restaurant) {
         this(null, user, restaurant);
     }
 }

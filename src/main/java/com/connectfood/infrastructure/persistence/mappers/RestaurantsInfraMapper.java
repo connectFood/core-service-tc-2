@@ -1,6 +1,6 @@
 package com.connectfood.infrastructure.persistence.mappers;
 
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
 
@@ -25,12 +25,12 @@ public class RestaurantsInfraMapper {
     this.usersMapper = usersMapper;
   }
 
-  public Restaurants toDomain(final RestaurantsEntity entity) {
+  public Restaurant toDomain(final RestaurantsEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    return new Restaurants(
+    return new Restaurant(
         entity.getUuid(),
         entity.getName(),
         entity.getRestaurantsType() != null ? restaurantsTypeMapper.toDomain(entity.getRestaurantsType()) : null,
@@ -43,7 +43,7 @@ public class RestaurantsInfraMapper {
     );
   }
 
-  public RestaurantsEntity toEntity(final Restaurants model, final RestaurantsTypeEntity restaurantsTypeEntity) {
+  public RestaurantsEntity toEntity(final Restaurant model, final RestaurantsTypeEntity restaurantsTypeEntity) {
     if (model == null) {
       return null;
     }
@@ -55,7 +55,7 @@ public class RestaurantsInfraMapper {
     return entity;
   }
 
-  public RestaurantsEntity toEntity(final Restaurants model, final RestaurantsEntity entity,
+  public RestaurantsEntity toEntity(final Restaurant model, final RestaurantsEntity entity,
       final RestaurantsTypeEntity restaurantsTypeEntity) {
     entity.setName(model.getName());
     entity.setRestaurantsType(restaurantsTypeEntity);

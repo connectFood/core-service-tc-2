@@ -4,8 +4,8 @@ import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersAddressGateway;
 import com.connectfood.core.domain.repository.UsersGateway;
 import org.junit.jupiter.api.Assertions;
@@ -38,8 +38,8 @@ class FindUsersUseCaseTest {
   @DisplayName("Deve retornar UsersOutput quando usuário existir")
   void shouldReturnUserWhenExists() {
     final var uuid = UUID.randomUUID();
-    final var userType = new UsersType(UUID.randomUUID(), "ADMIN", "Admin");
-    final var user = new Users(uuid, "Pilar", "pilar@test.com", "senha", userType);
+    final var userType = new UserType(UUID.randomUUID(), "ADMIN", "Admin");
+    final var user = new User(uuid, "Pilar", "pilar@test.com", "senha", userType);
     final var output = new UsersOutput(uuid, "Pilar", "pilar@test.com", new UsersTypeOutput(userType.getUuid(), "ADMIN", "Admin"));
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(user));

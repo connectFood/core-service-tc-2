@@ -7,13 +7,13 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import java.util.UUID;
 
 @Getter
-public class RestaurantsType {
+public class RestaurantType {
 
   private final UUID uuid;
   private final String name;
   private final String description;
 
-  public RestaurantsType(final UUID uuid, final String name, final String description) {
+  public RestaurantType(final UUID uuid, final String name, final String description) {
 
     if (name == null || name.isBlank()) {
       throw new BadRequestException("Name cannot be null or blank");
@@ -28,7 +28,7 @@ public class RestaurantsType {
     this.description = description;
   }
 
-  public RestaurantsType(final String name, final String description) {
+  public RestaurantType(final String name, final String description) {
     this(null, name, description);
   }
 

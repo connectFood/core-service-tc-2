@@ -2,10 +2,9 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsImagesEntity;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsImageInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +30,7 @@ class RestaurantItemsImageInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null ao converter entity null para domínio")
   void shouldReturnNullWhenToDomainReceivesNull() {
-    final RestaurantItemsImages result = mapper.toDomain(null);
+    final RestaurantItemImage result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
   }
@@ -47,7 +46,7 @@ class RestaurantItemsImageInfraMapperTest {
     entity.setDescription("Image description");
     entity.setPath("/images/image-01.png");
 
-    final RestaurantItemsImages result = mapper.toDomain(entity);
+    final RestaurantItemImage result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -60,7 +59,7 @@ class RestaurantItemsImageInfraMapperTest {
   @DisplayName("Deve retornar null ao converter model null para entity no overload com RestaurantItemsEntity")
   void shouldReturnNullWhenToEntityWithRestaurantItemsEntityReceivesNullArguments() {
     final RestaurantItemsEntity restaurantItemsEntity = Mockito.mock(RestaurantItemsEntity.class);
-    final RestaurantItemsImages model = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage model = Mockito.mock(RestaurantItemImage.class);
 
     Assertions.assertNull(mapper.toEntity(null, restaurantItemsEntity));
     Assertions.assertNull(mapper.toEntity(model, (RestaurantItemsEntity) null));
@@ -71,7 +70,7 @@ class RestaurantItemsImageInfraMapperTest {
   @DisplayName("Deve retornar null ao converter model null para entity no overload com RestaurantItemsImagesEntity")
   void shouldReturnNullWhenToEntityWithRestaurantItemsImagesEntityReceivesNullArguments() {
     final RestaurantItemsImagesEntity entity = Mockito.mock(RestaurantItemsImagesEntity.class);
-    final RestaurantItemsImages model = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage model = Mockito.mock(RestaurantItemImage.class);
 
     Assertions.assertThrows(
         NullPointerException.class,
@@ -92,7 +91,7 @@ class RestaurantItemsImageInfraMapperTest {
   void shouldConvertModelToEntityCorrectly() {
     final var uuid = UUID.randomUUID();
 
-    final var model = new RestaurantItemsImages(
+    final var model = new RestaurantItemImage(
         uuid,
         "IMAGE_01",
         "Image description",
@@ -120,7 +119,7 @@ class RestaurantItemsImageInfraMapperTest {
     entity.setDescription("Old description");
     entity.setPath("/images/old.png");
 
-    final var model = new RestaurantItemsImages(
+    final var model = new RestaurantItemImage(
         UUID.randomUUID(),
         "NEW_NAME",
         "New description",

@@ -2,9 +2,8 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsTypeInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +29,7 @@ class RestaurantsTypeInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
-    final RestaurantsType result = mapper.toDomain(null);
+    final RestaurantType result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
   }
@@ -45,7 +44,7 @@ class RestaurantsTypeInfraMapperTest {
     entity.setName("TYPE");
     entity.setDescription("Type description");
 
-    final RestaurantsType result = mapper.toDomain(entity);
+    final RestaurantType result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -66,7 +65,7 @@ class RestaurantsTypeInfraMapperTest {
   void toEntityShouldMapModelToEntityCorrectly() {
     final var uuid = UUID.randomUUID();
 
-    final var model = new RestaurantsType(
+    final var model = new RestaurantType(
         uuid,
         "TYPE",
         "Type description"
@@ -88,7 +87,7 @@ class RestaurantsTypeInfraMapperTest {
     entity.setName("OLD_NAME");
     entity.setDescription("Old description");
 
-    final var model = new RestaurantsType(
+    final var model = new RestaurantType(
         UUID.randomUUID(),
         "NEW_NAME",
         "New description"

@@ -5,9 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
-import com.connectfood.infrastructure.persistence.adapter.RestaurantsAddressGatewayAdapter;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsAddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
@@ -50,8 +49,8 @@ class RestaurantsAddressGatewayAdapterTest {
     final var restaurantsUuid = UUID.randomUUID();
     final var addressUuid = UUID.randomUUID();
 
-    final Restaurants restaurantsDomain = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsDomain.getUuid())
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
+    Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantsUuid);
 
     final Address addressDomain = Mockito.mock(Address.class);
@@ -61,8 +60,8 @@ class RestaurantsAddressGatewayAdapterTest {
     final RestaurantsAddress restaurantsAddress = Mockito.mock(RestaurantsAddress.class);
     Mockito.when(restaurantsAddress.getUuid())
         .thenReturn(restaurantsAddressUuid);
-    Mockito.when(restaurantsAddress.getRestaurants())
-        .thenReturn(restaurantsDomain);
+    Mockito.when(restaurantsAddress.getRestaurant())
+        .thenReturn(restaurantDomain);
     Mockito.when(restaurantsAddress.getAddress())
         .thenReturn(addressDomain);
 
@@ -107,13 +106,13 @@ class RestaurantsAddressGatewayAdapterTest {
   void saveShouldThrowWhenRestaurantDoesNotExist() {
     final var restaurantsUuid = UUID.randomUUID();
 
-    final Restaurants restaurantsDomain = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsDomain.getUuid())
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
+    Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantsUuid);
 
     final RestaurantsAddress restaurantsAddress = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantsAddress.getRestaurants())
-        .thenReturn(restaurantsDomain);
+    Mockito.when(restaurantsAddress.getRestaurant())
+        .thenReturn(restaurantDomain);
 
     Mockito.when(restaurantsRepository.findByUuid(restaurantsUuid))
         .thenReturn(Optional.empty());
@@ -133,8 +132,8 @@ class RestaurantsAddressGatewayAdapterTest {
     final var restaurantsUuid = UUID.randomUUID();
     final var addressUuid = UUID.randomUUID();
 
-    final Restaurants restaurantsDomain = Mockito.mock(Restaurants.class);
-    Mockito.when(restaurantsDomain.getUuid())
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
+    Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantsUuid);
 
     final Address addressDomain = Mockito.mock(Address.class);
@@ -142,8 +141,8 @@ class RestaurantsAddressGatewayAdapterTest {
         .thenReturn(addressUuid);
 
     final RestaurantsAddress restaurantsAddress = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantsAddress.getRestaurants())
-        .thenReturn(restaurantsDomain);
+    Mockito.when(restaurantsAddress.getRestaurant())
+        .thenReturn(restaurantDomain);
     Mockito.when(restaurantsAddress.getAddress())
         .thenReturn(addressDomain);
 

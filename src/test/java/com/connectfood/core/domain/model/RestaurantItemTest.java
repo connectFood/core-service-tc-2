@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantItemsTest {
+class RestaurantItemTest {
 
   @Test
   @DisplayName("Deve criar um item de restaurante com UUID explícito e dados válidos")
@@ -26,9 +26,9 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var item = new RestaurantItems(uuid, name, description, value, requestType, restaurant);
+    final var item = new RestaurantItem(uuid, name, description, value, requestType, restaurant);
 
     Assertions.assertEquals(uuid, item.getUuid());
     Assertions.assertEquals(name, item.getName());
@@ -46,9 +46,9 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var item = new RestaurantItems(name, description, value, requestType, restaurant);
+    final var item = new RestaurantItem(name, description, value, requestType, restaurant);
 
     Assertions.assertNotNull(item.getUuid());
     Assertions.assertEquals(name, item.getName());
@@ -67,10 +67,10 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
-    final List<RestaurantItemsImages> images = List.of(Mockito.mock(RestaurantItemsImages.class));
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
+    final List<RestaurantItemImage> images = List.of(Mockito.mock(RestaurantItemImage.class));
 
-    final var item = new RestaurantItems(uuid, name, description, value, requestType, restaurant, images);
+    final var item = new RestaurantItem(uuid, name, description, value, requestType, restaurant, images);
 
     Assertions.assertEquals(uuid, item.getUuid());
     Assertions.assertEquals(name, item.getName());
@@ -90,7 +90,7 @@ class RestaurantItemsTest {
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
 
-    final var item = new RestaurantItems(uuid, name, description, value, requestType);
+    final var item = new RestaurantItem(uuid, name, description, value, requestType);
 
     Assertions.assertEquals(uuid, item.getUuid());
     Assertions.assertEquals(name, item.getName());
@@ -108,11 +108,11 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantItems(uuid, null, description, value, requestType, restaurant)
+        () -> new RestaurantItem(uuid, null, description, value, requestType, restaurant)
     );
 
     Assertions.assertEquals("Name is required", exception.getMessage());
@@ -125,11 +125,11 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantItems(uuid, "", description, value, requestType, restaurant)
+        () -> new RestaurantItem(uuid, "", description, value, requestType, restaurant)
     );
 
     Assertions.assertEquals("Name is required", exception.getMessage());
@@ -142,11 +142,11 @@ class RestaurantItemsTest {
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantItems(uuid, "   ", description, value, requestType, restaurant)
+        () -> new RestaurantItem(uuid, "   ", description, value, requestType, restaurant)
     );
 
     Assertions.assertEquals("Name is required", exception.getMessage());
@@ -159,11 +159,11 @@ class RestaurantItemsTest {
     final var name = "TEST ITEM";
     final var description = "Test item description";
     final var requestType = RestaurantItemServiceType.DELIVERY;
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantItems(uuid, name, description, null, requestType, restaurant)
+        () -> new RestaurantItem(uuid, name, description, null, requestType, restaurant)
     );
 
     Assertions.assertEquals("Value is required", exception.getMessage());
@@ -176,11 +176,11 @@ class RestaurantItemsTest {
     final var name = "TEST ITEM";
     final var description = "Test item description";
     final var value = BigDecimal.valueOf(19.90);
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantItems(uuid, name, description, value, null, restaurant)
+        () -> new RestaurantItem(uuid, name, description, value, null, restaurant)
     );
 
     Assertions.assertEquals("Request Type hash is required", exception.getMessage());

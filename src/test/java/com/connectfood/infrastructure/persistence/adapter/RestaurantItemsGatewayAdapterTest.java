@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.infrastructure.persistence.adapter.RestaurantItemsGatewayAdapter;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsRepository;
@@ -49,11 +48,11 @@ class RestaurantItemsGatewayAdapterTest {
   void shouldSaveItemWhenRestaurantExistsAndReturnMappedDomain() {
     final var restaurantUuid = UUID.randomUUID();
 
-    final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantUuid);
 
-    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
     Mockito.when(model.getRestaurant())
         .thenReturn(restaurantDomain);
 
@@ -69,7 +68,7 @@ class RestaurantItemsGatewayAdapterTest {
     Mockito.when(repository.save(toSaveEntity))
         .thenReturn(savedEntity);
 
-    final RestaurantItems expectedDomain = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem expectedDomain = Mockito.mock(RestaurantItem.class);
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(expectedDomain);
 
@@ -92,11 +91,11 @@ class RestaurantItemsGatewayAdapterTest {
   void shouldThrowExceptionWhenRestaurantDoesNotExist() {
     final var restaurantUuid = UUID.randomUUID();
 
-    final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantUuid);
 
-    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
     Mockito.when(model.getRestaurant())
         .thenReturn(restaurantDomain);
 
@@ -117,7 +116,7 @@ class RestaurantItemsGatewayAdapterTest {
   void shouldUpdateExistingItemAndReturnMappedDomain() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
 
     final var existingEntity = new RestaurantItemsEntity();
     Mockito.when(repository.findByUuid(uuid))
@@ -131,7 +130,7 @@ class RestaurantItemsGatewayAdapterTest {
     Mockito.when(repository.save(updatedEntity))
         .thenReturn(savedEntity);
 
-    final RestaurantItems expectedDomain = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem expectedDomain = Mockito.mock(RestaurantItem.class);
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(expectedDomain);
 
@@ -173,7 +172,7 @@ class RestaurantItemsGatewayAdapterTest {
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(entity));
 
-    final RestaurantItems domain = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem domain = Mockito.mock(RestaurantItem.class);
     Mockito.when(mapper.toDomain(entity))
         .thenReturn(domain);
 
@@ -212,8 +211,8 @@ class RestaurantItemsGatewayAdapterTest {
         ))
         .thenReturn(entitiesPage);
 
-    final RestaurantItems domain1 = Mockito.mock(RestaurantItems.class);
-    final RestaurantItems domain2 = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem domain1 = Mockito.mock(RestaurantItem.class);
+    final RestaurantItem domain2 = Mockito.mock(RestaurantItem.class);
 
     Mockito.when(mapper.toDomainAll(entity1))
         .thenReturn(domain1);

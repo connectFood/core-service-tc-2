@@ -9,8 +9,8 @@ import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.Restaurant;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
@@ -51,12 +51,12 @@ class UpdateRestaurantsUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
     final var restaurantsTypeUuid = UUID.randomUUID();
 
-    final RestaurantsType currentType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType currentType = Mockito.mock(RestaurantType.class);
     Mockito.when(currentType.getUuid())
         .thenReturn(restaurantsTypeUuid);
 
-    final Restaurants existingRestaurant = Mockito.mock(Restaurants.class);
-    Mockito.when(existingRestaurant.getRestaurantsType())
+    final Restaurant existingRestaurant = Mockito.mock(Restaurant.class);
+    Mockito.when(existingRestaurant.getRestaurantType())
         .thenReturn(currentType);
 
     Mockito.when(repository.findByUuid(restaurantUuid))
@@ -66,11 +66,11 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.when(input.getRestaurantsTypeUuid())
         .thenReturn(restaurantsTypeUuid);
 
-    final Restaurants mappedDomain = Mockito.mock(Restaurants.class);
+    final Restaurant mappedDomain = Mockito.mock(Restaurant.class);
     Mockito.when(mapper.toDomain(restaurantUuid, input, currentType))
         .thenReturn(mappedDomain);
 
-    final Restaurants updatedRestaurant = Mockito.mock(Restaurants.class);
+    final Restaurant updatedRestaurant = Mockito.mock(Restaurant.class);
     Mockito.when(repository.update(restaurantUuid, mappedDomain))
         .thenReturn(updatedRestaurant);
 
@@ -91,7 +91,7 @@ class UpdateRestaurantsUseCaseTest {
 
     // Implementação chama getRestaurantsType() 2x (uma pra atribuir, outra pra comparar)
     Mockito.verify(existingRestaurant, Mockito.times(2))
-        .getRestaurantsType();
+        .getRestaurantType();
 
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
@@ -122,12 +122,12 @@ class UpdateRestaurantsUseCaseTest {
     final var currentTypeUuid = UUID.randomUUID();
     final var newTypeUuid = UUID.randomUUID();
 
-    final RestaurantsType currentType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType currentType = Mockito.mock(RestaurantType.class);
     Mockito.when(currentType.getUuid())
         .thenReturn(currentTypeUuid);
 
-    final Restaurants existingRestaurant = Mockito.mock(Restaurants.class);
-    Mockito.when(existingRestaurant.getRestaurantsType())
+    final Restaurant existingRestaurant = Mockito.mock(Restaurant.class);
+    Mockito.when(existingRestaurant.getRestaurantType())
         .thenReturn(currentType);
 
     Mockito.when(repository.findByUuid(restaurantUuid))
@@ -137,15 +137,15 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.when(input.getRestaurantsTypeUuid())
         .thenReturn(newTypeUuid);
 
-    final RestaurantsType newType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType newType = Mockito.mock(RestaurantType.class);
     Mockito.when(restaurantsTypeGateway.findById(newTypeUuid))
         .thenReturn(Optional.of(newType));
 
-    final Restaurants mappedDomain = Mockito.mock(Restaurants.class);
+    final Restaurant mappedDomain = Mockito.mock(Restaurant.class);
     Mockito.when(mapper.toDomain(restaurantUuid, input, newType))
         .thenReturn(mappedDomain);
 
-    final Restaurants updatedRestaurant = Mockito.mock(Restaurants.class);
+    final Restaurant updatedRestaurant = Mockito.mock(Restaurant.class);
     Mockito.when(repository.update(restaurantUuid, mappedDomain))
         .thenReturn(updatedRestaurant);
 
@@ -165,7 +165,7 @@ class UpdateRestaurantsUseCaseTest {
         .findByUuid(restaurantUuid);
 
     Mockito.verify(existingRestaurant, Mockito.times(2))
-        .getRestaurantsType();
+        .getRestaurantType();
 
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
@@ -230,12 +230,12 @@ class UpdateRestaurantsUseCaseTest {
     final var currentTypeUuid = UUID.randomUUID();
     final var newTypeUuid = UUID.randomUUID();
 
-    final RestaurantsType currentType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType currentType = Mockito.mock(RestaurantType.class);
     Mockito.when(currentType.getUuid())
         .thenReturn(currentTypeUuid);
 
-    final Restaurants existingRestaurant = Mockito.mock(Restaurants.class);
-    Mockito.when(existingRestaurant.getRestaurantsType())
+    final Restaurant existingRestaurant = Mockito.mock(Restaurant.class);
+    Mockito.when(existingRestaurant.getRestaurantType())
         .thenReturn(currentType);
 
     Mockito.when(repository.findByUuid(restaurantUuid))
@@ -262,7 +262,7 @@ class UpdateRestaurantsUseCaseTest {
         .findByUuid(restaurantUuid);
 
     Mockito.verify(existingRestaurant, Mockito.times(2))
-        .getRestaurantsType();
+        .getRestaurantType();
 
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();

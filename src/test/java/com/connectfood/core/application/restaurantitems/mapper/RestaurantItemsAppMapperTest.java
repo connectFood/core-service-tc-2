@@ -10,9 +10,9 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 import com.connectfood.core.domain.exception.BadRequestException;
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.RestaurantItemImage;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 
 import org.junit.jupiter.api.Assertions;
@@ -39,9 +39,9 @@ class RestaurantItemsAppMapperTest {
   @Test
   @DisplayName("Não deve criar domínio quando input for null")
   void shouldReturnNullWhenInputIsNull() {
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var result = mapper.toDomain(null, restaurants);
+    final var result = mapper.toDomain(null, restaurant);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImagesMapper);
@@ -62,9 +62,9 @@ class RestaurantItemsAppMapperTest {
   @DisplayName("Deve criar domínio quando input e restaurants forem válidos")
   void shouldCreateDomainWhenValidData() {
     final var input = buildValidInput();
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var result = mapper.toDomain(input, restaurants);
+    final var result = mapper.toDomain(input, restaurant);
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.getUuid());
@@ -72,7 +72,7 @@ class RestaurantItemsAppMapperTest {
     Assertions.assertEquals(input.getDescription(), result.getDescription());
     Assertions.assertEquals(input.getValue(), result.getValue());
     Assertions.assertEquals(input.getRequestType(), result.getRequestType());
-    Assertions.assertEquals(restaurants, result.getRestaurant());
+    Assertions.assertEquals(restaurant, result.getRestaurant());
 
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImagesMapper);
   }
@@ -80,9 +80,9 @@ class RestaurantItemsAppMapperTest {
   @Test
   @DisplayName("Não deve criar domínio com UUID quando input for null")
   void shouldReturnNullWhenInputIsNullEvenWithUuid() {
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var result = mapper.toDomain(UUID.randomUUID(), null, restaurants);
+    final var result = mapper.toDomain(UUID.randomUUID(), null, restaurant);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImagesMapper);
@@ -104,9 +104,9 @@ class RestaurantItemsAppMapperTest {
   void shouldCreateDomainWithExplicitUuidWhenValidData() {
     final var uuid = UUID.randomUUID();
     final var input = buildValidInput();
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var result = mapper.toDomain(uuid, input, restaurants);
+    final var result = mapper.toDomain(uuid, input, restaurant);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -114,7 +114,7 @@ class RestaurantItemsAppMapperTest {
     Assertions.assertEquals(input.getDescription(), result.getDescription());
     Assertions.assertEquals(input.getValue(), result.getValue());
     Assertions.assertEquals(input.getRequestType(), result.getRequestType());
-    Assertions.assertEquals(restaurants, result.getRestaurant());
+    Assertions.assertEquals(restaurant, result.getRestaurant());
 
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImagesMapper);
   }
@@ -132,12 +132,12 @@ class RestaurantItemsAppMapperTest {
   @DisplayName("Deve criar output quando restaurant existir e images for null")
   void shouldCreateOutputWhenRestaurantExistsAndImagesIsNull() {
     final var uuid = UUID.randomUUID();
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var model = mockModelWithoutImages(uuid, restaurants);
+    final var model = mockModelWithoutImages(uuid, restaurant);
 
     final RestaurantsOutput restaurantsOutput = Mockito.mock(RestaurantsOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurants)).thenReturn(restaurantsOutput);
+    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantsOutput);
 
     final var result = mapper.toOutput(model);
 
@@ -150,7 +150,7 @@ class RestaurantItemsAppMapperTest {
     Assertions.assertEquals(restaurantsOutput, result.getRestaurant());
     Assertions.assertEquals(List.of(), result.getImages());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurants);
+    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper);
     Mockito.verifyNoMoreInteractions(restaurantsMapper);
   }
@@ -177,15 +177,15 @@ class RestaurantItemsAppMapperTest {
   @DisplayName("Deve criar output com images quando model possuir images")
   void shouldCreateOutputWithImagesWhenModelHasImages() {
     final var uuid = UUID.randomUUID();
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final RestaurantItemsImages img1 = Mockito.mock(RestaurantItemsImages.class);
-    final RestaurantItemsImages img2 = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage img1 = Mockito.mock(RestaurantItemImage.class);
+    final RestaurantItemImage img2 = Mockito.mock(RestaurantItemImage.class);
 
-    final var model = mockModelWithImages(uuid, restaurants, List.of(img1, img2));
+    final var model = mockModelWithImages(uuid, restaurant, List.of(img1, img2));
 
     final RestaurantsOutput restaurantsOutput = Mockito.mock(RestaurantsOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurants)).thenReturn(restaurantsOutput);
+    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantsOutput);
 
     final RestaurantItemsImagesOutput outImg1 = Mockito.mock(RestaurantItemsImagesOutput.class);
     final RestaurantItemsImagesOutput outImg2 = Mockito.mock(RestaurantItemsImagesOutput.class);
@@ -200,7 +200,7 @@ class RestaurantItemsAppMapperTest {
     Assertions.assertNotNull(result.getImages());
     Assertions.assertEquals(List.of(outImg1, outImg2), result.getImages());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurants);
+    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img1);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img2);
     Mockito.verifyNoMoreInteractions(restaurantsMapper, restaurantItemsImagesMapper);
@@ -219,15 +219,15 @@ class RestaurantItemsAppMapperTest {
   @DisplayName("Deve criar output usando images recebidas por parâmetro")
   void shouldCreateOutputUsingImagesProvidedAsParameter() {
     final var uuid = UUID.randomUUID();
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final RestaurantItemsImages img1 = Mockito.mock(RestaurantItemsImages.class);
-    final RestaurantItemsImages img2 = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage img1 = Mockito.mock(RestaurantItemImage.class);
+    final RestaurantItemImage img2 = Mockito.mock(RestaurantItemImage.class);
 
-    final var model = mockModelWithoutImages(uuid, restaurants);
+    final var model = mockModelWithoutImages(uuid, restaurant);
 
     final RestaurantsOutput restaurantsOutput = Mockito.mock(RestaurantsOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurants)).thenReturn(restaurantsOutput);
+    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantsOutput);
 
     final RestaurantItemsImagesOutput outImg1 = Mockito.mock(RestaurantItemsImagesOutput.class);
     final RestaurantItemsImagesOutput outImg2 = Mockito.mock(RestaurantItemsImagesOutput.class);
@@ -241,7 +241,7 @@ class RestaurantItemsAppMapperTest {
     Assertions.assertEquals(restaurantsOutput, result.getRestaurant());
     Assertions.assertEquals(List.of(outImg1, outImg2), result.getImages());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurants);
+    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img1);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img2);
     Mockito.verifyNoMoreInteractions(restaurantsMapper, restaurantItemsImagesMapper);
@@ -253,7 +253,7 @@ class RestaurantItemsAppMapperTest {
     final var uuid = UUID.randomUUID();
     final var model = mockModelWithoutImages(uuid, null);
 
-    final RestaurantItemsImages img1 = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage img1 = Mockito.mock(RestaurantItemImage.class);
 
     final RestaurantItemsImagesOutput outImg1 = Mockito.mock(RestaurantItemsImagesOutput.class);
     Mockito.when(restaurantItemsImagesMapper.toOutput(img1)).thenReturn(outImg1);
@@ -274,12 +274,12 @@ class RestaurantItemsAppMapperTest {
   @DisplayName("Deve criar output com lista vazia quando images estiver vazio no método com images")
   void shouldCreateOutputWithEmptyImagesListWhenImagesIsEmptyOnOutputWithImages() {
     final var uuid = UUID.randomUUID();
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var model = mockModelWithoutImages(uuid, restaurants);
+    final var model = mockModelWithoutImages(uuid, restaurant);
 
     final RestaurantsOutput restaurantsOutput = Mockito.mock(RestaurantsOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurants)).thenReturn(restaurantsOutput);
+    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantsOutput);
 
     final var result = mapper.toOutput(model, Collections.emptyList());
 
@@ -289,7 +289,7 @@ class RestaurantItemsAppMapperTest {
     Assertions.assertNotNull(result.getImages());
     Assertions.assertTrue(result.getImages().isEmpty());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurants);
+    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper);
     Mockito.verifyNoMoreInteractions(restaurantsMapper);
   }
@@ -306,11 +306,11 @@ class RestaurantItemsAppMapperTest {
         List.of()
     );
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> mapper.toDomain(input, restaurants)
+        () -> mapper.toDomain(input, restaurant)
     );
 
     Assertions.assertEquals("Name is required", exception.getMessage());
@@ -328,23 +328,23 @@ class RestaurantItemsAppMapperTest {
     );
   }
 
-  private static RestaurantItems mockModelWithoutImages(final UUID uuid, final Restaurants restaurants) {
-    final var model = Mockito.mock(RestaurantItems.class);
+  private static RestaurantItem mockModelWithoutImages(final UUID uuid, final Restaurant restaurant) {
+    final var model = Mockito.mock(RestaurantItem.class);
     Mockito.when(model.getUuid()).thenReturn(uuid);
     Mockito.when(model.getName()).thenReturn("ITEM");
     Mockito.when(model.getDescription()).thenReturn("DESC");
     Mockito.when(model.getValue()).thenReturn(BigDecimal.valueOf(10.00));
     Mockito.when(model.getRequestType()).thenReturn(RestaurantItemServiceType.DELIVERY);
-    Mockito.when(model.getRestaurant()).thenReturn(restaurants);
+    Mockito.when(model.getRestaurant()).thenReturn(restaurant);
     return model;
   }
 
-  private static RestaurantItems mockModelWithImages(
+  private static RestaurantItem mockModelWithImages(
       final UUID uuid,
-      final Restaurants restaurants,
-      final List<RestaurantItemsImages> images
+      final Restaurant restaurant,
+      final List<RestaurantItemImage> images
   ) {
-    final var model = mockModelWithoutImages(uuid, restaurants);
+    final var model = mockModelWithoutImages(uuid, restaurant);
     Mockito.when(model.getImages()).thenReturn(images);
     return model;
   }

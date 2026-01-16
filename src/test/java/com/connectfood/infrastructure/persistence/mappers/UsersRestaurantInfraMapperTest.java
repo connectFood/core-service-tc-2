@@ -2,15 +2,12 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersRestaurant;
+import com.connectfood.core.domain.model.Restaurant;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserRestaurant;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersRestaurantEntity;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.UsersInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.UsersRestaurantInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +33,7 @@ class UsersRestaurantInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
-    final UsersRestaurant result = mapper.toDomain(null);
+    final UserRestaurant result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(usersMapper, restaurantsMapper);
@@ -50,13 +47,13 @@ class UsersRestaurantInfraMapperTest {
     final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
     final RestaurantsEntity restaurantsEntity = Mockito.mock(RestaurantsEntity.class);
 
-    final Users usersDomain = Mockito.mock(Users.class);
-    final Restaurants restaurantsDomain = Mockito.mock(Restaurants.class);
+    final User userDomain = Mockito.mock(User.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
 
     Mockito.when(usersMapper.toDomain(usersEntity))
-        .thenReturn(usersDomain);
+        .thenReturn(userDomain);
     Mockito.when(restaurantsMapper.toDomain(restaurantsEntity))
-        .thenReturn(restaurantsDomain);
+        .thenReturn(restaurantDomain);
 
     final UsersRestaurantEntity entity = Mockito.mock(UsersRestaurantEntity.class);
     Mockito.when(entity.getUuid())
@@ -66,12 +63,12 @@ class UsersRestaurantInfraMapperTest {
     Mockito.when(entity.getRestaurants())
         .thenReturn(restaurantsEntity);
 
-    final UsersRestaurant result = mapper.toDomain(entity);
+    final UserRestaurant result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertSame(usersDomain, result.getUser());
-    Assertions.assertSame(restaurantsDomain, result.getRestaurant());
+    Assertions.assertSame(userDomain, result.getUser());
+    Assertions.assertSame(restaurantDomain, result.getRestaurant());
 
     Mockito.verify(usersMapper, Mockito.times(1))
         .toDomain(usersEntity);

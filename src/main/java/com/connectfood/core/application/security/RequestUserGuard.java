@@ -3,7 +3,7 @@ package com.connectfood.core.application.security;
 import com.connectfood.core.domain.exception.BadRequestException;
 import com.connectfood.core.domain.exception.ForbiddenException;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Users;
+import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.repository.UsersGateway;
 
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class RequestUserGuard {
     this.repository = repository;
   }
 
-  public Users requireUser(final RequestUser request) {
+  public User requireUser(final RequestUser request) {
     if (request == null || request.uuid() == null) {
       throw new BadRequestException("Request-User-Uuid header is required");
     }
@@ -28,10 +28,10 @@ public class RequestUserGuard {
   }
 
   @Transactional(readOnly = true)
-  public Users requireRole(final RequestUser request, final String requiredRole) {
+  public User requireRole(final RequestUser request, final String requiredRole) {
     final var user = requireUser(request);
 
-    final var hasRole = user.getUsersType()
+    final var hasRole = user.getUserType()
         .getName()
         .equals(requiredRole);
 

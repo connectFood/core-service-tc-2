@@ -6,20 +6,15 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.exception.BadRequestException;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.RestaurantsType;
-import com.connectfood.core.domain.model.Users;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
+import com.connectfood.core.domain.model.Restaurant;
+import com.connectfood.core.domain.model.RestaurantType;
+import com.connectfood.core.domain.model.User;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
-import com.connectfood.infrastructure.persistence.mappers.AddressInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsTypeInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.UsersInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +48,7 @@ class RestaurantsInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
-    final Restaurants result = mapper.toDomain(null);
+    final Restaurant result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(restaurantsTypeMapper, restaurantOpeningHoursMapper, addressMapper, usersMapper);
@@ -66,19 +61,19 @@ class RestaurantsInfraMapperTest {
     final var name = "RESTAURANT";
 
     final RestaurantsTypeEntity typeEntity = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsType typeDomain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType typeDomain = Mockito.mock(RestaurantType.class);
 
     final RestaurantOpeningHoursEntity ohEntity1 = Mockito.mock(RestaurantOpeningHoursEntity.class);
     final RestaurantOpeningHoursEntity ohEntity2 = Mockito.mock(RestaurantOpeningHoursEntity.class);
 
-    final RestaurantOpeningHours ohDomain1 = Mockito.mock(RestaurantOpeningHours.class);
-    final RestaurantOpeningHours ohDomain2 = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour ohDomain1 = Mockito.mock(RestaurantOpeningHour.class);
+    final RestaurantOpeningHour ohDomain2 = Mockito.mock(RestaurantOpeningHour.class);
 
     final AddressEntity addressEntity = Mockito.mock(AddressEntity.class);
     final Address addressDomain = Mockito.mock(Address.class);
 
     final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
-    final Users usersDomain = Mockito.mock(Users.class);
+    final User userDomain = Mockito.mock(User.class);
 
     Mockito.when(restaurantsTypeMapper.toDomain(typeEntity))
         .thenReturn(typeDomain);
@@ -89,7 +84,7 @@ class RestaurantsInfraMapperTest {
     Mockito.when(addressMapper.toDomain(addressEntity))
         .thenReturn(addressDomain);
     Mockito.when(usersMapper.toDomain(usersEntity))
-        .thenReturn(usersDomain);
+        .thenReturn(userDomain);
 
     final RestaurantsEntity entity = Mockito.mock(RestaurantsEntity.class);
     Mockito.when(entity.getUuid())
@@ -105,16 +100,16 @@ class RestaurantsInfraMapperTest {
     Mockito.when(entity.getUsers())
         .thenReturn(usersEntity);
 
-    final Restaurants result = mapper.toDomain(entity);
+    final Restaurant result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals(name, result.getName());
-    Assertions.assertSame(typeDomain, result.getRestaurantsType());
+    Assertions.assertSame(typeDomain, result.getRestaurantType());
     assertThat(result.getOpeningHours())
         .containsExactlyInAnyOrder(ohDomain1, ohDomain2);
     Assertions.assertSame(addressDomain, result.getAddress());
-    Assertions.assertSame(usersDomain, result.getUsers());
+    Assertions.assertSame(userDomain, result.getUser());
 
     Mockito.verify(restaurantsTypeMapper)
         .toDomain(typeEntity);
@@ -135,7 +130,7 @@ class RestaurantsInfraMapperTest {
     final var name = "RESTAURANT";
 
     final RestaurantsTypeEntity typeEntity = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsType typeDomain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType typeDomain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(restaurantsTypeMapper.toDomain(typeEntity))
         .thenReturn(typeDomain);
@@ -156,15 +151,15 @@ class RestaurantsInfraMapperTest {
     Mockito.when(entity.getUsers())
         .thenReturn(null);
 
-    final Restaurants result = mapper.toDomain(entity);
+    final Restaurant result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals(name, result.getName());
-    Assertions.assertSame(typeDomain, result.getRestaurantsType());
+    Assertions.assertSame(typeDomain, result.getRestaurantType());
     Assertions.assertEquals(List.of(), result.getOpeningHours());
     Assertions.assertNull(result.getAddress());
-    Assertions.assertNull(result.getUsers());
+    Assertions.assertNull(result.getUser());
 
     Mockito.verify(restaurantsTypeMapper)
         .toDomain(typeEntity);
@@ -214,7 +209,7 @@ class RestaurantsInfraMapperTest {
   void toEntityShouldMapModelToEntityWithRestaurantsType() {
     final var uuid = UUID.randomUUID();
 
-    final Restaurants model = Mockito.mock(Restaurants.class);
+    final Restaurant model = Mockito.mock(Restaurant.class);
     Mockito.when(model.getUuid())
         .thenReturn(uuid);
     Mockito.when(model.getName())
@@ -240,7 +235,7 @@ class RestaurantsInfraMapperTest {
     entity.setName("OLD_NAME");
     entity.setRestaurantsType(Mockito.mock(RestaurantsTypeEntity.class));
 
-    final Restaurants model = Mockito.mock(Restaurants.class);
+    final Restaurant model = Mockito.mock(Restaurant.class);
     Mockito.when(model.getName())
         .thenReturn("NEW_NAME");
 

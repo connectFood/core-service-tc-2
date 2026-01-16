@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput;
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -99,7 +99,7 @@ class RestaurantsTypeAppMapperTest {
   void shouldCreateOutputFromDomain() {
     final var uuid = UUID.randomUUID();
 
-    final var model = Mockito.mock(RestaurantsType.class);
+    final var model = Mockito.mock(RestaurantType.class);
     Mockito.when(model.getUuid())
         .thenReturn(uuid);
     Mockito.when(model.getName())

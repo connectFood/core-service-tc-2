@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsImagesEntity;
@@ -36,7 +36,7 @@ public class RestaurantItemsImagesGatewayAdapter implements RestaurantItemsImage
   }
 
   @Override
-  public RestaurantItemsImages save(final UUID restaurantItemsUuid, final RestaurantItemsImages model) {
+  public RestaurantItemImage save(final UUID restaurantItemsUuid, final RestaurantItemImage model) {
     final var restaurantItems = restaurantItemsRepository.findByUuid(restaurantItemsUuid)
         .orElseThrow();
 
@@ -46,7 +46,7 @@ public class RestaurantItemsImagesGatewayAdapter implements RestaurantItemsImage
   }
 
   @Override
-  public RestaurantItemsImages update(final UUID uuid, final RestaurantItemsImages model) {
+  public RestaurantItemImage update(final UUID uuid, final RestaurantItemImage model) {
     var entity = repository.findByUuid(uuid)
         .orElseThrow();
 
@@ -56,14 +56,14 @@ public class RestaurantItemsImagesGatewayAdapter implements RestaurantItemsImage
   }
 
   @Override
-  public Optional<RestaurantItemsImages> findByUuid(final UUID uuid) {
+  public Optional<RestaurantItemImage> findByUuid(final UUID uuid) {
     final var entity = repository.findByUuid(uuid);
 
     return entity.map(mapper::toDomain);
   }
 
   @Override
-  public PageModel<List<RestaurantItemsImages>> findAll(final UUID restaurantItemsUuid, final Integer page,
+  public PageModel<List<RestaurantItemImage>> findAll(final UUID restaurantItemsUuid, final Integer page,
       final Integer size,
       final String sort, final String direction) {
 

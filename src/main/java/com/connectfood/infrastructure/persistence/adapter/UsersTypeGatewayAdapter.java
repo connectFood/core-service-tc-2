@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
@@ -29,31 +29,31 @@ public class UsersTypeGatewayAdapter implements UsersTypeGateway {
   }
 
   @Override
-  public UsersType save(final UsersType usersType) {
-    final var entity = repository.save(mapper.toEntity(usersType));
+  public UserType save(final UserType userType) {
+    final var entity = repository.save(mapper.toEntity(userType));
 
     return mapper.toDomain(entity);
   }
 
   @Override
-  public UsersType update(final UUID uuid, final UsersType usersType) {
+  public UserType update(final UUID uuid, final UserType userType) {
     var entity = repository.findByUuid(uuid)
         .orElseThrow();
 
-    entity = repository.save(mapper.toEntity(usersType, entity));
+    entity = repository.save(mapper.toEntity(userType, entity));
 
     return mapper.toDomain(entity);
   }
 
   @Override
-  public Optional<UsersType> findByUuid(final UUID uuid) {
+  public Optional<UserType> findByUuid(final UUID uuid) {
     final var entity = repository.findByUuid(uuid);
 
     return entity.map(mapper::toDomain);
   }
 
   @Override
-  public PageModel<List<UsersType>> findAll(final String name, final Integer page, final Integer size,
+  public PageModel<List<UserType>> findAll(final String name, final Integer page, final Integer size,
       final String sort, final String direction) {
 
     final var pageable = PageRequest.of(page, size,
@@ -77,5 +77,10 @@ public class UsersTypeGatewayAdapter implements UsersTypeGateway {
   @Override
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
+  }
+
+  @Override
+  public boolean existsByName(final String name) {
+    return repository.existsByName(name);
   }
 }

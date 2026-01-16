@@ -3,14 +3,11 @@ package com.connectfood.infrastructure.persistence.mappers;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersAddress;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersAddressEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
-import com.connectfood.infrastructure.persistence.mappers.AddressInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.UsersAddressInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.UsersInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +35,7 @@ class UsersAddressInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
-    final UsersAddress result = mapper.toDomain(null);
+    final UserAddress result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(usersMapper, addressMapper);
@@ -52,11 +49,11 @@ class UsersAddressInfraMapperTest {
     final var usersEntity = Mockito.mock(UsersEntity.class);
     final var addressEntity = Mockito.mock(AddressEntity.class);
 
-    final Users usersDomain = Mockito.mock(Users.class);
+    final User userDomain = Mockito.mock(User.class);
     final Address addressDomain = Mockito.mock(Address.class);
 
     Mockito.when(usersMapper.toDomain(usersEntity))
-        .thenReturn(usersDomain);
+        .thenReturn(userDomain);
     Mockito.when(addressMapper.toDomain(addressEntity))
         .thenReturn(addressDomain);
 
@@ -68,11 +65,11 @@ class UsersAddressInfraMapperTest {
     Mockito.when(entity.getAddress())
         .thenReturn(addressEntity);
 
-    final UsersAddress result = mapper.toDomain(entity);
+    final UserAddress result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertSame(usersDomain, result.getUsers());
+    Assertions.assertSame(userDomain, result.getUser());
     Assertions.assertSame(addressDomain, result.getAddress());
 
     Mockito.verify(usersMapper, Mockito.times(1))

@@ -6,7 +6,7 @@ import com.connectfood.core.application.users.dto.UsersInput;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersGateway;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 
@@ -34,16 +34,16 @@ public class UpdateUsersUseCase {
     final var users = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("User not found"));
 
-    UsersType usersType = users.getUsersType();
+    UserType userType = users.getUserType();
 
-    if (!users.getUsersType()
+    if (!users.getUserType()
         .getUuid()
         .equals(input.getUsersTypeUuid())) {
-      usersType = usersTypeGateway.findByUuid(input.getUsersTypeUuid())
+      userType = usersTypeGateway.findByUuid(input.getUsersTypeUuid())
           .orElseThrow(() -> new NotFoundException("User type not found"));
     }
 
-    final var usersUpdated = repository.update(uuid, mapper.toDomain(uuid, input, users.getPasswordHash(), usersType));
+    final var usersUpdated = repository.update(uuid, mapper.toDomain(uuid, input, users.getPasswordHash(), userType));
 
     return mapper.toOutput(usersUpdated);
   }

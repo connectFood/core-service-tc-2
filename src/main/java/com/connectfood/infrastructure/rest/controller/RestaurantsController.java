@@ -15,6 +15,7 @@ import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantOpen
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsAddressUseCase;
 import com.connectfood.core.application.restaurants.usecase.UpdateRestaurantsUseCase;
 import com.connectfood.core.application.security.RequestUser;
+import com.connectfood.infrastructure.rest.controller.docs.RestaurantsControllerApi;
 import com.connectfood.infrastructure.rest.dto.address.AddressRequest;
 import com.connectfood.infrastructure.rest.dto.address.AddressResponse;
 import com.connectfood.infrastructure.rest.dto.commons.BaseResponse;
@@ -29,25 +30,10 @@ import com.connectfood.infrastructure.rest.mappers.RestaurantsEntryMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-
 @RestController
-@RequestMapping("/v1/restaurants")
-@Tag(name = "Restaurants Controller", description = "Operations related to restaurants management")
-public class RestaurantsController {
+public class RestaurantsController implements RestaurantsControllerApi {
 
   private final SearchRestaurantsUseCase searchUseCase;
   private final FindRestaurantsUseCase findUseCase;
@@ -96,22 +82,17 @@ public class RestaurantsController {
     this.addressMapper = addressMapper;
   }
 
-  @GetMapping
-  @Operation(
-      summary = "Search Restaurants with filters and pagination",
-      description = "Returns paginated list of restaurants filtered by the given parameters"
-  )
+  @Override
   public ResponseEntity<PageResponse<List<RestaurantsResponse>>> search(
-      @RequestParam(required = false) final String name,
-      @RequestParam(required = false) final UUID restaurantsTypeUuid,
-      @RequestParam(required = false) final String street,
-      @RequestParam(required = false) final String city,
-      @RequestParam(required = false) final String state,
-      @RequestParam(defaultValue = "0") final Integer page,
-      @RequestParam(defaultValue = "10") final Integer size,
-      @RequestParam(required = false) final String sort,
-      @RequestParam(required = false) final String direction
-  ) {
+      final String name,
+      final UUID restaurantsTypeUuid,
+      final String street,
+      final String city,
+      final String state,
+      final Integer page,
+      final Integer size,
+      final String sort,
+      final String direction) {
     final var result = searchUseCase.execute(name, restaurantsTypeUuid, street, city, state, page, size, sort,
         direction
     );
@@ -125,12 +106,8 @@ public class RestaurantsController {
         .body(new PageResponse<>(response, result.total(), page, size));
   }
 
-  @GetMapping(path = "/{uuid}")
-  @Operation(
-      summary = "Find restaurant by UUID",
-      description = "Returns a restaurants for the given UUID"
-  )
-  public ResponseEntity<BaseResponse<RestaurantsResponse>> findByUuid(@PathVariable final UUID uuid) {
+  @Override
+  public ResponseEntity<BaseResponse<RestaurantsResponse>> findByUuid(final UUID uuid) {
 
     final var result = findUseCase.execute(uuid);
     final var response = mapper.toResponse(result);
@@ -139,14 +116,10 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PostMapping
-  @Operation(
-      summary = "Create a new restaurant",
-      description = "Create a new restaurant and returns the created resource"
-  )
+  @Override
   public ResponseEntity<BaseResponse<RestaurantsResponse>> create(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @Valid @RequestBody final RestaurantsRequest request) {
+      final UUID requestUserUuid,
+      final RestaurantsRequest request) {
 
     final var result = createUseCase.execute(new RequestUser(requestUserUuid), mapper.toInput(request));
     final var response = mapper.toResponse(result);
@@ -155,15 +128,11 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PostMapping(path = "/{uuid}/opening-hours")
-  @Operation(
-      summary = "Create a new restaurant opening hours",
-      description = "Create a new restaurant opening hours and returns the created resource"
-  )
+  @Override
   public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> createOpeningHours(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID uuid,
-      @Valid @RequestBody final RestaurantOpeningHoursRequest request) {
+      final UUID requestUserUuid,
+      final UUID uuid,
+      final RestaurantOpeningHoursRequest request) {
 
     final var result = createRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), uuid,
         restaurantOpeningHoursMapper.toInput(request)
@@ -174,15 +143,11 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PostMapping(path = "/{uuid}/address")
-  @Operation(
-      summary = "Create a new restaurant address",
-      description = "Create a new restaurant address and returns the created resource"
-  )
+  @Override
   public ResponseEntity<BaseResponse<AddressResponse>> createAddress(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID uuid,
-      @Valid @RequestBody final AddressRequest request) {
+      final UUID requestUserUuid,
+      final UUID uuid,
+      final AddressRequest request) {
 
     final var result = createRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
         addressMapper.toInput(request)
@@ -193,15 +158,11 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PutMapping(path = "/{uuid}")
-  @Operation(
-      summary = "Update an existing restaurant",
-      description = "Updates an existing restaurants identified by UUID"
-  )
+  @Override
   public ResponseEntity<BaseResponse<RestaurantsResponse>> update(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID uuid,
-      @Valid @RequestBody final RestaurantsRequest request
+      final UUID requestUserUuid,
+      final UUID uuid,
+      final RestaurantsRequest request
   ) {
 
     final var result = updateUseCase.execute(new RequestUser(requestUserUuid), uuid, mapper.toInput(request));
@@ -211,15 +172,11 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PutMapping(path = "/opening-hours/{openingHoursUuid}")
-  @Operation(
-      summary = "Update an existing restaurant opening hours",
-      description = "Updates an existing restaurant opening hours identified by UUID"
-  )
+  @Override
   public ResponseEntity<BaseResponse<RestaurantOpeningHoursResponse>> update(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID openingHoursUuid,
-      @Valid @RequestBody final RestaurantOpeningHoursRequest request
+      final UUID requestUserUuid,
+      final UUID openingHoursUuid,
+      final RestaurantOpeningHoursRequest request
   ) {
     final var result = updateRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid,
         restaurantOpeningHoursMapper.toInput(request)
@@ -230,15 +187,12 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @PutMapping(path = "/{uuid}/address")
-  @Operation(
-      summary = "Update an existing restaurant address",
-      description = "Updates an existing restaurants address identified by UUID"
-  )
+  @Override
   public ResponseEntity<BaseResponse<AddressResponse>> updateAddress(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID uuid,
-      @Valid @RequestBody final AddressRequest request) {
+      final UUID requestUserUuid,
+      final UUID uuid,
+      final AddressRequest request
+  ) {
 
     final var result = updateRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid,
         addressMapper.toInput(request)
@@ -249,42 +203,33 @@ public class RestaurantsController {
         .body(new BaseResponse<>(response));
   }
 
-  @DeleteMapping(path = "/{uuid}")
-  @Operation(
-      summary = "Delete an existing restaurant",
-      description = "Delete and existing restaurant identified by UUID"
-  )
+  @Override
   public ResponseEntity<Void> delete(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID uuid) {
+      final UUID requestUserUuid,
+      final UUID uuid
+  ) {
     removeUseCase.execute(new RequestUser(requestUserUuid), uuid);
 
     return ResponseEntity.noContent()
         .build();
   }
 
-  @DeleteMapping(path = "/opening-hours/{openingHoursUuid}")
-  @Operation(
-      summary = "Delete an existing restaurant opening hours",
-      description = "Deletes an existing restaurant opening hours identified by UUID"
-  )
+  @Override
   public ResponseEntity<Void> deleteOpeningHoursUuid(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID openingHoursUuid) {
+      final UUID requestUserUuid,
+      final UUID openingHoursUuid
+  ) {
     removeRestaurantOpeningHoursUseCase.execute(new RequestUser(requestUserUuid), openingHoursUuid);
 
     return ResponseEntity.noContent()
         .build();
   }
 
-  @DeleteMapping(path = "/{uuid}/address")
-  @Operation(
-      summary = "Delete an existing restaurant address",
-      description = "Deletes an existing restaurant address identified by UUID"
-  )
+  @Override
   public ResponseEntity<Void> deleteAddress(
-      @RequestHeader(name = "Request-User-Uuid") final UUID requestUserUuid,
-      @PathVariable final UUID uuid) {
+      final UUID requestUserUuid,
+      final UUID uuid
+  ) {
     removeRestaurantsAddressUseCase.execute(new RequestUser(requestUserUuid), uuid);
 
     return ResponseEntity.noContent()

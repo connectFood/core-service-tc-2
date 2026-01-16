@@ -2,8 +2,8 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.List;
 
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
@@ -22,19 +22,19 @@ public class RestaurantItemsInfraMapper {
     this.restaurantItemsImageMapper = restaurantItemsImageMapper;
   }
 
-  public RestaurantItems toDomain(final RestaurantItemsEntity entity) {
+  public RestaurantItem toDomain(final RestaurantItemsEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    final List<RestaurantItemsImages> images = entity.getImages() == null
+    final List<RestaurantItemImage> images = entity.getImages() == null
         ? List.of()
         : entity.getImages()
         .stream()
         .map(restaurantItemsImageMapper::toDomain)
         .toList();
 
-    return new RestaurantItems(
+    return new RestaurantItem(
         entity.getUuid(),
         entity.getName(),
         entity.getDescription(),
@@ -45,12 +45,12 @@ public class RestaurantItemsInfraMapper {
     );
   }
 
-  public RestaurantItems toDomainAll(final RestaurantItemsEntity entity) {
+  public RestaurantItem toDomainAll(final RestaurantItemsEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    return new RestaurantItems(
+    return new RestaurantItem(
         entity.getUuid(),
         entity.getName(),
         entity.getDescription(),
@@ -59,7 +59,7 @@ public class RestaurantItemsInfraMapper {
     );
   }
 
-  public RestaurantItemsEntity toEntity(final RestaurantItems model, final RestaurantsEntity restaurantsEntity) {
+  public RestaurantItemsEntity toEntity(final RestaurantItem model, final RestaurantsEntity restaurantsEntity) {
 
     if (model == null || restaurantsEntity == null) {
       return null;
@@ -77,7 +77,7 @@ public class RestaurantItemsInfraMapper {
     return entity;
   }
 
-  public RestaurantItemsEntity toEntity(final RestaurantItems model, final RestaurantItemsEntity entity) {
+  public RestaurantItemsEntity toEntity(final RestaurantItem model, final RestaurantItemsEntity entity) {
     entity.setName(model.getName());
     entity.setDescription(model.getDescription());
     entity.setValue(model.getValue());

@@ -3,15 +3,15 @@ package com.connectfood.core.domain.repository;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 
 public interface RestaurantOpeningHoursGateway {
 
-  RestaurantOpeningHours save(RestaurantOpeningHours model, final UUID restaurantUuid);
+  RestaurantOpeningHour save(RestaurantOpeningHour model, final UUID restaurantUuid);
 
-  RestaurantOpeningHours update(UUID uuid, RestaurantOpeningHours model);
+  RestaurantOpeningHour update(UUID uuid, RestaurantOpeningHour model);
 
-  Optional<RestaurantOpeningHours> findByUuid(UUID uuid);
+  Optional<RestaurantOpeningHour> findByUuid(UUID uuid);
 
   void delete(UUID uuid);
 }

@@ -15,8 +15,8 @@ import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsIm
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
 import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 
@@ -58,16 +58,16 @@ public class UpdateRestaurantItemsUseCase {
     return mapper.toOutput(modelUpdated, images);
   }
 
-  private List<RestaurantItemsImages> syncImages(final RestaurantItems restaurantItems,
+  private List<RestaurantItemImage> syncImages(final RestaurantItem restaurantItem,
       final RestaurantItemsInput input) {
-    final var currentByUuid = restaurantItems.getImages()
+    final var currentByUuid = restaurantItem.getImages()
         .stream()
         .filter(img -> img.getUuid() != null)
-        .collect(Collectors.toMap(RestaurantItemsImages::getUuid, Function.identity(), (a, b) -> a));
+        .collect(Collectors.toMap(RestaurantItemImage::getUuid, Function.identity(), (a, b) -> a));
 
     final var incomingUuids = new HashSet<UUID>();
 
-    final var persistedImages = new ArrayList<RestaurantItemsImages>();
+    final var persistedImages = new ArrayList<RestaurantItemImage>();
 
     for (var image : input.getImages()) {
       final var model = restaurantItemsImagesMapper.toDomain(image);
@@ -89,11 +89,11 @@ public class UpdateRestaurantItemsUseCase {
           persistedImages.add(current);
         }
       } else {
-        persistedImages.add(restaurantItemsImagesGateway.save(restaurantItems.getUuid(), model));
+        persistedImages.add(restaurantItemsImagesGateway.save(restaurantItem.getUuid(), model));
       }
     }
 
-    for (var current : restaurantItems.getImages()) {
+    for (var current : restaurantItem.getImages()) {
       final var currentUuid = current.getUuid();
       if (currentUuid != null && !incomingUuids.contains(currentUuid)) {
         restaurantItemsImagesGateway.delete(currentUuid);

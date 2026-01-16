@@ -9,16 +9,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class UsersRestaurantTest {
+class UserRestaurantTest {
 
   @Test
   @DisplayName("Deve criar UsersRestaurant com UUID explícito e dados válidos")
   void shouldCreateUsersRestaurantWithExplicitUuid() {
     final var uuid = UUID.randomUUID();
-    final Users user = Mockito.mock(Users.class);
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final User user = Mockito.mock(User.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var usersRestaurant = new UsersRestaurant(uuid, user, restaurant);
+    final var usersRestaurant = new UserRestaurant(uuid, user, restaurant);
 
     Assertions.assertEquals(uuid, usersRestaurant.getUuid());
     Assertions.assertEquals(user, usersRestaurant.getUser());
@@ -28,10 +28,10 @@ class UsersRestaurantTest {
   @Test
   @DisplayName("Deve criar UsersRestaurant sem UUID explícito e gerar UUID automaticamente")
   void shouldCreateUsersRestaurantWithoutExplicitUuid() {
-    final Users user = Mockito.mock(Users.class);
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final User user = Mockito.mock(User.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final var usersRestaurant = new UsersRestaurant(user, restaurant);
+    final var usersRestaurant = new UserRestaurant(user, restaurant);
 
     Assertions.assertNotNull(usersRestaurant.getUuid());
     Assertions.assertEquals(user, usersRestaurant.getUser());
@@ -41,11 +41,11 @@ class UsersRestaurantTest {
   @Test
   @DisplayName("Não deve criar UsersRestaurant sem User e deve lançar BadRequestException")
   void shouldNotCreateUsersRestaurantWithoutUserAndThrowBadRequestException() {
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new UsersRestaurant(null, restaurant)
+        () -> new UserRestaurant(null, restaurant)
     );
 
     Assertions.assertEquals("User is required", exception.getMessage());
@@ -54,11 +54,11 @@ class UsersRestaurantTest {
   @Test
   @DisplayName("Não deve criar UsersRestaurant sem Restaurant e deve lançar BadRequestException")
   void shouldNotCreateUsersRestaurantWithoutRestaurantAndThrowBadRequestException() {
-    final Users user = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new UsersRestaurant(user, null)
+        () -> new UserRestaurant(user, null)
     );
 
     Assertions.assertEquals("Restaurant is required", exception.getMessage());

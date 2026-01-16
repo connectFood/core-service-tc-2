@@ -2,9 +2,8 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
-import com.connectfood.infrastructure.persistence.mappers.UsersTypeInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +23,7 @@ class UsersTypeInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null ao converter entity null para domínio")
   void shouldReturnNullWhenToDomainReceivesNull() {
-    final UsersType result = mapper.toDomain(null);
+    final UserType result = mapper.toDomain(null);
     Assertions.assertNull(result);
   }
 
@@ -38,7 +37,7 @@ class UsersTypeInfraMapperTest {
     entity.setName("ADMIN");
     entity.setDescription("Administrator role");
 
-    final UsersType result = mapper.toDomain(entity);
+    final UserType result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -49,7 +48,7 @@ class UsersTypeInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null ao converter model null para entity")
   void shouldReturnNullWhenToEntityReceivesNull() {
-    final UsersTypeEntity result = mapper.toEntity((UsersType) null);
+    final UsersTypeEntity result = mapper.toEntity((UserType) null);
     Assertions.assertNull(result);
   }
 
@@ -58,7 +57,7 @@ class UsersTypeInfraMapperTest {
   void shouldConvertModelToEntityCorrectly() {
     final var uuid = UUID.randomUUID();
 
-    final var model = new UsersType(uuid, "OWNER", "Owner role");
+    final var model = new UserType(uuid, "OWNER", "Owner role");
 
     final UsersTypeEntity result = mapper.toEntity(model);
 
@@ -78,7 +77,7 @@ class UsersTypeInfraMapperTest {
     entity.setName("OLD_NAME");
     entity.setDescription("Old description");
 
-    final var model = new UsersType(UUID.randomUUID(), "NEW_NAME", "New description");
+    final var model = new UserType(UUID.randomUUID(), "NEW_NAME", "New description");
 
     final UsersTypeEntity result = mapper.toEntity(model, entity);
 

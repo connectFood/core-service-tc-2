@@ -2,7 +2,7 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.UsersAddress;
+import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersAddressEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
@@ -20,12 +20,12 @@ public class UsersAddressInfraMapper {
     this.addressMapper = addressMapper;
   }
 
-  public UsersAddress toDomain(final UsersAddressEntity entity) {
+  public UserAddress toDomain(final UsersAddressEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    return new UsersAddress(
+    return new UserAddress(
         entity.getUuid(),
         usersMapper.toDomain(entity.getUsers()),
         addressMapper.toDomain(entity.getAddress())

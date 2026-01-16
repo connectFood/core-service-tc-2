@@ -7,9 +7,9 @@ import com.connectfood.core.application.restaurants.mapper.UsersRestaurantAppMap
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersRestaurant;
+import com.connectfood.core.domain.model.Restaurant;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserRestaurant;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
 import com.connectfood.core.domain.repository.UsersGateway;
 import com.connectfood.core.domain.repository.UsersRestaurantGateway;
@@ -72,9 +72,9 @@ class CreateUsersRestaurantUseCaseTest {
     final var usersUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     Mockito.when(usersGateway.findByUuid(usersUuid))
-        .thenReturn(Optional.of(users));
+        .thenReturn(Optional.of(user));
 
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
@@ -101,26 +101,26 @@ class CreateUsersRestaurantUseCaseTest {
     final var usersUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     Mockito.when(usersGateway.findByUuid(usersUuid))
-        .thenReturn(Optional.of(users));
+        .thenReturn(Optional.of(user));
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurants));
+        .thenReturn(Optional.of(restaurant));
 
-    final UsersRestaurant usersRestaurantDomain = Mockito.mock(UsersRestaurant.class);
-    Mockito.when(mapper.toDomain(users, restaurants))
-        .thenReturn(usersRestaurantDomain);
+    final UserRestaurant userRestaurantDomain = Mockito.mock(UserRestaurant.class);
+    Mockito.when(mapper.toDomain(user, restaurant))
+        .thenReturn(userRestaurantDomain);
 
-    final UsersRestaurant savedUsersRestaurant = Mockito.mock(UsersRestaurant.class);
-    Mockito.when(savedUsersRestaurant.getUser())
-        .thenReturn(users);
-    Mockito.when(repository.save(usersRestaurantDomain))
-        .thenReturn(savedUsersRestaurant);
+    final UserRestaurant savedUserRestaurant = Mockito.mock(UserRestaurant.class);
+    Mockito.when(savedUserRestaurant.getUser())
+        .thenReturn(user);
+    Mockito.when(repository.save(userRestaurantDomain))
+        .thenReturn(savedUserRestaurant);
 
     final UsersOutput usersOutput = Mockito.mock(UsersOutput.class);
-    Mockito.when(usersMapper.toOutput(users))
+    Mockito.when(usersMapper.toOutput(user))
         .thenReturn(usersOutput);
 
     final var result = useCase.execute(usersUuid, restaurantUuid);
@@ -133,11 +133,11 @@ class CreateUsersRestaurantUseCaseTest {
     Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(users, restaurants);
+        .toDomain(user, restaurant);
     Mockito.verify(repository, Mockito.times(1))
-        .save(usersRestaurantDomain);
+        .save(userRestaurantDomain);
     Mockito.verify(usersMapper, Mockito.times(1))
-        .toOutput(users);
+        .toOutput(user);
 
     Mockito.verifyNoMoreInteractions(
         usersGateway,

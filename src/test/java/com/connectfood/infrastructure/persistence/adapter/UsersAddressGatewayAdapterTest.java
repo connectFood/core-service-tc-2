@@ -5,9 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersAddress;
-import com.connectfood.infrastructure.persistence.adapter.UsersAddressGatewayAdapter;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersAddressEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
@@ -50,20 +49,20 @@ class UsersAddressGatewayAdapterTest {
     final var addressUuid = UUID.randomUUID();
     final var usersAddressUuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
-    Mockito.when(users.getUuid())
+    Mockito.when(user.getUuid())
         .thenReturn(usersUuid);
     Mockito.when(address.getUuid())
         .thenReturn(addressUuid);
 
-    final UsersAddress usersAddress = Mockito.mock(UsersAddress.class);
-    Mockito.when(usersAddress.getUuid())
+    final UserAddress userAddress = Mockito.mock(UserAddress.class);
+    Mockito.when(userAddress.getUuid())
         .thenReturn(usersAddressUuid);
-    Mockito.when(usersAddress.getUsers())
-        .thenReturn(users);
-    Mockito.when(usersAddress.getAddress())
+    Mockito.when(userAddress.getUser())
+        .thenReturn(user);
+    Mockito.when(userAddress.getAddress())
         .thenReturn(address);
 
     final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
@@ -82,11 +81,11 @@ class UsersAddressGatewayAdapterTest {
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
 
-    final UsersAddress mappedDomain = Mockito.mock(UsersAddress.class);
+    final UserAddress mappedDomain = Mockito.mock(UserAddress.class);
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(mappedDomain);
 
-    final var result = adapter.save(usersAddress);
+    final var result = adapter.save(userAddress);
 
     Assertions.assertSame(mappedDomain, result);
 
@@ -108,18 +107,18 @@ class UsersAddressGatewayAdapterTest {
   void saveShouldThrowWhenUsersNotFound() {
     final var usersUuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
-    Mockito.when(users.getUuid())
+    final User user = Mockito.mock(User.class);
+    Mockito.when(user.getUuid())
         .thenReturn(usersUuid);
 
-    final UsersAddress usersAddress = Mockito.mock(UsersAddress.class);
-    Mockito.when(usersAddress.getUsers())
-        .thenReturn(users);
+    final UserAddress userAddress = Mockito.mock(UserAddress.class);
+    Mockito.when(userAddress.getUser())
+        .thenReturn(user);
 
     Mockito.when(usersRepository.findByUuid(usersUuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(usersAddress));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(userAddress));
 
     Mockito.verify(usersRepository, Mockito.times(1))
         .findByUuid(usersUuid);
@@ -133,18 +132,18 @@ class UsersAddressGatewayAdapterTest {
     final var usersUuid = UUID.randomUUID();
     final var addressUuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
-    Mockito.when(users.getUuid())
+    Mockito.when(user.getUuid())
         .thenReturn(usersUuid);
     Mockito.when(address.getUuid())
         .thenReturn(addressUuid);
 
-    final UsersAddress usersAddress = Mockito.mock(UsersAddress.class);
-    Mockito.when(usersAddress.getUsers())
-        .thenReturn(users);
-    Mockito.when(usersAddress.getAddress())
+    final UserAddress userAddress = Mockito.mock(UserAddress.class);
+    Mockito.when(userAddress.getUser())
+        .thenReturn(user);
+    Mockito.when(userAddress.getAddress())
         .thenReturn(address);
 
     final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
@@ -154,7 +153,7 @@ class UsersAddressGatewayAdapterTest {
     Mockito.when(addressRepository.findByUuid(addressUuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(usersAddress));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(userAddress));
 
     Mockito.verify(usersRepository, Mockito.times(1))
         .findByUuid(usersUuid);
@@ -189,7 +188,7 @@ class UsersAddressGatewayAdapterTest {
     final var usersUuid = UUID.randomUUID();
 
     final UsersAddressEntity entity = Mockito.mock(UsersAddressEntity.class);
-    final UsersAddress mappedDomain = Mockito.mock(UsersAddress.class);
+    final UserAddress mappedDomain = Mockito.mock(UserAddress.class);
 
     Mockito.when(repository.findByUsersUuid(usersUuid))
         .thenReturn(Optional.of(entity));

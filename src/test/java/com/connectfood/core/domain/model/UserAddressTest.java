@@ -10,32 +10,32 @@ import org.junit.jupiter.api.Test;
 
 import org.mockito.Mockito;
 
-class UsersAddressTest {
+class UserAddressTest {
 
   @Test
   @DisplayName("Deve criar um vínculo de endereço de usuário com UUID explícito e dados válidos")
   void shouldCreateUsersAddressWithExplicitUuid() {
     final var uuid = UUID.randomUUID();
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
-    final var usersAddress = new UsersAddress(uuid, users, address);
+    final var usersAddress = new UserAddress(uuid, user, address);
 
     Assertions.assertEquals(uuid, usersAddress.getUuid());
-    Assertions.assertEquals(users, usersAddress.getUsers());
+    Assertions.assertEquals(user, usersAddress.getUser());
     Assertions.assertEquals(address, usersAddress.getAddress());
   }
 
   @Test
   @DisplayName("Deve criar um vínculo de endereço de usuário sem UUID explícito e dados válidos")
   void shouldCreateUsersAddressWithoutExplicitUuid() {
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
-    final var usersAddress = new UsersAddress(users, address);
+    final var usersAddress = new UserAddress(user, address);
 
     Assertions.assertNotNull(usersAddress.getUuid());
-    Assertions.assertEquals(users, usersAddress.getUsers());
+    Assertions.assertEquals(user, usersAddress.getUser());
     Assertions.assertEquals(address, usersAddress.getAddress());
   }
 
@@ -46,7 +46,7 @@ class UsersAddressTest {
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new UsersAddress(UUID.randomUUID(), null, address)
+        () -> new UserAddress(UUID.randomUUID(), null, address)
     );
 
     Assertions.assertEquals("Users is required", exception.getMessage());
@@ -55,11 +55,11 @@ class UsersAddressTest {
   @Test
   @DisplayName("Não deve criar um vínculo de endereço de usuário sem address e lançar BadRequestException")
   void shouldNotCreateUsersAddressWithoutAddressAndThrowBadRequestException() {
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new UsersAddress(UUID.randomUUID(), users, null)
+        () -> new UserAddress(UUID.randomUUID(), user, null)
     );
 
     Assertions.assertEquals("Address is required", exception.getMessage());

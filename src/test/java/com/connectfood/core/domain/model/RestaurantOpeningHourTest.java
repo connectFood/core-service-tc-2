@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class RestaurantOpeningHoursTest {
+class RestaurantOpeningHourTest {
 
   @Test
   @DisplayName("Deve criar um horário de funcionamento com UUID explícito e dados válidos")
@@ -20,7 +20,7 @@ class RestaurantOpeningHoursTest {
     final var startTime = LocalTime.of(9, 0);
     final var endTime = LocalTime.of(18, 0);
 
-    final var openingHours = new RestaurantOpeningHours(uuid, dayWeek, startTime, endTime);
+    final var openingHours = new RestaurantOpeningHour(uuid, dayWeek, startTime, endTime);
 
     Assertions.assertEquals(uuid, openingHours.getUuid());
     Assertions.assertEquals(dayWeek, openingHours.getDayWeek());
@@ -35,7 +35,7 @@ class RestaurantOpeningHoursTest {
     final var startTime = LocalTime.of(9, 0);
     final var endTime = LocalTime.of(18, 0);
 
-    final var openingHours = new RestaurantOpeningHours(dayWeek, startTime, endTime);
+    final var openingHours = new RestaurantOpeningHour(dayWeek, startTime, endTime);
 
     Assertions.assertNotNull(openingHours.getUuid());
     Assertions.assertEquals(dayWeek, openingHours.getDayWeek());
@@ -48,7 +48,7 @@ class RestaurantOpeningHoursTest {
   void shouldNotCreateRestaurantOpeningHoursWithoutDayWeekAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantOpeningHours(
+        () -> new RestaurantOpeningHour(
             UUID.randomUUID(),
             null,
             LocalTime.of(9, 0),
@@ -64,7 +64,7 @@ class RestaurantOpeningHoursTest {
   void shouldNotCreateRestaurantOpeningHoursWithoutStartTimeAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantOpeningHours(
+        () -> new RestaurantOpeningHour(
             UUID.randomUUID(),
             DayOfWeek.MONDAY,
             null,
@@ -80,7 +80,7 @@ class RestaurantOpeningHoursTest {
   void shouldNotCreateRestaurantOpeningHoursWithoutEndTimeAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantOpeningHours(
+        () -> new RestaurantOpeningHour(
             UUID.randomUUID(),
             DayOfWeek.MONDAY,
             LocalTime.of(9, 0),

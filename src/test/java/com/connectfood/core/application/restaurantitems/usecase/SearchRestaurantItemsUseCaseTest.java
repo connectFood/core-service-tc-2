@@ -8,8 +8,8 @@ import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
@@ -47,12 +47,12 @@ class SearchRestaurantItemsUseCaseTest {
     final var sort = "id";
     final var direction = "ASC";
 
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurant));
 
-    final RestaurantItems model1 = Mockito.mock(RestaurantItems.class);
-    final RestaurantItems model2 = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model1 = Mockito.mock(RestaurantItem.class);
+    final RestaurantItem model2 = Mockito.mock(RestaurantItem.class);
 
     final var pageModel = new PageModel<>(List.of(model1, model2), 25L);
 
@@ -86,11 +86,11 @@ class SearchRestaurantItemsUseCaseTest {
     final var page = 0;
     final var size = 10;
 
-    final Restaurants restaurant = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurant));
 
-    final var pageModel = new PageModel<>(List.<RestaurantItems>of(), 0L);
+    final var pageModel = new PageModel<>(List.<RestaurantItem>of(), 0L);
 
     Mockito.when(repository.findAll(restaurantUuid, page, size, null, null))
         .thenReturn(pageModel);

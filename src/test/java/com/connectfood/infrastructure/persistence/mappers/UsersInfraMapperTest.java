@@ -2,12 +2,10 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
-import com.connectfood.infrastructure.persistence.mappers.UsersInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.UsersTypeInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +28,7 @@ class UsersInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
-    final Users result = mapper.toDomain(null);
+    final User result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(usersTypeMapper);
@@ -42,10 +40,10 @@ class UsersInfraMapperTest {
     final var uuid = UUID.randomUUID();
 
     final UsersTypeEntity usersTypeEntity = Mockito.mock(UsersTypeEntity.class);
-    final UsersType usersTypeDomain = Mockito.mock(UsersType.class);
+    final UserType userTypeDomain = Mockito.mock(UserType.class);
 
     Mockito.when(usersTypeMapper.toDomain(usersTypeEntity))
-        .thenReturn(usersTypeDomain);
+        .thenReturn(userTypeDomain);
 
     final UsersEntity entity = Mockito.mock(UsersEntity.class);
     Mockito.when(entity.getUuid())
@@ -59,14 +57,14 @@ class UsersInfraMapperTest {
     Mockito.when(entity.getUsersType())
         .thenReturn(usersTypeEntity);
 
-    final Users result = mapper.toDomain(entity);
+    final User result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals("Lucas Santos", result.getFullName());
     Assertions.assertEquals("lucas@email.com", result.getEmail());
     Assertions.assertEquals("hashed-password", result.getPasswordHash());
-    Assertions.assertSame(usersTypeDomain, result.getUsersType());
+    Assertions.assertSame(userTypeDomain, result.getUserType());
 
     Mockito.verify(usersTypeMapper, Mockito.times(1))
         .toDomain(usersTypeEntity);
@@ -110,7 +108,7 @@ class UsersInfraMapperTest {
   void toEntityShouldMapModelToEntityCorrectly() {
     final var uuid = UUID.randomUUID();
 
-    final Users model = Mockito.mock(Users.class);
+    final User model = Mockito.mock(User.class);
     Mockito.when(model.getUuid())
         .thenReturn(uuid);
     Mockito.when(model.getFullName())
@@ -146,7 +144,7 @@ class UsersInfraMapperTest {
     entity.setPassword("old-password");
     entity.setUsersType(Mockito.mock(UsersTypeEntity.class));
 
-    final Users model = Mockito.mock(Users.class);
+    final User model = Mockito.mock(User.class);
     Mockito.when(model.getFullName())
         .thenReturn("New Name");
     Mockito.when(model.getEmail())

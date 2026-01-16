@@ -6,9 +6,9 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsInput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.RestaurantItemImage;
+import com.connectfood.core.domain.model.Restaurant;
 
 import org.springframework.stereotype.Component;
 
@@ -24,36 +24,36 @@ public class RestaurantItemsAppMapper {
     this.restaurantItemsImagesMapper = restaurantItemsImagesMapper;
   }
 
-  public RestaurantItems toDomain(final RestaurantItemsInput input, final Restaurants restaurants) {
-    if (input == null || restaurants == null) {
+  public RestaurantItem toDomain(final RestaurantItemsInput input, final Restaurant restaurant) {
+    if (input == null || restaurant == null) {
       return null;
     }
 
-    return new RestaurantItems(
+    return new RestaurantItem(
         input.getName(),
         input.getDescription(),
         input.getValue(),
         input.getRequestType(),
-        restaurants
+        restaurant
     );
   }
 
-  public RestaurantItems toDomain(final UUID uuid, final RestaurantItemsInput input, final Restaurants restaurants) {
-    if (input == null || restaurants == null) {
+  public RestaurantItem toDomain(final UUID uuid, final RestaurantItemsInput input, final Restaurant restaurant) {
+    if (input == null || restaurant == null) {
       return null;
     }
 
-    return new RestaurantItems(
+    return new RestaurantItem(
         uuid,
         input.getName(),
         input.getDescription(),
         input.getValue(),
         input.getRequestType(),
-        restaurants
+        restaurant
     );
   }
 
-  public RestaurantItemsOutput toOutput(final RestaurantItems model) {
+  public RestaurantItemsOutput toOutput(final RestaurantItem model) {
     if (model == null) {
       return null;
     }
@@ -72,7 +72,7 @@ public class RestaurantItemsAppMapper {
     );
   }
 
-  public RestaurantItemsOutput toOutput(final RestaurantItems model, final List<RestaurantItemsImages> images) {
+  public RestaurantItemsOutput toOutput(final RestaurantItem model, final List<RestaurantItemImage> images) {
     if (model == null) {
       return null;
     }

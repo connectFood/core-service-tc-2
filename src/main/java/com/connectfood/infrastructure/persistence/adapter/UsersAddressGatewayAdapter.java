@@ -3,7 +3,7 @@ package com.connectfood.infrastructure.persistence.adapter;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.UsersAddress;
+import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.core.domain.repository.UsersAddressGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaAddressRepository;
 import com.connectfood.infrastructure.persistence.jpa.JpaUsersAddressRepository;
@@ -31,21 +31,21 @@ public class UsersAddressGatewayAdapter implements UsersAddressGateway {
   }
 
   @Override
-  public UsersAddress save(final UsersAddress usersAddress) {
-    final var users = usersRepository.findByUuid(usersAddress.getUsers()
+  public UserAddress save(final UserAddress userAddress) {
+    final var users = usersRepository.findByUuid(userAddress.getUser()
             .getUuid())
         .orElseThrow();
-    final var address = addressRepository.findByUuid(usersAddress.getAddress()
+    final var address = addressRepository.findByUuid(userAddress.getAddress()
             .getUuid())
         .orElseThrow();
 
-    final var entity = repository.save(mapper.toEntity(usersAddress.getUuid(), users, address));
+    final var entity = repository.save(mapper.toEntity(userAddress.getUuid(), users, address));
 
     return mapper.toDomain(entity);
   }
 
   @Override
-  public Optional<UsersAddress> findByUsersUuid(final UUID usersUuid) {
+  public Optional<UserAddress> findByUsersUuid(final UUID usersUuid) {
     final var entity = repository.findByUsersUuid(usersUuid);
 
     return entity.map(mapper::toDomain);

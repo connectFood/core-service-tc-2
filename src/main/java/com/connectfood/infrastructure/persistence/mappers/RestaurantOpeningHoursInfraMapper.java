@@ -1,6 +1,6 @@
 package com.connectfood.infrastructure.persistence.mappers;
 
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 
@@ -12,12 +12,12 @@ public class RestaurantOpeningHoursInfraMapper {
   public RestaurantOpeningHoursInfraMapper() {
   }
 
-  public RestaurantOpeningHours toDomain(final RestaurantOpeningHoursEntity entity) {
+  public RestaurantOpeningHour toDomain(final RestaurantOpeningHoursEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    return new RestaurantOpeningHours(
+    return new RestaurantOpeningHour(
         entity.getUuid(),
         entity.getDayOfWeek(),
         entity.getStartTime(),
@@ -25,7 +25,7 @@ public class RestaurantOpeningHoursInfraMapper {
     );
   }
 
-  public RestaurantOpeningHoursEntity toEntity(final RestaurantOpeningHours model,
+  public RestaurantOpeningHoursEntity toEntity(final RestaurantOpeningHour model,
       final RestaurantsEntity restaurantsEntity) {
 
     if (model == null || restaurantsEntity == null) {
@@ -42,7 +42,7 @@ public class RestaurantOpeningHoursInfraMapper {
     return entity;
   }
 
-  public RestaurantOpeningHoursEntity toEntity(final RestaurantOpeningHours model,
+  public RestaurantOpeningHoursEntity toEntity(final RestaurantOpeningHour model,
       final RestaurantOpeningHoursEntity entity) {
     entity.setStartTime(model.getStartTime());
     entity.setEndTime(model.getEndTime());

@@ -8,8 +8,8 @@ import com.connectfood.core.application.users.dto.UsersInput;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 
 import org.springframework.stereotype.Component;
 
@@ -26,34 +26,34 @@ public class UsersAppMapper {
     this.addressMapper = addressMapper;
   }
 
-  public Users toDomain(final UsersInput input, final String passwordHash, final UsersType usersType) {
+  public User toDomain(final UsersInput input, final String passwordHash, final UserType userType) {
     if (input == null) {
       return null;
     }
 
-    return new Users(
+    return new User(
         input.getFullName(),
         input.getEmail(),
         passwordHash,
-        usersType
+        userType
     );
   }
 
-  public Users toDomain(final UUID uuid, final UsersInput input, final String passwordHash, final UsersType usersType) {
+  public User toDomain(final UUID uuid, final UsersInput input, final String passwordHash, final UserType userType) {
     if (input == null) {
       return null;
     }
 
-    return new Users(
+    return new User(
         uuid,
         input.getFullName(),
         input.getEmail(),
         passwordHash,
-        usersType
+        userType
     );
   }
 
-  public UsersOutput toOutput(final Users model) {
+  public UsersOutput toOutput(final User model) {
     if (model == null) {
       return null;
     }
@@ -62,11 +62,11 @@ public class UsersAppMapper {
         model.getUuid(),
         model.getFullName(),
         model.getEmail(),
-        model.getUsersType() != null ? usersTypeMapper.toOutput(model.getUsersType()) : null
+        model.getUserType() != null ? usersTypeMapper.toOutput(model.getUserType()) : null
     );
   }
 
-  public UsersOutput toOutput(final Users model, final AddressOutput addressOutput) {
+  public UsersOutput toOutput(final User model, final AddressOutput addressOutput) {
     if (model == null) {
       return null;
     }
@@ -75,12 +75,12 @@ public class UsersAppMapper {
         model.getUuid(),
         model.getFullName(),
         model.getEmail(),
-        model.getUsersType() != null ? usersTypeMapper.toOutput(model.getUsersType()) : null,
+        model.getUserType() != null ? usersTypeMapper.toOutput(model.getUserType()) : null,
         addressOutput
     );
   }
 
-  public UsersOutput toOutput(final Users model, final Address address) {
+  public UsersOutput toOutput(final User model, final Address address) {
     if (model == null || address == null) {
       return null;
     }
@@ -89,7 +89,7 @@ public class UsersAppMapper {
         model.getUuid(),
         model.getFullName(),
         model.getEmail(),
-        model.getUsersType() != null ? usersTypeMapper.toOutput(model.getUsersType()) : null,
+        model.getUserType() != null ? usersTypeMapper.toOutput(model.getUserType()) : null,
         addressMapper.toOutput(address)
     );
   }

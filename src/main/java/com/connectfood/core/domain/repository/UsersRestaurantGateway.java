@@ -1,8 +1,8 @@
 package com.connectfood.core.domain.repository;
 
-import com.connectfood.core.domain.model.UsersRestaurant;
+import com.connectfood.core.domain.model.UserRestaurant;
 
 public interface UsersRestaurantGateway {
 
-  UsersRestaurant save(UsersRestaurant usersRestaurant);
+  UserRestaurant save(UserRestaurant userRestaurant);
 }

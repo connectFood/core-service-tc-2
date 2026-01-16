@@ -6,7 +6,7 @@ import java.util.List;
 import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
@@ -40,8 +40,8 @@ class SearchRestaurantTypeUseCaseTest {
     final var sort = "name";
     final var direction = "ASC";
 
-    final var model1 = Mockito.mock(RestaurantsType.class);
-    final var model2 = Mockito.mock(RestaurantsType.class);
+    final var model1 = Mockito.mock(RestaurantType.class);
+    final var model2 = Mockito.mock(RestaurantType.class);
 
     final var out1 = Mockito.mock(RestaurantsTypeOutput.class);
     final var out2 = Mockito.mock(RestaurantsTypeOutput.class);
@@ -91,7 +91,7 @@ class SearchRestaurantTypeUseCaseTest {
     final var sort = "createdAt";
     final var direction = "DESC";
 
-    final var pageModel = new PageModel<>(Collections.<RestaurantsType>emptyList(), 0L);
+    final var pageModel = new PageModel<>(Collections.<RestaurantType>emptyList(), 0L);
 
     Mockito.when(repository.findAll(name, page, size, sort, direction))
         .thenReturn(pageModel);

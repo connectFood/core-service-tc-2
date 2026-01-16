@@ -1,7 +1,7 @@
 package com.connectfood.core.application.restaurants.mapper;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 
 import org.junit.jupiter.api.Assertions;
@@ -33,9 +33,9 @@ class RestaurantsAddressAppMapperTest {
   @Test
   @DisplayName("Deve retornar null quando address for null")
   void shouldReturnNullWhenAddressIsNull() {
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
-    final RestaurantsAddress result = mapper.toDomain(restaurants, null);
+    final RestaurantsAddress result = mapper.toDomain(restaurant, null);
 
     Assertions.assertNull(result);
   }
@@ -51,14 +51,14 @@ class RestaurantsAddressAppMapperTest {
   @Test
   @DisplayName("Deve criar RestaurantsAddress quando restaurants e address forem válidos")
   void shouldCreateRestaurantsAddressWhenValidData() {
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     final Address address = Mockito.mock(Address.class);
 
-    final RestaurantsAddress result = mapper.toDomain(restaurants, address);
+    final RestaurantsAddress result = mapper.toDomain(restaurant, address);
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.getUuid());
-    Assertions.assertEquals(restaurants, result.getRestaurants());
+    Assertions.assertEquals(restaurant, result.getRestaurant());
     Assertions.assertEquals(address, result.getAddress());
   }
 }

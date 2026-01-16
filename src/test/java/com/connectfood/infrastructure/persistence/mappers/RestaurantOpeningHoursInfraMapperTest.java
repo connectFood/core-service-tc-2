@@ -4,10 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +44,7 @@ class RestaurantOpeningHoursInfraMapperTest {
     entity.setStartTime(start);
     entity.setEndTime(end);
 
-    final RestaurantOpeningHours result = mapper.toDomain(entity);
+    final RestaurantOpeningHour result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -67,7 +66,7 @@ class RestaurantOpeningHoursInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando restaurantsEntity for null no toEntity")
   void toEntityShouldReturnNullWhenRestaurantsEntityIsNull() {
-    final var model = new RestaurantOpeningHours(
+    final var model = new RestaurantOpeningHour(
         UUID.randomUUID(),
         DayOfWeek.TUESDAY,
         LocalTime.of(9, 0),
@@ -87,7 +86,7 @@ class RestaurantOpeningHoursInfraMapperTest {
     final var start = LocalTime.of(8, 30);
     final var end = LocalTime.of(19, 0);
 
-    final var model = new RestaurantOpeningHours(uuid, day, start, end);
+    final var model = new RestaurantOpeningHour(uuid, day, start, end);
     final var restaurantsEntity = new RestaurantsEntity();
 
     final var result = mapper.toEntity(model, restaurantsEntity);
@@ -114,7 +113,7 @@ class RestaurantOpeningHoursInfraMapperTest {
     entity.setStartTime(LocalTime.of(7, 0));
     entity.setEndTime(LocalTime.of(12, 0));
 
-    final var model = new RestaurantOpeningHours(
+    final var model = new RestaurantOpeningHour(
         UUID.randomUUID(),
         DayOfWeek.FRIDAY,
         LocalTime.of(9, 0),

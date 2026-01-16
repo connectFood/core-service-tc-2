@@ -2,7 +2,7 @@ package com.connectfood.infrastructure.persistence.mappers;
 
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.UsersRestaurant;
+import com.connectfood.core.domain.model.UserRestaurant;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersRestaurantEntity;
@@ -21,12 +21,12 @@ public class UsersRestaurantInfraMapper {
     this.restaurantsMapper = restaurantsMapper;
   }
 
-  public UsersRestaurant toDomain(final UsersRestaurantEntity entity) {
+  public UserRestaurant toDomain(final UsersRestaurantEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    return new UsersRestaurant(
+    return new UserRestaurant(
         entity.getUuid(),
         usersMapper.toDomain(entity.getUsers()),
         restaurantsMapper.toDomain(entity.getRestaurants())

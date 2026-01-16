@@ -7,15 +7,15 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import lombok.Getter;
 
 @Getter
-public class UsersAddress {
+public class UserAddress {
 
   private final UUID uuid;
-  private final Users users;
+  private final User user;
   private final Address address;
 
-  public UsersAddress(final UUID uuid, final Users users, final Address address) {
+  public UserAddress(final UUID uuid, final User user, final Address address) {
 
-    if (users == null) {
+    if (user == null) {
       throw new BadRequestException("Users is required");
     }
 
@@ -24,11 +24,11 @@ public class UsersAddress {
     }
 
     this.uuid = uuid == null ? UUID.randomUUID() : uuid;
-    this.users = users;
+    this.user = user;
     this.address = address;
   }
 
-  public UsersAddress(final Users users, final Address address) {
-    this(null, users, address);
+  public UserAddress(final User user, final Address address) {
+    this(null, user, address);
   }
 }

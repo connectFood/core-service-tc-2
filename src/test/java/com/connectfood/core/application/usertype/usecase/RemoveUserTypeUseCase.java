@@ -1,7 +1,7 @@
 package com.connectfood.core.application.usertype.usecase;
 
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class RemoveUserTypeUseCaseTest {
   @DisplayName("Deve remover tipo de usuário com sucesso quando existir")
   void shouldRemoveUserTypeSuccessfully() {
     final var uuid = UUID.randomUUID();
-    final var usersType = new UsersType(uuid, "CLIENT", "Cliente");
+    final var usersType = new UserType(uuid, "CLIENT", "Cliente");
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(usersType));
 

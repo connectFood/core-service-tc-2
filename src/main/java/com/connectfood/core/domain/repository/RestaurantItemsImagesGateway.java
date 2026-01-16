@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.commons.PageModel;
 
 public interface RestaurantItemsImagesGateway {
 
-  RestaurantItemsImages save(UUID restaurantItemsUuid, RestaurantItemsImages restaurantItemsImages);
+  RestaurantItemImage save(UUID restaurantItemsUuid, RestaurantItemImage restaurantItemImage);
 
-  RestaurantItemsImages update(UUID uuid, RestaurantItemsImages restaurantItemsImages);
+  RestaurantItemImage update(UUID uuid, RestaurantItemImage restaurantItemImage);
 
-  Optional<RestaurantItemsImages> findByUuid(UUID uuid);
+  Optional<RestaurantItemImage> findByUuid(UUID uuid);
 
-  PageModel<List<RestaurantItemsImages>> findAll(UUID restaurantItemsUuid, Integer page, Integer size, String sort,
+  PageModel<List<RestaurantItemImage>> findAll(UUID restaurantItemsUuid, Integer page, Integer size, String sort,
       String direction);
 
   void delete(UUID uuid);

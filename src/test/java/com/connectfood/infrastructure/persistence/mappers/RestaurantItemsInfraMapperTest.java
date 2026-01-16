@@ -4,16 +4,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.RestaurantItemImage;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsImagesEntity;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsImageInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +53,7 @@ class RestaurantItemsInfraMapperTest {
     final var value = BigDecimal.valueOf(9.90);
 
     final RestaurantsEntity restaurantEntity = Mockito.mock(RestaurantsEntity.class);
-    final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
 
     Mockito.when(restaurantsMapper.toDomain(restaurantEntity))
         .thenReturn(restaurantDomain);
@@ -77,7 +74,7 @@ class RestaurantItemsInfraMapperTest {
     Mockito.when(entity.getImages())
         .thenReturn(null);
 
-    final RestaurantItems result = mapper.toDomain(entity);
+    final RestaurantItem result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -154,8 +151,8 @@ class RestaurantItemsInfraMapperTest {
     Mockito.when(entity.getImages())
         .thenReturn(List.of(imageEntity1, imageEntity2));
 
-    final RestaurantItemsImages img1 = Mockito.mock(RestaurantItemsImages.class);
-    final RestaurantItemsImages img2 = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage img1 = Mockito.mock(RestaurantItemImage.class);
+    final RestaurantItemImage img2 = Mockito.mock(RestaurantItemImage.class);
 
     Mockito.when(restaurantItemsImageMapper.toDomain(imageEntity1))
         .thenReturn(img1);
@@ -189,7 +186,7 @@ class RestaurantItemsInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando restaurantsEntity for null")
   void toEntityWithRestaurantsEntityShouldReturnNullWhenRestaurantsEntityIsNull() {
-    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
 
     final var result = mapper.toEntity(model, (RestaurantsEntity) null);
 
@@ -206,8 +203,8 @@ class RestaurantItemsInfraMapperTest {
     final var value = BigDecimal.valueOf(9.90);
     final var requestType = RestaurantItemServiceType.DELIVERY;
 
-    final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
-    final var model = new RestaurantItems(uuid, name, description, value, requestType, restaurantDomain);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
+    final var model = new RestaurantItem(uuid, name, description, value, requestType, restaurantDomain);
 
     final var restaurantsEntity = new RestaurantsEntity();
 
@@ -250,7 +247,7 @@ class RestaurantItemsInfraMapperTest {
     Mockito.when(entity.getRequestType())
         .thenReturn("DELIVERY");
 
-    final RestaurantItems result = mapper.toDomainAll(entity);
+    final RestaurantItem result = mapper.toDomainAll(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -269,7 +266,7 @@ class RestaurantItemsInfraMapperTest {
   void toEntityWithExistingEntityShouldUpdateFields() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
     Mockito.when(model.getName())
         .thenReturn("NEW_NAME");
     Mockito.when(model.getDescription())

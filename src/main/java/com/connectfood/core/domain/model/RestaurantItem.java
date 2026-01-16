@@ -10,19 +10,19 @@ import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
 import lombok.Getter;
 
 @Getter
-public class RestaurantItems {
+public class RestaurantItem {
 
   private final UUID uuid;
   private final String name;
   private final String description;
   private final BigDecimal value;
   private final RestaurantItemServiceType requestType;
-  private final Restaurants restaurant;
-  private final List<RestaurantItemsImages> images;
+  private final Restaurant restaurant;
+  private final List<RestaurantItemImage> images;
 
-  public RestaurantItems(final UUID uuid, final String name, final String description, final BigDecimal value,
-      final RestaurantItemServiceType requestType, final Restaurants restaurant,
-      final List<RestaurantItemsImages> images) {
+  public RestaurantItem(final UUID uuid, final String name, final String description, final BigDecimal value,
+                        final RestaurantItemServiceType requestType, final Restaurant restaurant,
+                        final List<RestaurantItemImage> images) {
 
     if (name == null || name.isBlank()) {
       throw new BadRequestException("Name is required");
@@ -45,18 +45,18 @@ public class RestaurantItems {
     this.images = images;
   }
 
-  public RestaurantItems(final UUID uuid, final String name, final String description, final BigDecimal value,
-      final RestaurantItemServiceType requestType, final Restaurants restaurant) {
+  public RestaurantItem(final UUID uuid, final String name, final String description, final BigDecimal value,
+                        final RestaurantItemServiceType requestType, final Restaurant restaurant) {
     this(uuid, name, description, value, requestType, restaurant, null);
   }
 
-  public RestaurantItems(final String name, final String description, final BigDecimal value,
-      final RestaurantItemServiceType requestType, final Restaurants restaurant) {
+  public RestaurantItem(final String name, final String description, final BigDecimal value,
+                        final RestaurantItemServiceType requestType, final Restaurant restaurant) {
     this(null, name, description, value, requestType, restaurant, null);
   }
 
-  public RestaurantItems(final UUID uuid, final String name, final String description, final BigDecimal value,
-      final RestaurantItemServiceType requestType) {
+  public RestaurantItem(final UUID uuid, final String name, final String description, final BigDecimal value,
+                        final RestaurantItemServiceType requestType) {
     this(uuid, name, description, value, requestType, null, null);
   }
 }

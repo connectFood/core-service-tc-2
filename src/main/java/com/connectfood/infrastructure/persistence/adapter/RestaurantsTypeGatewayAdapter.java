@@ -1,6 +1,6 @@
 package com.connectfood.infrastructure.persistence.adapter;
 
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
@@ -33,14 +33,14 @@ public class RestaurantsTypeGatewayAdapter implements RestaurantsTypeGateway {
   }
 
   @Override
-  public RestaurantsType save(RestaurantsType restaurantType) {
+  public RestaurantType save(RestaurantType restaurantType) {
     final var entity = repository.save(mapper.toEntity(restaurantType));
 
     return mapper.toDomain(entity);
   }
 
   @Override
-  public RestaurantsType update(UUID uuid, RestaurantsType restaurantType) {
+  public RestaurantType update(UUID uuid, RestaurantType restaurantType) {
     var entity = repository.findByUuid(uuid).orElseThrow();
 
     entity = repository.save(mapper.toEntity(restaurantType, entity));
@@ -49,14 +49,14 @@ public class RestaurantsTypeGatewayAdapter implements RestaurantsTypeGateway {
   }
 
   @Override
-  public Optional<RestaurantsType> findById(final UUID uuid) {
+  public Optional<RestaurantType> findById(final UUID uuid) {
     final var entity = repository.findByUuid(uuid);
 
     return entity.map(mapper::toDomain);
   }
 
   @Override
-  public PageModel<List<RestaurantsType>> findAll(final String name, final Integer page, final Integer size,
+  public PageModel<List<RestaurantType>> findAll(final String name, final Integer page, final Integer size,
       final String sort, final String direction) {
     final var pageable = PageRequest.of(page, size,
         Sort.by(direction == null ? Sort.Direction.ASC :

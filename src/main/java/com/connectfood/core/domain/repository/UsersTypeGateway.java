@@ -4,18 +4,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
 
 public interface UsersTypeGateway {
 
-  UsersType save(UsersType usersType);
+  UserType save(UserType userType);
 
-  UsersType update(UUID uuid, UsersType usersType);
+  UserType update(UUID uuid, UserType userType);
 
-  Optional<UsersType> findByUuid(UUID uuid);
+  Optional<UserType> findByUuid(UUID uuid);
 
-  PageModel<List<UsersType>> findAll(String name, Integer page, Integer size, String sort, String direction);
+  PageModel<List<UserType>> findAll(String name, Integer page, Integer size, String sort, String direction);
 
   void delete(UUID uuid);
+
+  boolean existsByName(String name);
 }

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class RestaurantOpeningHoursAppMapperTest {
         LocalTime.of(18, 0)
     );
 
-    final RestaurantOpeningHours result = mapper.toDomain(input);
+    final RestaurantOpeningHour result = mapper.toDomain(input);
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.getUuid());
@@ -66,7 +66,7 @@ class RestaurantOpeningHoursAppMapperTest {
         LocalTime.of(22, 0)
     );
 
-    final RestaurantOpeningHours result = mapper.toDomain(uuid, input);
+    final RestaurantOpeningHour result = mapper.toDomain(uuid, input);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
@@ -87,7 +87,7 @@ class RestaurantOpeningHoursAppMapperTest {
   void toOutputShouldMapModelToOutputCorrectly() {
     final var uuid = UUID.randomUUID();
 
-    final var model = new RestaurantOpeningHours(
+    final var model = new RestaurantOpeningHour(
         uuid,
         DayOfWeek.TUESDAY,
         LocalTime.of(8, 0),

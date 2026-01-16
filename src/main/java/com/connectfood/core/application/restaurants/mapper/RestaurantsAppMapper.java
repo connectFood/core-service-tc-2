@@ -11,8 +11,8 @@ import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.Restaurant;
+import com.connectfood.core.domain.model.RestaurantType;
 
 import org.springframework.stereotype.Component;
 
@@ -35,30 +35,30 @@ public class RestaurantsAppMapper {
     this.usersMapper = usersMapper;
   }
 
-  public Restaurants toDomain(final RestaurantsInput input, final RestaurantsType restaurantsType) {
+  public Restaurant toDomain(final RestaurantsInput input, final RestaurantType restaurantType) {
     if (input == null) {
       return null;
     }
 
-    return new Restaurants(
+    return new Restaurant(
         input.getName(),
-        restaurantsType
+        restaurantType
     );
   }
 
-  public Restaurants toDomain(final UUID uuid, final RestaurantsInput input, final RestaurantsType restaurantsType) {
+  public Restaurant toDomain(final UUID uuid, final RestaurantsInput input, final RestaurantType restaurantType) {
     if (input == null) {
       return null;
     }
 
-    return new Restaurants(
+    return new Restaurant(
         uuid,
         input.getName(),
-        restaurantsType
+        restaurantType
     );
   }
 
-  public RestaurantsOutput toOutputAll(final Restaurants model) {
+  public RestaurantsOutput toOutputAll(final Restaurant model) {
     if (model == null) {
       return null;
     }
@@ -66,11 +66,11 @@ public class RestaurantsAppMapper {
     return new RestaurantsOutput(
         model.getUuid(),
         model.getName(),
-        model.getRestaurantsType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantsType()) : null
+        model.getRestaurantType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantType()) : null
     );
   }
 
-  public RestaurantsOutput toOutput(final Restaurants model) {
+  public RestaurantsOutput toOutput(final Restaurant model) {
     if (model == null) {
       return null;
     }
@@ -78,18 +78,18 @@ public class RestaurantsAppMapper {
     return new RestaurantsOutput(
         model.getUuid(),
         model.getName(),
-        model.getRestaurantsType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantsType()) : null,
+        model.getRestaurantType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantType()) : null,
         model.getOpeningHours()
             .stream()
             .map(restaurantOpeningHoursMapper::toOutput)
             .toList(),
         model.getAddress() != null ? addressMapper.toOutput(model.getAddress()) : null,
-        model.getUsers() != null ? usersMapper.toOutput(model.getUsers()) : null
+        model.getUser() != null ? usersMapper.toOutput(model.getUser()) : null
     );
   }
 
-  public RestaurantsOutput toOutput(final Restaurants model, final List<RestaurantOpeningHoursOutput> openingHours,
-      final AddressOutput address, final UsersOutput users) {
+  public RestaurantsOutput toOutput(final Restaurant model, final List<RestaurantOpeningHoursOutput> openingHours,
+                                    final AddressOutput address, final UsersOutput users) {
     if (model == null) {
       return null;
     }
@@ -97,7 +97,7 @@ public class RestaurantsAppMapper {
     return new RestaurantsOutput(
         model.getUuid(),
         model.getName(),
-        model.getRestaurantsType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantsType()) : null,
+        model.getRestaurantType() != null ? restaurantsTypeMapper.toOutput(model.getRestaurantType()) : null,
         openingHours,
         address,
         users

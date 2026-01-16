@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesInput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsImagesOutput;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 
 import org.springframework.stereotype.Component;
 
@@ -14,24 +14,24 @@ public class RestaurantItemsImagesAppMapper {
   public RestaurantItemsImagesAppMapper() {
   }
 
-  public RestaurantItemsImages toDomain(final RestaurantItemsImagesInput input) {
+  public RestaurantItemImage toDomain(final RestaurantItemsImagesInput input) {
     if (input == null) {
       return null;
     }
 
-    return new RestaurantItemsImages(
+    return new RestaurantItemImage(
         input.getName(),
         input.getDescription(),
         input.getPath()
     );
   }
 
-  public RestaurantItemsImages toDomain(final UUID uuid, final RestaurantItemsImagesInput input) {
+  public RestaurantItemImage toDomain(final UUID uuid, final RestaurantItemsImagesInput input) {
     if (input == null) {
       return null;
     }
 
-    return new RestaurantItemsImages(
+    return new RestaurantItemImage(
         uuid,
         input.getName(),
         input.getDescription(),
@@ -39,7 +39,7 @@ public class RestaurantItemsImagesAppMapper {
     );
   }
 
-  public RestaurantItemsImagesOutput toOutput(final RestaurantItemsImages model) {
+  public RestaurantItemsImagesOutput toOutput(final RestaurantItemImage model) {
     if (model == null) {
       return null;
     }

@@ -51,7 +51,7 @@ src/
      │    ├── mapper/
      │    └── usecase/
      │         ├── authentication/
-     │         └── users/
+     │         └── user/
      ├── domain/
      │    ├── exception/
      │    ├── factory/
@@ -90,7 +90,7 @@ src/
 ### Tabelas principais
 | Tabela | Descrição |
 |--------|------------|
-| `core.users` | Usuários do sistema (clientes e donos de restaurante) |
+| `core.user` | Usuários do sistema (clientes e donos de restaurante) |
 | `core.address` | Endereços vinculados aos usuários |
 
 **Scripts:**
@@ -163,12 +163,12 @@ docker rm -f connectfood-db
 **Endpoints principais:**
 | Método | Rota | Descrição |
 |---------|------|------------|
-| POST | `/v1/users` | Cria usuário |
-| GET | `/v1/users` | Lista usuários |
-| GET | `/v1/users/{uuid}` | Consulta usuário |
-| PUT | `/v1/users/{uuid}` | Atualiza dados |
-| PATCH | `/v1/users/{uuid}/password` | Altera senha |
-| DELETE | `/v1/users/{uuid}` | Remove usuário |
+| POST | `/v1/user` | Cria usuário |
+| GET | `/v1/user` | Lista usuários |
+| GET | `/v1/user/{uuid}` | Consulta usuário |
+| PUT | `/v1/user/{uuid}` | Atualiza dados |
+| PATCH | `/v1/user/{uuid}/password` | Altera senha |
+| DELETE | `/v1/user/{uuid}` | Remove usuário |
 | POST | `/v1/auth/login` | Autentica e gera token JWT |
 
 **Padrão de erro:** RFC 7807 — `application/problem+json`  

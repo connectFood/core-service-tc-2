@@ -11,7 +11,7 @@ import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsIm
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
+import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
 import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
@@ -55,7 +55,7 @@ public class CreateRestaurantItemsUseCase {
     var model = repository.save(mapper.toDomain(input, restaurants));
 
     final List<RestaurantItemsImagesInput> imagesInput = input.getImages() == null ? List.of() : input.getImages();
-    List<RestaurantItemsImages> images = new ArrayList<>();
+    List<RestaurantItemImage> images = new ArrayList<>();
 
     for (var image : imagesInput) {
       images.add(restaurantItemsImagesGateway.save(model.getUuid(), restaurantItemsImagesMapper.toDomain(image)));

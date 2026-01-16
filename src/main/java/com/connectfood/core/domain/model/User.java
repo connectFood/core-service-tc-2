@@ -7,16 +7,16 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import lombok.Getter;
 
 @Getter
-public class Users {
+public class User {
 
   private final UUID uuid;
   private final String fullName;
   private final String email;
   private final String passwordHash;
-  private final UsersType usersType;
+  private final UserType userType;
 
-  public Users(final UUID uuid, final String fullName, final String email, final String passwordHash,
-      final UsersType usersType) {
+  public User(final UUID uuid, final String fullName, final String email, final String passwordHash,
+              final UserType userType) {
 
     if (fullName == null || fullName.isBlank()) {
       throw new BadRequestException("Full name is required");
@@ -30,7 +30,7 @@ public class Users {
       throw new BadRequestException("Password hash is required");
     }
 
-    if (usersType == null) {
+    if (userType == null) {
       throw new BadRequestException("Users type is required");
     }
 
@@ -38,10 +38,10 @@ public class Users {
     this.fullName = fullName;
     this.email = email;
     this.passwordHash = passwordHash;
-    this.usersType = usersType;
+    this.userType = userType;
   }
 
-  public Users(final String fullName, final String email, final String passwordHash, final UsersType usersType) {
-    this(null, fullName, email, passwordHash, usersType);
+  public User(final String fullName, final String email, final String passwordHash, final UserType userType) {
+    this(null, fullName, email, passwordHash, userType);
   }
 }

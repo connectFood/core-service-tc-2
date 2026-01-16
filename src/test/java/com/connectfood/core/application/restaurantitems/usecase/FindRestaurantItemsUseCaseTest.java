@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantItems;
+import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +35,7 @@ class FindRestaurantItemsUseCaseTest {
   void shouldReturnOutputWhenItemExists() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantItems model = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(model));
 

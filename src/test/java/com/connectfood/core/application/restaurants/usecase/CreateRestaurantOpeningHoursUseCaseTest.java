@@ -7,7 +7,7 @@ import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOu
 import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHoursAppMapper;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
 
@@ -44,11 +44,11 @@ class CreateRestaurantOpeningHoursUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
     final RestaurantOpeningHoursInput input = Mockito.mock(RestaurantOpeningHoursInput.class);
 
-    final RestaurantOpeningHours domain = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour domain = Mockito.mock(RestaurantOpeningHour.class);
     Mockito.when(mapper.toDomain(input))
         .thenReturn(domain);
 
-    final RestaurantOpeningHours saved = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour saved = Mockito.mock(RestaurantOpeningHour.class);
     Mockito.when(repository.save(domain, restaurantUuid))
         .thenReturn(saved);
 

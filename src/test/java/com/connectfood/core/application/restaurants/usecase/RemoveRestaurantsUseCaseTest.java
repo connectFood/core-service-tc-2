@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
 
@@ -69,10 +69,10 @@ class RemoveRestaurantsUseCaseTest {
 
     final var uuid = UUID.randomUUID();
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
 
     Mockito.when(repository.findByUuid(uuid))
-        .thenReturn(Optional.of(restaurants));
+        .thenReturn(Optional.of(restaurant));
 
     Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, uuid));
 

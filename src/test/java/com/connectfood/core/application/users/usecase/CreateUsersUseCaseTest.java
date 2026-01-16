@@ -10,8 +10,8 @@ import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersGateway;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 import com.connectfood.core.domain.utils.PasswordGateway;
@@ -65,21 +65,21 @@ class CreateUsersUseCaseTest {
     Mockito.when(passwordGateway.encode("senha123"))
         .thenReturn("hashSenha");
 
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    final UserType userType = Mockito.mock(UserType.class);
     Mockito.when(usersTypeGateway.findByUuid(usersTypeUuid))
-        .thenReturn(Optional.of(usersType));
+        .thenReturn(Optional.of(userType));
 
-    final Users domainToSave = Mockito.mock(Users.class);
-    Mockito.when(mapper.toDomain(input, "hashSenha", usersType))
+    final User domainToSave = Mockito.mock(User.class);
+    Mockito.when(mapper.toDomain(input, "hashSenha", userType))
         .thenReturn(domainToSave);
 
-    final Users savedUsers = Mockito.mock(Users.class);
+    final User savedUser = Mockito.mock(User.class);
     final var savedUserUuid = UUID.randomUUID();
-    Mockito.when(savedUsers.getUuid())
+    Mockito.when(savedUser.getUuid())
         .thenReturn(savedUserUuid);
 
     Mockito.when(repository.save(domainToSave))
-        .thenReturn(savedUsers);
+        .thenReturn(savedUser);
 
     final AddressInput addressInput = Mockito.mock(AddressInput.class);
     Mockito.when(input.getAddress())
@@ -90,7 +90,7 @@ class CreateUsersUseCaseTest {
         .thenReturn(addressOutput);
 
     final UsersOutput expectedOutput = Mockito.mock(UsersOutput.class);
-    Mockito.when(mapper.toOutput(savedUsers, addressOutput))
+    Mockito.when(mapper.toOutput(savedUser, addressOutput))
         .thenReturn(expectedOutput);
 
     final var result = useCase.execute(input);
@@ -105,15 +105,15 @@ class CreateUsersUseCaseTest {
     Mockito.verify(usersTypeGateway, Mockito.times(1))
         .findByUuid(usersTypeUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(input, "hashSenha", usersType);
+        .toDomain(input, "hashSenha", userType);
     Mockito.verify(repository, Mockito.times(1))
         .save(domainToSave);
-    Mockito.verify(savedUsers, Mockito.times(1))
+    Mockito.verify(savedUser, Mockito.times(1))
         .getUuid();
     Mockito.verify(createUsersAddressUseCase, Mockito.times(1))
         .execute(savedUserUuid, addressInput);
     Mockito.verify(mapper, Mockito.times(1))
-        .toOutput(savedUsers, addressOutput);
+        .toOutput(savedUser, addressOutput);
 
     Mockito.verifyNoMoreInteractions(
         repository,
@@ -121,7 +121,7 @@ class CreateUsersUseCaseTest {
         usersTypeGateway,
         passwordGateway,
         createUsersAddressUseCase,
-        savedUsers
+        savedUser
     );
   }
 

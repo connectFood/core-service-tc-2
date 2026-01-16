@@ -7,7 +7,7 @@ import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
 import org.junit.jupiter.api.Assertions;
@@ -37,9 +37,9 @@ class UpdateRestaurantTypeUseCaseTest {
     final var uuid = UUID.randomUUID();
     final var input = Mockito.mock(RestaurantsTypeInput.class);
 
-    final RestaurantsType existing = Mockito.mock(RestaurantsType.class);
-    final RestaurantsType mappedDomain = Mockito.mock(RestaurantsType.class);
-    final RestaurantsType updated = Mockito.mock(RestaurantsType.class);
+    final RestaurantType existing = Mockito.mock(RestaurantType.class);
+    final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
+    final RestaurantType updated = Mockito.mock(RestaurantType.class);
     final RestaurantsTypeOutput output = Mockito.mock(RestaurantsTypeOutput.class);
 
     Mockito.when(repository.findById(uuid))

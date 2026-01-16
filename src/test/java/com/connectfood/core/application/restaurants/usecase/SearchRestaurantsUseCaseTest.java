@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
 
@@ -44,10 +44,10 @@ class SearchRestaurantsUseCaseTest {
     final String sort = "id";
     final String direction = "ASC";
 
-    final Restaurants restaurant1 = Mockito.mock(Restaurants.class);
-    final Restaurants restaurant2 = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant1 = Mockito.mock(Restaurant.class);
+    final Restaurant restaurant2 = Mockito.mock(Restaurant.class);
 
-    final PageModel<List<Restaurants>> model = new PageModel<>(List.of(restaurant1, restaurant2), 2L);
+    final PageModel<List<Restaurant>> model = new PageModel<>(List.of(restaurant1, restaurant2), 2L);
 
     Mockito.when(repository.findAll(name, restaurantsTypeUuid, street, city, state, page, size, sort, direction))
         .thenReturn(model);
@@ -104,7 +104,7 @@ class SearchRestaurantsUseCaseTest {
     final String sort = null;
     final String direction = null;
 
-    final PageModel<List<Restaurants>> model = new PageModel<>(List.of(), 0L);
+    final PageModel<List<Restaurant>> model = new PageModel<>(List.of(), 0L);
 
     Mockito.when(repository.findAll(name, restaurantsTypeUuid, street, city, state, page, size, sort, direction))
         .thenReturn(model);

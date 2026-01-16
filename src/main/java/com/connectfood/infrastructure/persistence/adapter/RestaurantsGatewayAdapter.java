@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
@@ -35,47 +35,47 @@ public class RestaurantsGatewayAdapter implements RestaurantsGateway {
   }
 
   @Override
-  public Restaurants save(final Restaurants restaurants) {
-    final var restaurantsType = restaurantsTypeRepository.findByUuid(restaurants.getRestaurantsType()
+  public Restaurant save(final Restaurant restaurant) {
+    final var restaurantsType = restaurantsTypeRepository.findByUuid(restaurant.getRestaurantType()
             .getUuid())
         .orElseThrow();
 
-    final var entity = repository.save(mapper.toEntity(restaurants, restaurantsType));
+    final var entity = repository.save(mapper.toEntity(restaurant, restaurantsType));
 
     return mapper.toDomain(entity);
   }
 
   @Override
-  public Restaurants update(UUID uuid, Restaurants restaurants) {
+  public Restaurant update(UUID uuid, Restaurant restaurant) {
     var entity = repository.findByUuid(uuid)
         .orElseThrow();
 
-    var restaurantType = restaurantsTypeRepository.findByUuid(restaurants.getRestaurantsType()
+    var restaurantType = restaurantsTypeRepository.findByUuid(restaurant.getRestaurantType()
             .getUuid())
         .orElseThrow();
 
     RestaurantsTypeEntity restaurantsTypeEntity = entity.getRestaurantsType();
 
     if (!restaurantsTypeEntity.getUuid()
-        .equals(restaurants.getRestaurantsType()
+        .equals(restaurant.getRestaurantType()
             .getUuid())) {
       restaurantsTypeEntity = restaurantType;
     }
 
-    entity = repository.save(mapper.toEntity(restaurants, entity, restaurantsTypeEntity));
+    entity = repository.save(mapper.toEntity(restaurant, entity, restaurantsTypeEntity));
 
     return mapper.toDomain(entity);
   }
 
   @Override
-  public Optional<Restaurants> findByUuid(UUID uuid) {
+  public Optional<Restaurant> findByUuid(UUID uuid) {
     final var entity = repository.findByUuid(uuid);
 
     return entity.map(mapper::toDomain);
   }
 
   @Override
-  public PageModel<List<Restaurants>> findAll(final String name, final UUID restaurantsTypeUuid, final String street,
+  public PageModel<List<Restaurant>> findAll(final String name, final UUID restaurantsTypeUuid, final String street,
       final String city, final String state, final Integer page, final Integer size, final String sort,
       final String direction) {
     final var pageable = PageRequest.of(page, size,

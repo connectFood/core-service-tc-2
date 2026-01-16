@@ -1,6 +1,6 @@
 package com.connectfood.infrastructure.persistence.mappers;
 
-import com.connectfood.core.domain.model.Users;
+import com.connectfood.core.domain.model.User;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
 
@@ -15,12 +15,12 @@ public class UsersInfraMapper {
     this.usersTypeMapper = usersTypeMapper;
   }
 
-  public Users toDomain(final UsersEntity entity) {
+  public User toDomain(final UsersEntity entity) {
     if (entity == null) {
       return null;
     }
 
-    return new Users(
+    return new User(
         entity.getUuid(),
         entity.getFullName(),
         entity.getEmail(),
@@ -29,7 +29,7 @@ public class UsersInfraMapper {
     );
   }
 
-  public UsersEntity toEntity(final Users model, final UsersTypeEntity usersTypeEntity) {
+  public UsersEntity toEntity(final User model, final UsersTypeEntity usersTypeEntity) {
     if (model == null) {
       return null;
     }
@@ -43,7 +43,7 @@ public class UsersInfraMapper {
     return entity;
   }
 
-  public UsersEntity toEntity(final Users model, final UsersEntity entity, final UsersTypeEntity usersTypeEntity) {
+  public UsersEntity toEntity(final User model, final UsersEntity entity, final UsersTypeEntity usersTypeEntity) {
     entity.setFullName(model.getFullName());
     entity.setEmail(model.getEmail());
     entity.setPassword(model.getPasswordHash());

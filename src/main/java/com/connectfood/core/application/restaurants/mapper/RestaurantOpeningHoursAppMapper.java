@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursInput;
 import com.connectfood.core.application.restaurants.dto.RestaurantOpeningHoursOutput;
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 
 import org.springframework.stereotype.Component;
 
@@ -15,24 +15,24 @@ public class RestaurantOpeningHoursAppMapper {
   public RestaurantOpeningHoursAppMapper() {
   }
 
-  public RestaurantOpeningHours toDomain(final RestaurantOpeningHoursInput input) {
+  public RestaurantOpeningHour toDomain(final RestaurantOpeningHoursInput input) {
     if (input == null) {
       return null;
     }
 
-    return new RestaurantOpeningHours(
+    return new RestaurantOpeningHour(
         input.getDayOfWeek(),
         input.getStartTime(),
         input.getEndTime()
     );
   }
 
-  public RestaurantOpeningHours toDomain(final UUID uuid, final RestaurantOpeningHoursInput input) {
+  public RestaurantOpeningHour toDomain(final UUID uuid, final RestaurantOpeningHoursInput input) {
     if (input == null) {
       return null;
     }
 
-    return new RestaurantOpeningHours(
+    return new RestaurantOpeningHour(
         uuid,
         input.getDayOfWeek(),
         input.getStartTime(),
@@ -40,7 +40,7 @@ public class RestaurantOpeningHoursAppMapper {
     );
   }
 
-  public RestaurantOpeningHoursOutput toOutput(final RestaurantOpeningHours model) {
+  public RestaurantOpeningHoursOutput toOutput(final RestaurantOpeningHour model) {
     if (model == null) {
       return null;
     }

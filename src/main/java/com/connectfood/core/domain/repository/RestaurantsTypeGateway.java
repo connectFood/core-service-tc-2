@@ -1,6 +1,6 @@
 package com.connectfood.core.domain.repository;
 
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
 
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public interface RestaurantsTypeGateway {
 
-  RestaurantsType save(RestaurantsType restaurantType);
+  RestaurantType save(RestaurantType restaurantType);
 
-  RestaurantsType update(UUID uuid, RestaurantsType restaurantType);
+  RestaurantType update(UUID uuid, RestaurantType restaurantType);
 
-  Optional<RestaurantsType> findById(UUID uuid);
+  Optional<RestaurantType> findById(UUID uuid);
 
-  PageModel<List<RestaurantsType>> findAll(String name, Integer page, Integer size, String sort, String direction);
+  PageModel<List<RestaurantType>> findAll(String name, Integer page, Integer size, String sort, String direction);
 
   void delete(UUID uuid);
 }

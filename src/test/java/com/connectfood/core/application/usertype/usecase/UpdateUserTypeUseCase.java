@@ -4,7 +4,7 @@ import com.connectfood.core.application.usertype.dto.UsersTypeInput;
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -39,9 +39,9 @@ class UpdateUserTypeUseCaseTest {
     final var uuid = UUID.randomUUID();
     final var input = new UsersTypeInput("ADMIN_UPDATE", "Administrador Atualizado");
 
-    final var existingUserType = new UsersType(uuid, "ADMIN", "Admin Antigo");
+    final var existingUserType = new UserType(uuid, "ADMIN", "Admin Antigo");
 
-    final var updatedUserType = new UsersType(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
+    final var updatedUserType = new UserType(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
 
     final var output = new UsersTypeOutput(uuid, "ADMIN_UPDATE", "Administrador Atualizado");
 

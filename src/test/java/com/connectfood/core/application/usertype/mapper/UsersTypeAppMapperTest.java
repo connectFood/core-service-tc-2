@@ -1,7 +1,7 @@
 package com.connectfood.core.application.usertype.mapper;
 
 import com.connectfood.core.application.usertype.dto.UsersTypeInput;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class UsersTypeAppMapperTest {
   @DisplayName("Deve converter Domínio para Output corretamente")
   void shouldMapDomainToOutput() {
     final var uuid = UUID.randomUUID();
-    final var domain = new UsersType(uuid, "TEST", "Teste");
+    final var domain = new UserType(uuid, "TEST", "Teste");
 
     final var result = mapper.toOutput(domain);
 

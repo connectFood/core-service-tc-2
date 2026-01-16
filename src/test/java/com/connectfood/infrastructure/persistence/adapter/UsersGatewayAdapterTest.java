@@ -5,10 +5,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.infrastructure.persistence.adapter.UsersGatewayAdapter;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
@@ -49,39 +48,39 @@ class UsersGatewayAdapterTest {
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")
   void saveShouldPersistAndReturnMappedModel() {
-    final Users users = Mockito.mock(Users.class);
-    final UsersType usersTypeDomain = Mockito.mock(UsersType.class);
+    final User user = Mockito.mock(User.class);
+    final UserType userTypeDomain = Mockito.mock(UserType.class);
 
     final var usersTypeUuid = UUID.randomUUID();
-    Mockito.when(usersTypeDomain.getUuid())
+    Mockito.when(userTypeDomain.getUuid())
         .thenReturn(usersTypeUuid);
-    Mockito.when(users.getUsersType())
-        .thenReturn(usersTypeDomain);
+    Mockito.when(user.getUserType())
+        .thenReturn(userTypeDomain);
 
     final UsersTypeEntity usersTypeEntity = Mockito.mock(UsersTypeEntity.class);
 
     final UsersEntity entityToSave = Mockito.mock(UsersEntity.class);
     final UsersEntity savedEntity = Mockito.mock(UsersEntity.class);
 
-    final Users mappedDomain = Mockito.mock(Users.class);
+    final User mappedDomain = Mockito.mock(User.class);
 
     Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
         .thenReturn(Optional.of(usersTypeEntity));
-    Mockito.when(mapper.toEntity(users, usersTypeEntity))
+    Mockito.when(mapper.toEntity(user, usersTypeEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(mappedDomain);
 
-    final var result = adapter.save(users);
+    final var result = adapter.save(user);
 
     Assertions.assertSame(mappedDomain, result);
 
     Mockito.verify(usersTypeRepository, Mockito.times(1))
         .findByUuid(usersTypeUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(users, usersTypeEntity);
+        .toEntity(user, usersTypeEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -92,19 +91,19 @@ class UsersGatewayAdapterTest {
   @Test
   @DisplayName("Deve lançar exceção quando tipo de usuário não existir ao salvar")
   void saveShouldThrowWhenUsersTypeDoesNotExist() {
-    final Users users = Mockito.mock(Users.class);
-    final UsersType usersTypeDomain = Mockito.mock(UsersType.class);
+    final User user = Mockito.mock(User.class);
+    final UserType userTypeDomain = Mockito.mock(UserType.class);
 
     final var usersTypeUuid = UUID.randomUUID();
-    Mockito.when(usersTypeDomain.getUuid())
+    Mockito.when(userTypeDomain.getUuid())
         .thenReturn(usersTypeUuid);
-    Mockito.when(users.getUsersType())
-        .thenReturn(usersTypeDomain);
+    Mockito.when(user.getUserType())
+        .thenReturn(userTypeDomain);
 
     Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(users));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(user));
 
     Mockito.verify(usersTypeRepository, Mockito.times(1))
         .findByUuid(usersTypeUuid);
@@ -117,14 +116,14 @@ class UsersGatewayAdapterTest {
   void updateShouldKeepExistingTypeWhenUuidIsSame() {
     final var uuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
-    final UsersType usersTypeDomain = Mockito.mock(UsersType.class);
+    final User user = Mockito.mock(User.class);
+    final UserType userTypeDomain = Mockito.mock(UserType.class);
 
     final var usersTypeUuid = UUID.randomUUID();
-    Mockito.when(usersTypeDomain.getUuid())
+    Mockito.when(userTypeDomain.getUuid())
         .thenReturn(usersTypeUuid);
-    Mockito.when(users.getUsersType())
-        .thenReturn(usersTypeDomain);
+    Mockito.when(user.getUserType())
+        .thenReturn(userTypeDomain);
 
     final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
 
@@ -145,16 +144,16 @@ class UsersGatewayAdapterTest {
 
     final UsersEntity entityToSave = Mockito.mock(UsersEntity.class);
     final UsersEntity savedEntity = Mockito.mock(UsersEntity.class);
-    final Users mappedDomain = Mockito.mock(Users.class);
+    final User mappedDomain = Mockito.mock(User.class);
 
-    Mockito.when(mapper.toEntity(users, foundEntity, existingTypeEntity))
+    Mockito.when(mapper.toEntity(user, foundEntity, existingTypeEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(mappedDomain);
 
-    final var result = adapter.update(uuid, users);
+    final var result = adapter.update(uuid, user);
 
     Assertions.assertSame(mappedDomain, result);
 
@@ -163,7 +162,7 @@ class UsersGatewayAdapterTest {
     Mockito.verify(usersTypeRepository, Mockito.times(1))
         .findByUuid(usersTypeUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(users, foundEntity, existingTypeEntity);
+        .toEntity(user, foundEntity, existingTypeEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -176,14 +175,14 @@ class UsersGatewayAdapterTest {
   void updateShouldReplaceTypeWhenUuidIsDifferent() {
     final var uuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
-    final UsersType usersTypeDomain = Mockito.mock(UsersType.class);
+    final User user = Mockito.mock(User.class);
+    final UserType userTypeDomain = Mockito.mock(UserType.class);
 
     final var newTypeUuid = UUID.randomUUID();
-    Mockito.when(usersTypeDomain.getUuid())
+    Mockito.when(userTypeDomain.getUuid())
         .thenReturn(newTypeUuid);
-    Mockito.when(users.getUsersType())
-        .thenReturn(usersTypeDomain);
+    Mockito.when(user.getUserType())
+        .thenReturn(userTypeDomain);
 
     final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
 
@@ -205,16 +204,16 @@ class UsersGatewayAdapterTest {
 
     final UsersEntity entityToSave = Mockito.mock(UsersEntity.class);
     final UsersEntity savedEntity = Mockito.mock(UsersEntity.class);
-    final Users mappedDomain = Mockito.mock(Users.class);
+    final User mappedDomain = Mockito.mock(User.class);
 
-    Mockito.when(mapper.toEntity(users, foundEntity, fetchedTypeEntity))
+    Mockito.when(mapper.toEntity(user, foundEntity, fetchedTypeEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(mappedDomain);
 
-    final var result = adapter.update(uuid, users);
+    final var result = adapter.update(uuid, user);
 
     Assertions.assertSame(mappedDomain, result);
 
@@ -223,7 +222,7 @@ class UsersGatewayAdapterTest {
     Mockito.verify(usersTypeRepository, Mockito.times(1))
         .findByUuid(newTypeUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(users, foundEntity, fetchedTypeEntity);
+        .toEntity(user, foundEntity, fetchedTypeEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -235,12 +234,12 @@ class UsersGatewayAdapterTest {
   @DisplayName("Deve lançar exceção quando uuid não existir ao atualizar")
   void updateShouldThrowWhenUserDoesNotExist() {
     final var uuid = UUID.randomUUID();
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.update(uuid, users));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.update(uuid, user));
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
@@ -253,14 +252,14 @@ class UsersGatewayAdapterTest {
   void updateShouldThrowWhenUsersTypeDoesNotExist() {
     final var uuid = UUID.randomUUID();
 
-    final Users users = Mockito.mock(Users.class);
-    final UsersType usersTypeDomain = Mockito.mock(UsersType.class);
+    final User user = Mockito.mock(User.class);
+    final UserType userTypeDomain = Mockito.mock(UserType.class);
 
     final var typeUuid = UUID.randomUUID();
-    Mockito.when(usersTypeDomain.getUuid())
+    Mockito.when(userTypeDomain.getUuid())
         .thenReturn(typeUuid);
-    Mockito.when(users.getUsersType())
-        .thenReturn(usersTypeDomain);
+    Mockito.when(user.getUserType())
+        .thenReturn(userTypeDomain);
 
     final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
     Mockito.when(repository.findByUuid(uuid))
@@ -269,7 +268,7 @@ class UsersGatewayAdapterTest {
     Mockito.when(usersTypeRepository.findByUuid(typeUuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.update(uuid, users));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.update(uuid, user));
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
@@ -304,7 +303,7 @@ class UsersGatewayAdapterTest {
     final var uuid = UUID.randomUUID();
 
     final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
-    final Users mappedDomain = Mockito.mock(Users.class);
+    final User mappedDomain = Mockito.mock(User.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(foundEntity));
@@ -331,8 +330,8 @@ class UsersGatewayAdapterTest {
     final UsersEntity entity1 = Mockito.mock(UsersEntity.class);
     final UsersEntity entity2 = Mockito.mock(UsersEntity.class);
 
-    final Users domain1 = Mockito.mock(Users.class);
-    final Users domain2 = Mockito.mock(Users.class);
+    final User domain1 = Mockito.mock(User.class);
+    final User domain2 = Mockito.mock(User.class);
 
     Mockito.when(mapper.toDomain(entity1))
         .thenReturn(domain1);
@@ -350,7 +349,7 @@ class UsersGatewayAdapterTest {
         ))
         .thenReturn(pageResult);
 
-    final PageModel<List<Users>> result =
+    final PageModel<List<User>> result =
         adapter.findAll(
             "Lucas",
             "lucas@email.com",
@@ -387,7 +386,7 @@ class UsersGatewayAdapterTest {
   @DisplayName("Deve listar paginado respeitando sort e direction informados")
   void findAllShouldReturnPagedResultUsingProvidedSortAndDirection() {
     final UsersEntity entity = Mockito.mock(UsersEntity.class);
-    final Users domain = Mockito.mock(Users.class);
+    final User domain = Mockito.mock(User.class);
 
     Mockito.when(mapper.toDomain(entity))
         .thenReturn(domain);
@@ -403,7 +402,7 @@ class UsersGatewayAdapterTest {
         ))
         .thenReturn(pageResult);
 
-    final PageModel<List<Users>> result =
+    final PageModel<List<User>> result =
         adapter.findAll(
             null,
             null,

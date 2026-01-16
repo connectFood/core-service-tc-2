@@ -11,7 +11,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
@@ -60,9 +60,9 @@ class CreateRestaurantsAddressUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurants));
+        .thenReturn(Optional.of(restaurant));
 
     final Address addressDomainToSave = Mockito.mock(Address.class);
     Mockito.when(mapper.toDomain(input))
@@ -73,7 +73,7 @@ class CreateRestaurantsAddressUseCaseTest {
         .thenReturn(savedAddress);
 
     final RestaurantsAddress restaurantsAddressDomain = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantsAddressMapper.toDomain(restaurants, savedAddress))
+    Mockito.when(restaurantsAddressMapper.toDomain(restaurant, savedAddress))
         .thenReturn(restaurantsAddressDomain);
 
     final RestaurantsAddress savedRestaurantsAddress = Mockito.mock(RestaurantsAddress.class);
@@ -106,7 +106,7 @@ class CreateRestaurantsAddressUseCaseTest {
         .save(addressDomainToSave);
 
     Mockito.verify(restaurantsAddressMapper, Mockito.times(1))
-        .toDomain(restaurants, savedAddress);
+        .toDomain(restaurant, savedAddress);
 
     Mockito.verify(restaurantsAddressGateway, Mockito.times(1))
         .save(restaurantsAddressDomain);

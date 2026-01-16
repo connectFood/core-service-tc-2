@@ -9,7 +9,7 @@ import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHour
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
 
@@ -46,15 +46,15 @@ class UpdateRestaurantOpeningHoursUseCaseTest {
     final var uuid = UUID.randomUUID();
     final var input = Mockito.mock(RestaurantOpeningHoursInput.class);
 
-    final RestaurantOpeningHours existing = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour existing = Mockito.mock(RestaurantOpeningHour.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(existing));
 
-    final RestaurantOpeningHours domainToUpdate = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour domainToUpdate = Mockito.mock(RestaurantOpeningHour.class);
     Mockito.when(mapper.toDomain(uuid, input))
         .thenReturn(domainToUpdate);
 
-    final RestaurantOpeningHours updated = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour updated = Mockito.mock(RestaurantOpeningHour.class);
     Mockito.when(repository.update(uuid, domainToUpdate))
         .thenReturn(updated);
 

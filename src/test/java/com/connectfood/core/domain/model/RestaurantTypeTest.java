@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class RestaurantsTypeTest {
+class RestaurantTypeTest {
 
   @Test
   @DisplayName("Deve criar um tipo de restaurante com UUID explícito e dados válidos")
@@ -17,7 +17,7 @@ class RestaurantsTypeTest {
     final var name = "Fast Food";
     final var description = "Quick service restaurant";
 
-    final var restaurantsType = new RestaurantsType(uuid, name, description);
+    final var restaurantsType = new RestaurantType(uuid, name, description);
 
     Assertions.assertEquals(uuid, restaurantsType.getUuid());
     Assertions.assertEquals(name, restaurantsType.getName());
@@ -30,7 +30,7 @@ class RestaurantsTypeTest {
     final var name = "Fast Food";
     final var description = "Quick service restaurant";
 
-    final var restaurantsType = new RestaurantsType(name, description);
+    final var restaurantsType = new RestaurantType(name, description);
 
     Assertions.assertNotNull(restaurantsType.getUuid());
     Assertions.assertEquals(name, restaurantsType.getName());
@@ -42,7 +42,7 @@ class RestaurantsTypeTest {
   void shouldNotCreateRestaurantsTypeWithoutNameAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantsType(UUID.randomUUID(), null, "desc")
+        () -> new RestaurantType(UUID.randomUUID(), null, "desc")
     );
 
     Assertions.assertEquals("Name cannot be null or blank", exception.getMessage());
@@ -53,7 +53,7 @@ class RestaurantsTypeTest {
   void shouldNotCreateRestaurantsTypeWithNameBlankAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantsType(UUID.randomUUID(), "   ", "desc")
+        () -> new RestaurantType(UUID.randomUUID(), "   ", "desc")
     );
 
     Assertions.assertEquals("Name cannot be null or blank", exception.getMessage());
@@ -64,7 +64,7 @@ class RestaurantsTypeTest {
   void shouldNotCreateRestaurantsTypeWithNameTooShortAndThrowBadRequestException() {
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantsType(UUID.randomUUID(), "AB", "desc")
+        () -> new RestaurantType(UUID.randomUUID(), "AB", "desc")
     );
 
     Assertions.assertEquals("Name length must be between 3 and 255 characters", exception.getMessage());
@@ -77,7 +77,7 @@ class RestaurantsTypeTest {
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantsType(UUID.randomUUID(), name, "desc")
+        () -> new RestaurantType(UUID.randomUUID(), name, "desc")
     );
 
     Assertions.assertEquals("Name length must be between 3 and 255 characters", exception.getMessage());

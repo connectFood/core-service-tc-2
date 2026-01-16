@@ -12,41 +12,41 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class RestaurantsTest {
+class RestaurantTest {
 
   @Test
   @DisplayName("Deve criar um restaurante com UUID explícito e dados válidos")
   void shouldCreateRestaurantWithExplicitUuid() {
     final var uuid = UUID.randomUUID();
     final var name = "Restaurante Central";
-    final RestaurantsType restaurantsType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType restaurantType = Mockito.mock(RestaurantType.class);
 
-    final var restaurant = new Restaurants(uuid, name, restaurantsType);
+    final var restaurant = new Restaurant(uuid, name, restaurantType);
 
     Assertions.assertEquals(uuid, restaurant.getUuid());
     Assertions.assertEquals(name, restaurant.getName());
-    Assertions.assertEquals(restaurantsType, restaurant.getRestaurantsType());
+    Assertions.assertEquals(restaurantType, restaurant.getRestaurantType());
 
     Assertions.assertNull(restaurant.getOpeningHours());
     Assertions.assertNull(restaurant.getAddress());
-    Assertions.assertNull(restaurant.getUsers());
+    Assertions.assertNull(restaurant.getUser());
   }
 
   @Test
   @DisplayName("Deve criar um restaurante sem UUID explícito e gerar UUID automaticamente")
   void shouldCreateRestaurantWithoutExplicitUuid() {
     final var name = "Restaurante Central";
-    final RestaurantsType restaurantsType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType restaurantType = Mockito.mock(RestaurantType.class);
 
-    final var restaurant = new Restaurants(name, restaurantsType);
+    final var restaurant = new Restaurant(name, restaurantType);
 
     Assertions.assertNotNull(restaurant.getUuid());
     Assertions.assertEquals(name, restaurant.getName());
-    Assertions.assertEquals(restaurantsType, restaurant.getRestaurantsType());
+    Assertions.assertEquals(restaurantType, restaurant.getRestaurantType());
 
     Assertions.assertNull(restaurant.getOpeningHours());
     Assertions.assertNull(restaurant.getAddress());
-    Assertions.assertNull(restaurant.getUsers());
+    Assertions.assertNull(restaurant.getUser());
   }
 
   @Test
@@ -54,34 +54,34 @@ class RestaurantsTest {
   void shouldCreateRestaurantWithFullConstructor() {
     final var uuid = UUID.randomUUID();
     final var name = "Restaurante Central";
-    final RestaurantsType restaurantsType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType restaurantType = Mockito.mock(RestaurantType.class);
 
     final var openingHours = List.of(
-        new RestaurantOpeningHours(DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-        new RestaurantOpeningHours(DayOfWeek.SATURDAY, LocalTime.of(10, 0), LocalTime.of(22, 0))
+        new RestaurantOpeningHour(DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+        new RestaurantOpeningHour(DayOfWeek.SATURDAY, LocalTime.of(10, 0), LocalTime.of(22, 0))
     );
 
     final Address address = Mockito.mock(Address.class);
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
 
-    final var restaurant = new Restaurants(uuid, name, restaurantsType, openingHours, address, users);
+    final var restaurant = new Restaurant(uuid, name, restaurantType, openingHours, address, user);
 
     Assertions.assertEquals(uuid, restaurant.getUuid());
     Assertions.assertEquals(name, restaurant.getName());
-    Assertions.assertEquals(restaurantsType, restaurant.getRestaurantsType());
+    Assertions.assertEquals(restaurantType, restaurant.getRestaurantType());
     Assertions.assertEquals(openingHours, restaurant.getOpeningHours());
     Assertions.assertEquals(address, restaurant.getAddress());
-    Assertions.assertEquals(users, restaurant.getUsers());
+    Assertions.assertEquals(user, restaurant.getUser());
   }
 
   @Test
   @DisplayName("Não deve criar um restaurante sem name e deve lançar BadRequestException")
   void shouldNotCreateRestaurantWithoutNameAndThrowBadRequestException() {
-    final RestaurantsType restaurantsType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType restaurantType = Mockito.mock(RestaurantType.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new Restaurants(UUID.randomUUID(), null, restaurantsType)
+        () -> new Restaurant(UUID.randomUUID(), null, restaurantType)
     );
 
     Assertions.assertEquals("Name cannot be null or blank", exception.getMessage());
@@ -90,11 +90,11 @@ class RestaurantsTest {
   @Test
   @DisplayName("Não deve criar um restaurante com name em branco e deve lançar BadRequestException")
   void shouldNotCreateRestaurantWithNameBlankAndThrowBadRequestException() {
-    final RestaurantsType restaurantsType = Mockito.mock(RestaurantsType.class);
+    final RestaurantType restaurantType = Mockito.mock(RestaurantType.class);
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new Restaurants(UUID.randomUUID(), "   ", restaurantsType)
+        () -> new Restaurant(UUID.randomUUID(), "   ", restaurantType)
     );
 
     Assertions.assertEquals("Name cannot be null or blank", exception.getMessage());
@@ -107,7 +107,7 @@ class RestaurantsTest {
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new Restaurants(UUID.randomUUID(), name, null)
+        () -> new Restaurant(UUID.randomUUID(), name, null)
     );
 
     Assertions.assertEquals("Restaurant type is required", exception.getMessage());

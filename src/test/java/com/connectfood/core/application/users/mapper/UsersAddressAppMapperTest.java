@@ -1,7 +1,7 @@
 package com.connectfood.core.application.users.mapper;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
+import com.connectfood.core.domain.model.User;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,9 +28,9 @@ class UsersAddressAppMapperTest {
   @Test
   @DisplayName("Deve retornar null quando address for null")
   void shouldReturnNullWhenAddressIsNull() {
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
 
-    final var result = mapper.toDomain(users, null);
+    final var result = mapper.toDomain(user, null);
 
     Assertions.assertNull(result);
   }
@@ -38,14 +38,14 @@ class UsersAddressAppMapperTest {
   @Test
   @DisplayName("Deve criar UsersAddress quando users e address forem válidos")
   void shouldCreateUsersAddressWhenValidData() {
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
-    final var result = mapper.toDomain(users, address);
+    final var result = mapper.toDomain(user, address);
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.getUuid());
-    Assertions.assertSame(users, result.getUsers());
+    Assertions.assertSame(user, result.getUser());
     Assertions.assertSame(address, result.getAddress());
   }
 }

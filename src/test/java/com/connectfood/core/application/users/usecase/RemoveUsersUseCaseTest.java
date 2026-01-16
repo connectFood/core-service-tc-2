@@ -1,8 +1,8 @@
 package com.connectfood.core.application.users.usecase;
 
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class RemoveUsersUseCaseTest {
   @DisplayName("Deve remover o usuário com sucesso se existir")
   void shouldDeleteUserSuccessfully() {
     final var uuid = UUID.randomUUID();
-    final var user = new Users(uuid, "Pilar", "email", "senha", new UsersType(UUID.randomUUID(), "ADMIN", "Admin"));
+    final var user = new User(uuid, "Pilar", "email", "senha", new UserType(UUID.randomUUID(), "ADMIN", "Admin"));
 
     when(repository.findByUuid(uuid)).thenReturn(Optional.of(user));
 

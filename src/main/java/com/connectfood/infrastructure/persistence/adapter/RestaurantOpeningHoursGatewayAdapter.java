@@ -3,7 +3,7 @@ package com.connectfood.infrastructure.persistence.adapter;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantOpeningHoursRepository;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
@@ -29,7 +29,7 @@ public class RestaurantOpeningHoursGatewayAdapter implements RestaurantOpeningHo
   }
 
   @Override
-  public RestaurantOpeningHours save(final RestaurantOpeningHours model, final UUID restaurantUuid) {
+  public RestaurantOpeningHour save(final RestaurantOpeningHour model, final UUID restaurantUuid) {
     final var restaurant = restaurantsRepository.findByUuid(restaurantUuid)
         .orElseThrow();
 
@@ -40,7 +40,7 @@ public class RestaurantOpeningHoursGatewayAdapter implements RestaurantOpeningHo
 
   @Override
   @Transactional
-  public RestaurantOpeningHours update(final UUID uuid, final RestaurantOpeningHours model) {
+  public RestaurantOpeningHour update(final UUID uuid, final RestaurantOpeningHour model) {
     var entity = repository.findByUuid(uuid)
         .orElseThrow();
 
@@ -51,7 +51,7 @@ public class RestaurantOpeningHoursGatewayAdapter implements RestaurantOpeningHo
 
   @Override
   @Transactional(readOnly = true)
-  public Optional<RestaurantOpeningHours> findByUuid(final UUID uuid) {
+  public Optional<RestaurantOpeningHour> findByUuid(final UUID uuid) {
     final var entity = repository.findByUuid(uuid);
 
     return entity.map(mapper::toDomain);

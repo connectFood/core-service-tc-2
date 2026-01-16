@@ -9,15 +9,15 @@ import com.connectfood.core.domain.exception.BadRequestException;
 import lombok.Getter;
 
 @Getter
-public class RestaurantOpeningHours {
+public class RestaurantOpeningHour {
 
   private final UUID uuid;
   private final DayOfWeek dayWeek;
   private final LocalTime startTime;
   private final LocalTime endTime;
 
-  public RestaurantOpeningHours(final UUID uuid, final DayOfWeek dayWeek,
-      final LocalTime startTime, final LocalTime endTime) {
+  public RestaurantOpeningHour(final UUID uuid, final DayOfWeek dayWeek,
+                               final LocalTime startTime, final LocalTime endTime) {
 
     if (dayWeek == null) {
       throw new BadRequestException("Day of week is required");
@@ -37,7 +37,7 @@ public class RestaurantOpeningHours {
     this.endTime = endTime;
   }
 
-  public RestaurantOpeningHours(final DayOfWeek dayWeek, final LocalTime startTime, final LocalTime endTime) {
+  public RestaurantOpeningHour(final DayOfWeek dayWeek, final LocalTime startTime, final LocalTime endTime) {
     this(null, dayWeek, startTime, endTime);
   }
 }

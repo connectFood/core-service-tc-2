@@ -2,8 +2,8 @@ package com.connectfood.core.application.users.usecase;
 
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UsersGateway;
 import org.junit.jupiter.api.Assertions;
@@ -43,8 +43,8 @@ class SearchUsersUseCaseTest {
     final var sort = "name";
     final var direction = "ASC";
 
-    final var userType = new UsersType(typeUuid, "ADMIN", "Admin");
-    final var user = new Users(UUID.randomUUID(), "Pilar", "pilar@email.com", "hash", userType);
+    final var userType = new UserType(typeUuid, "ADMIN", "Admin");
+    final var user = new User(UUID.randomUUID(), "Pilar", "pilar@email.com", "hash", userType);
 
     final var usersList = List.of(user);
     final var pageModel = new PageModel<>(usersList, 1L);
@@ -69,7 +69,7 @@ class SearchUsersUseCaseTest {
   @Test
   @DisplayName("Deve retornar página vazia quando não encontrar resultados")
   void shouldReturnEmptyListWhenNoResults() {
-    final var pageModel = new PageModel<>(List.<Users>of(), 0L);
+    final var pageModel = new PageModel<>(List.<User>of(), 0L);
 
     when(repository.findAll(any(), any(), any(), any(), any(), any(), any()))
         .thenReturn(pageModel);

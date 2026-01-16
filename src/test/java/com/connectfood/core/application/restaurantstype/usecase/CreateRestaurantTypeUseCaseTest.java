@@ -3,7 +3,7 @@ package com.connectfood.core.application.restaurantstype.usecase;
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput;
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
 
 import org.junit.jupiter.api.Assertions;
@@ -32,8 +32,8 @@ class CreateRestaurantTypeUseCaseTest {
   void shouldCreateRestaurantsTypeAndReturnOutput() {
     final var input = Mockito.mock(RestaurantsTypeInput.class);
 
-    final RestaurantsType domain = Mockito.mock(RestaurantsType.class);
-    final RestaurantsType saved = Mockito.mock(RestaurantsType.class);
+    final RestaurantType domain = Mockito.mock(RestaurantType.class);
+    final RestaurantType saved = Mockito.mock(RestaurantType.class);
     final RestaurantsTypeOutput output = Mockito.mock(RestaurantsTypeOutput.class);
 
     Mockito.when(mapper.toDomain(input))
@@ -82,7 +82,7 @@ class CreateRestaurantTypeUseCaseTest {
   void shouldThrowWhenRepositorySaveThrows() {
     final var input = Mockito.mock(RestaurantsTypeInput.class);
 
-    final RestaurantsType domain = Mockito.mock(RestaurantsType.class);
+    final RestaurantType domain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(mapper.toDomain(input))
         .thenReturn(domain);
@@ -106,8 +106,8 @@ class CreateRestaurantTypeUseCaseTest {
   void shouldReturnNullWhenMapperToOutputReturnsNull() {
     final var input = Mockito.mock(RestaurantsTypeInput.class);
 
-    final RestaurantsType domain = Mockito.mock(RestaurantsType.class);
-    final RestaurantsType saved = Mockito.mock(RestaurantsType.class);
+    final RestaurantType domain = Mockito.mock(RestaurantType.class);
+    final RestaurantType saved = Mockito.mock(RestaurantType.class);
 
     Mockito.when(mapper.toDomain(input))
         .thenReturn(domain);

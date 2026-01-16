@@ -9,8 +9,8 @@ import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +36,7 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve retornar null no toDomain (sem UUID) quando input for nulo")
   void shouldReturnNullWhenInputIsNull() {
-    final var result = mapper.toDomain(null, "hash", Mockito.mock(UsersType.class));
+    final var result = mapper.toDomain(null, "hash", Mockito.mock(UserType.class));
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(usersTypeMapper, addressMapper);
   }
@@ -51,16 +51,16 @@ class UsersAppMapperTest {
         .thenReturn("pilar@test.com");
 
     final var passwordHash = "hashSeguro";
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    final UserType userType = Mockito.mock(UserType.class);
 
-    final var result = mapper.toDomain(input, passwordHash, usersType);
+    final var result = mapper.toDomain(input, passwordHash, userType);
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.getUuid());
     Assertions.assertEquals("Maria Pilar", result.getFullName());
     Assertions.assertEquals("pilar@test.com", result.getEmail());
     Assertions.assertEquals(passwordHash, result.getPasswordHash());
-    Assertions.assertSame(usersType, result.getUsersType());
+    Assertions.assertSame(userType, result.getUserType());
 
     Mockito.verifyNoInteractions(usersTypeMapper, addressMapper);
   }
@@ -68,7 +68,7 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve retornar null no toDomain (com UUID) quando input for nulo")
   void shouldReturnNullWhenInputWithUuidIsNull() {
-    final var result = mapper.toDomain(UUID.randomUUID(), null, "hash", Mockito.mock(UsersType.class));
+    final var result = mapper.toDomain(UUID.randomUUID(), null, "hash", Mockito.mock(UserType.class));
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(usersTypeMapper, addressMapper);
   }
@@ -85,16 +85,16 @@ class UsersAppMapperTest {
         .thenReturn("novo@test.com");
 
     final var passwordHash = "hashNovo";
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    final UserType userType = Mockito.mock(UserType.class);
 
-    final var result = mapper.toDomain(uuid, input, passwordHash, usersType);
+    final var result = mapper.toDomain(uuid, input, passwordHash, userType);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals("Pilar Atualizada", result.getFullName());
     Assertions.assertEquals("novo@test.com", result.getEmail());
     Assertions.assertEquals(passwordHash, result.getPasswordHash());
-    Assertions.assertSame(usersType, result.getUsersType());
+    Assertions.assertSame(userType, result.getUserType());
 
     Mockito.verifyNoInteractions(usersTypeMapper, addressMapper);
   }
@@ -102,14 +102,14 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve retornar null no toOutput simples quando model for nulo")
   void shouldReturnNullWhenModelIsNull() {
-    Assertions.assertNull(mapper.toOutput((Users) null));
+    Assertions.assertNull(mapper.toOutput((User) null));
     Mockito.verifyNoInteractions(usersTypeMapper, addressMapper);
   }
 
   @Test
   @DisplayName("Deve converter domínio para output corretamente quando usersType for nulo")
   void shouldMapDomainToOutputWithoutUsersType() {
-    final Users model = Mockito.mock(Users.class);
+    final User model = Mockito.mock(User.class);
     final var uuid = UUID.randomUUID();
 
     Mockito.when(model.getUuid())
@@ -118,7 +118,7 @@ class UsersAppMapperTest {
         .thenReturn("Maria Pilar");
     Mockito.when(model.getEmail())
         .thenReturn("pilar@test.com");
-    Mockito.when(model.getUsersType())
+    Mockito.when(model.getUserType())
         .thenReturn(null);
 
     final UsersOutput result = mapper.toOutput(model);
@@ -136,8 +136,8 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve converter domínio para output corretamente (sem endereço)")
   void shouldMapDomainToOutput() {
-    final Users model = Mockito.mock(Users.class);
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    final User model = Mockito.mock(User.class);
+    final UserType userType = Mockito.mock(UserType.class);
 
     final var uuid = UUID.randomUUID();
     Mockito.when(model.getUuid())
@@ -146,11 +146,11 @@ class UsersAppMapperTest {
         .thenReturn("Maria Pilar");
     Mockito.when(model.getEmail())
         .thenReturn("pilar@test.com");
-    Mockito.when(model.getUsersType())
-        .thenReturn(usersType);
+    Mockito.when(model.getUserType())
+        .thenReturn(userType);
 
     final UsersTypeOutput usersTypeOutput = Mockito.mock(UsersTypeOutput.class);
-    Mockito.when(usersTypeMapper.toOutput(usersType))
+    Mockito.when(usersTypeMapper.toOutput(userType))
         .thenReturn(usersTypeOutput);
 
     final UsersOutput result = mapper.toOutput(model);
@@ -163,7 +163,7 @@ class UsersAppMapperTest {
     Assertions.assertNull(result.getAddress());
 
     Mockito.verify(usersTypeMapper, Mockito.times(1))
-        .toOutput(usersType);
+        .toOutput(userType);
     Mockito.verifyNoInteractions(addressMapper);
     Mockito.verifyNoMoreInteractions(usersTypeMapper);
   }
@@ -182,7 +182,7 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve converter domínio para output com AddressOutput (usersType nulo)")
   void shouldMapDomainToOutputWithAddressOutputWithoutUsersType() {
-    final Users model = Mockito.mock(Users.class);
+    final User model = Mockito.mock(User.class);
     final AddressOutput addressOutput = Mockito.mock(AddressOutput.class);
 
     final var uuid = UUID.randomUUID();
@@ -192,7 +192,7 @@ class UsersAppMapperTest {
         .thenReturn("Maria Pilar");
     Mockito.when(model.getEmail())
         .thenReturn("pilar@test.com");
-    Mockito.when(model.getUsersType())
+    Mockito.when(model.getUserType())
         .thenReturn(null);
 
     final UsersOutput result = mapper.toOutput(model, addressOutput);
@@ -210,8 +210,8 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve converter domínio para output com AddressOutput (usersType presente)")
   void shouldMapDomainToOutputWithAddressOutput() {
-    final Users model = Mockito.mock(Users.class);
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    final User model = Mockito.mock(User.class);
+    final UserType userType = Mockito.mock(UserType.class);
     final AddressOutput addressOutput = Mockito.mock(AddressOutput.class);
 
     final var uuid = UUID.randomUUID();
@@ -221,11 +221,11 @@ class UsersAppMapperTest {
         .thenReturn("Maria Pilar");
     Mockito.when(model.getEmail())
         .thenReturn("pilar@test.com");
-    Mockito.when(model.getUsersType())
-        .thenReturn(usersType);
+    Mockito.when(model.getUserType())
+        .thenReturn(userType);
 
     final UsersTypeOutput usersTypeOutput = Mockito.mock(UsersTypeOutput.class);
-    Mockito.when(usersTypeMapper.toOutput(usersType))
+    Mockito.when(usersTypeMapper.toOutput(userType))
         .thenReturn(usersTypeOutput);
 
     final UsersOutput result = mapper.toOutput(model, addressOutput);
@@ -238,7 +238,7 @@ class UsersAppMapperTest {
     Assertions.assertSame(addressOutput, result.getAddress());
 
     Mockito.verify(usersTypeMapper, Mockito.times(1))
-        .toOutput(usersType);
+        .toOutput(userType);
     Mockito.verifyNoInteractions(addressMapper);
     Mockito.verifyNoMoreInteractions(usersTypeMapper);
   }
@@ -246,7 +246,7 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve retornar null no toOutput(model, Address) quando model ou address for nulo")
   void shouldReturnNullWhenModelOrAddressIsNull() {
-    final Users user = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
     Assertions.assertNull(mapper.toOutput(null, address));
@@ -258,8 +258,8 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve converter domínio e Address para output corretamente (usersType presente)")
   void shouldMapDomainAndAddressToOutput() {
-    final Users model = Mockito.mock(Users.class);
-    final UsersType usersType = Mockito.mock(UsersType.class);
+    final User model = Mockito.mock(User.class);
+    final UserType userType = Mockito.mock(UserType.class);
     final Address address = Mockito.mock(Address.class);
 
     final var uuid = UUID.randomUUID();
@@ -269,11 +269,11 @@ class UsersAppMapperTest {
         .thenReturn("Maria Pilar");
     Mockito.when(model.getEmail())
         .thenReturn("pilar@test.com");
-    Mockito.when(model.getUsersType())
-        .thenReturn(usersType);
+    Mockito.when(model.getUserType())
+        .thenReturn(userType);
 
     final UsersTypeOutput usersTypeOutput = Mockito.mock(UsersTypeOutput.class);
-    Mockito.when(usersTypeMapper.toOutput(usersType))
+    Mockito.when(usersTypeMapper.toOutput(userType))
         .thenReturn(usersTypeOutput);
 
     final AddressOutput addressOutput = Mockito.mock(AddressOutput.class);
@@ -290,7 +290,7 @@ class UsersAppMapperTest {
     Assertions.assertSame(addressOutput, result.getAddress());
 
     Mockito.verify(usersTypeMapper, Mockito.times(1))
-        .toOutput(usersType);
+        .toOutput(userType);
     Mockito.verify(addressMapper, Mockito.times(1))
         .toOutput(address);
     Mockito.verifyNoMoreInteractions(usersTypeMapper, addressMapper);
@@ -299,7 +299,7 @@ class UsersAppMapperTest {
   @Test
   @DisplayName("Deve converter domínio e Address para output corretamente quando usersType for nulo")
   void shouldMapDomainAndAddressToOutputWithoutUsersType() {
-    final Users model = Mockito.mock(Users.class);
+    final User model = Mockito.mock(User.class);
     final Address address = Mockito.mock(Address.class);
 
     final var uuid = UUID.randomUUID();
@@ -309,7 +309,7 @@ class UsersAppMapperTest {
         .thenReturn("Maria Pilar");
     Mockito.when(model.getEmail())
         .thenReturn("pilar@test.com");
-    Mockito.when(model.getUsersType())
+    Mockito.when(model.getUserType())
         .thenReturn(null);
 
     final AddressOutput addressOutput = Mockito.mock(AddressOutput.class);

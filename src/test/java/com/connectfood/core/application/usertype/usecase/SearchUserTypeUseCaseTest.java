@@ -2,7 +2,7 @@ package com.connectfood.core.application.usertype.usecase;
 
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +42,7 @@ class SearchUserTypeUseCaseTest {
     final var direction = "ASC";
 
     final var uuid = UUID.randomUUID();
-    final var usersType = new UsersType(uuid, "CLIENT", "Cliente do sistema");
+    final var usersType = new UserType(uuid, "CLIENT", "Cliente do sistema");
     final var usersTypeOutput = new UsersTypeOutput(uuid, "CLIENT", "Cliente do sistema");
 
     final var pageModel = new PageModel<>(List.of(usersType), 1L);
@@ -64,7 +64,7 @@ class SearchUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve retornar página vazia quando não encontrar resultados")
   void shouldReturnEmptyPageWhenNoResults() {
-    final var pageModel = new PageModel<List<UsersType>>(Collections.emptyList(), 0L);
+    final var pageModel = new PageModel<List<UserType>>(Collections.emptyList(), 0L);
 
     when(repository.findAll(any(), any(), any(), any(), any())).thenReturn(pageModel);
 

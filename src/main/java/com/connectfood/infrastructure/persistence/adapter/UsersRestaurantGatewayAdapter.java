@@ -1,6 +1,6 @@
 package com.connectfood.infrastructure.persistence.adapter;
 
-import com.connectfood.core.domain.model.UsersRestaurant;
+import com.connectfood.core.domain.model.UserRestaurant;
 import com.connectfood.core.domain.repository.UsersRestaurantGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
@@ -28,7 +28,7 @@ public class UsersRestaurantGatewayAdapter implements UsersRestaurantGateway {
   }
 
   @Override
-  public UsersRestaurant save(final UsersRestaurant usersAddress) {
+  public UserRestaurant save(final UserRestaurant usersAddress) {
     final var users = usersRepository.findByUuid(usersAddress.getUser()
             .getUuid())
         .orElseThrow();

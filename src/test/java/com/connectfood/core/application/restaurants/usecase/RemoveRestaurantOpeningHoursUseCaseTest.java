@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
 
@@ -39,7 +39,7 @@ class RemoveRestaurantOpeningHoursUseCaseTest {
 
     final var uuid = UUID.randomUUID();
 
-    final RestaurantOpeningHours model = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(model));
 

@@ -34,7 +34,7 @@ public class RestaurantsAddressGatewayAdapter implements RestaurantsAddressGatew
 
   @Override
   public RestaurantsAddress save(RestaurantsAddress restaurantsAddress) {
-    final var restaurants = restaurantsRepository.findByUuid(restaurantsAddress.getRestaurants()
+    final var restaurants = restaurantsRepository.findByUuid(restaurantsAddress.getRestaurant()
             .getUuid())
         .orElseThrow();
     final var address = addressRepository.findByUuid(restaurantsAddress.getAddress()

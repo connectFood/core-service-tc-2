@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class UsersTypeTest {
+class UserTypeTest {
 
   @Test
   @DisplayName("Deve criar um tipo de usuário com UUID explícito e dados válidos")
@@ -17,7 +17,7 @@ class UsersTypeTest {
     final var name = "TEST";
     final var description = "Test users type";
 
-    final var userType = new UsersType(uuid, name, description);
+    final var userType = new UserType(uuid, name, description);
 
     Assertions.assertEquals(uuid, userType.getUuid());
     Assertions.assertEquals(name, userType.getName());
@@ -30,7 +30,7 @@ class UsersTypeTest {
     final var name = "TEST";
     final var description = "Test users type";
 
-    final var userType = new UsersType(name, description);
+    final var userType = new UserType(name, description);
 
     Assertions.assertNotNull(userType.getUuid());
     Assertions.assertEquals(name, userType.getName());
@@ -43,7 +43,7 @@ class UsersTypeTest {
     final var uuid = UUID.randomUUID();
     final var description = "Test users type";
 
-    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UsersType(uuid, null,
+    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UserType(uuid, null,
             description
         )
     );
@@ -58,7 +58,7 @@ class UsersTypeTest {
     final var uuid = UUID.randomUUID();
     final var description = "Test users type";
 
-    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UsersType(uuid, "",
+    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UserType(uuid, "",
             description
         )
     );
@@ -74,7 +74,7 @@ class UsersTypeTest {
     final var name = "TE";
     final var description = "Test users type";
 
-    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UsersType(uuid, name,
+    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UserType(uuid, name,
             description
         )
     );
@@ -92,7 +92,7 @@ class UsersTypeTest {
         + "autem provident qui voluptates laudantium aut autem incidu";
     final var description = "Test users type";
 
-    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UsersType(uuid, name,
+    final var exception = Assertions.assertThrows(BadRequestException.class, () -> new UserType(uuid, name,
             description
         )
     );

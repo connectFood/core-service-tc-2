@@ -12,9 +12,9 @@ import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsIm
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantItems;
-import com.connectfood.core.domain.model.RestaurantItemsImages;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.RestaurantItem;
+import com.connectfood.core.domain.model.RestaurantItemImage;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
 import com.connectfood.core.domain.repository.RestaurantItemsGateway;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
@@ -67,30 +67,30 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.when(input.getImages())
         .thenReturn(List.of(imageInput1, imageInput2));
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurants));
+        .thenReturn(Optional.of(restaurant));
 
-    final RestaurantItems domainToSave = Mockito.mock(RestaurantItems.class);
-    Mockito.when(mapper.toDomain(input, restaurants))
+    final RestaurantItem domainToSave = Mockito.mock(RestaurantItem.class);
+    Mockito.when(mapper.toDomain(input, restaurant))
         .thenReturn(domainToSave);
 
     final var itemUuid = UUID.randomUUID();
-    final RestaurantItems savedModel = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem savedModel = Mockito.mock(RestaurantItem.class);
     Mockito.when(savedModel.getUuid())
         .thenReturn(itemUuid);
     Mockito.when(repository.save(domainToSave))
         .thenReturn(savedModel);
 
-    final RestaurantItemsImages imgDomain1 = Mockito.mock(RestaurantItemsImages.class);
-    final RestaurantItemsImages imgDomain2 = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage imgDomain1 = Mockito.mock(RestaurantItemImage.class);
+    final RestaurantItemImage imgDomain2 = Mockito.mock(RestaurantItemImage.class);
     Mockito.when(restaurantItemsImagesMapper.toDomain(imageInput1))
         .thenReturn(imgDomain1);
     Mockito.when(restaurantItemsImagesMapper.toDomain(imageInput2))
         .thenReturn(imgDomain2);
 
-    final RestaurantItemsImages persisted1 = Mockito.mock(RestaurantItemsImages.class);
-    final RestaurantItemsImages persisted2 = Mockito.mock(RestaurantItemsImages.class);
+    final RestaurantItemImage persisted1 = Mockito.mock(RestaurantItemImage.class);
+    final RestaurantItemImage persisted2 = Mockito.mock(RestaurantItemImage.class);
     Mockito.when(restaurantItemsImagesGateway.save(itemUuid, imgDomain1))
         .thenReturn(persisted1);
     Mockito.when(restaurantItemsImagesGateway.save(itemUuid, imgDomain2))
@@ -110,7 +110,7 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(input, restaurants);
+        .toDomain(input, restaurant);
     Mockito.verify(repository, Mockito.times(1))
         .save(domainToSave);
 
@@ -149,15 +149,15 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.when(input.getImages())
         .thenReturn(List.of());
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurants));
+        .thenReturn(Optional.of(restaurant));
 
-    final RestaurantItems domainToSave = Mockito.mock(RestaurantItems.class);
-    Mockito.when(mapper.toDomain(input, restaurants))
+    final RestaurantItem domainToSave = Mockito.mock(RestaurantItem.class);
+    Mockito.when(mapper.toDomain(input, restaurant))
         .thenReturn(domainToSave);
 
-    final RestaurantItems savedModel = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem savedModel = Mockito.mock(RestaurantItem.class);
     Mockito.when(repository.save(domainToSave))
         .thenReturn(savedModel);
 
@@ -175,7 +175,7 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(input, restaurants);
+        .toDomain(input, restaurant);
     Mockito.verify(repository, Mockito.times(1))
         .save(domainToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -198,15 +198,15 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.when(input.getImages())
         .thenReturn(null);
 
-    final Restaurants restaurants = Mockito.mock(Restaurants.class);
+    final Restaurant restaurant = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurants));
+        .thenReturn(Optional.of(restaurant));
 
-    final RestaurantItems domainToSave = Mockito.mock(RestaurantItems.class);
-    Mockito.when(mapper.toDomain(input, restaurants))
+    final RestaurantItem domainToSave = Mockito.mock(RestaurantItem.class);
+    Mockito.when(mapper.toDomain(input, restaurant))
         .thenReturn(domainToSave);
 
-    final RestaurantItems savedModel = Mockito.mock(RestaurantItems.class);
+    final RestaurantItem savedModel = Mockito.mock(RestaurantItem.class);
     Mockito.when(repository.save(domainToSave))
         .thenReturn(savedModel);
 
@@ -224,7 +224,7 @@ class CreateRestaurantItemsUseCaseTest {
     Mockito.verify(restaurantsGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toDomain(input, restaurants);
+        .toDomain(input, restaurant);
     Mockito.verify(repository, Mockito.times(1))
         .save(domainToSave);
     Mockito.verify(mapper, Mockito.times(1))

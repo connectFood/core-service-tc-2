@@ -4,8 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantOpeningHours;
-import com.connectfood.infrastructure.persistence.adapter.RestaurantOpeningHoursGatewayAdapter;
+import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantOpeningHoursRepository;
@@ -40,14 +39,14 @@ class RestaurantOpeningHoursGatewayAdapterTest {
   @DisplayName("Deve salvar e retornar o model mapeado")
   void saveShouldPersistAndReturnMappedModel() {
     final var restaurantUuid = UUID.randomUUID();
-    final RestaurantOpeningHours model = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
 
     final RestaurantsEntity restaurantEntity = Mockito.mock(RestaurantsEntity.class);
 
     final RestaurantOpeningHoursEntity entityToSave = Mockito.mock(RestaurantOpeningHoursEntity.class);
     final RestaurantOpeningHoursEntity savedEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
 
-    final RestaurantOpeningHours mappedDomain = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour mappedDomain = Mockito.mock(RestaurantOpeningHour.class);
 
     Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurantEntity));
@@ -77,7 +76,7 @@ class RestaurantOpeningHoursGatewayAdapterTest {
   @DisplayName("Deve lançar exceção quando restaurante não existir ao salvar")
   void saveShouldThrowWhenRestaurantDoesNotExist() {
     final var restaurantUuid = UUID.randomUUID();
-    final RestaurantOpeningHours model = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
 
     Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
@@ -94,13 +93,13 @@ class RestaurantOpeningHoursGatewayAdapterTest {
   @DisplayName("Deve atualizar e retornar o model mapeado")
   void updateShouldPersistAndReturnMappedModel() {
     final var uuid = UUID.randomUUID();
-    final RestaurantOpeningHours model = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
 
     final RestaurantOpeningHoursEntity foundEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
     final RestaurantOpeningHoursEntity entityToSave = Mockito.mock(RestaurantOpeningHoursEntity.class);
     final RestaurantOpeningHoursEntity savedEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
 
-    final RestaurantOpeningHours mappedDomain = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour mappedDomain = Mockito.mock(RestaurantOpeningHour.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(foundEntity));
@@ -130,7 +129,7 @@ class RestaurantOpeningHoursGatewayAdapterTest {
   @DisplayName("Deve lançar exceção quando uuid não existir ao atualizar")
   void updateShouldThrowWhenUuidDoesNotExist() {
     final var uuid = UUID.randomUUID();
-    final RestaurantOpeningHours model = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.empty());
@@ -151,7 +150,7 @@ class RestaurantOpeningHoursGatewayAdapterTest {
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.empty());
 
-    final Optional<RestaurantOpeningHours> result = adapter.findByUuid(uuid);
+    final Optional<RestaurantOpeningHour> result = adapter.findByUuid(uuid);
 
     Assertions.assertNotNull(result);
     Assertions.assertTrue(result.isEmpty());
@@ -168,14 +167,14 @@ class RestaurantOpeningHoursGatewayAdapterTest {
     final var uuid = UUID.randomUUID();
 
     final RestaurantOpeningHoursEntity foundEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
-    final RestaurantOpeningHours mappedDomain = Mockito.mock(RestaurantOpeningHours.class);
+    final RestaurantOpeningHour mappedDomain = Mockito.mock(RestaurantOpeningHour.class);
 
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(foundEntity));
     Mockito.when(mapper.toDomain(foundEntity))
         .thenReturn(mappedDomain);
 
-    final Optional<RestaurantOpeningHours> result = adapter.findByUuid(uuid);
+    final Optional<RestaurantOpeningHour> result = adapter.findByUuid(uuid);
 
     Assertions.assertTrue(result.isPresent());
     Assertions.assertSame(mappedDomain, result.get());

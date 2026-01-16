@@ -8,7 +8,7 @@ import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.RestaurantsType;
+import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantsGateway;
 import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
@@ -42,16 +42,16 @@ public class UpdateRestaurantsUseCase {
     final var restaurants = repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurants not found"));
 
-    RestaurantsType restaurantsType = restaurants.getRestaurantsType();
+    RestaurantType restaurantType = restaurants.getRestaurantType();
 
-    if (!restaurants.getRestaurantsType()
+    if (!restaurants.getRestaurantType()
         .getUuid()
         .equals(input.getRestaurantsTypeUuid())) {
-      restaurantsType = restaurantsTypeGateway.findById(input.getRestaurantsTypeUuid())
+      restaurantType = restaurantsTypeGateway.findById(input.getRestaurantsTypeUuid())
           .orElseThrow(() -> new NotFoundException("Restaurant type not found"));
     }
 
-    final var restaurantsUpdated = repository.update(uuid, mapper.toDomain(uuid, input, restaurantsType));
+    final var restaurantsUpdated = repository.update(uuid, mapper.toDomain(uuid, input, restaurantType));
 
     return mapper.toOutput(restaurantsUpdated);
   }

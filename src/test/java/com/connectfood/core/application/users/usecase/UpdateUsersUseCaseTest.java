@@ -7,8 +7,8 @@ import com.connectfood.core.application.users.dto.UsersInput;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersType;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.repository.UsersGateway;
 import com.connectfood.core.domain.repository.UsersTypeGateway;
 
@@ -46,12 +46,12 @@ class UpdateUsersUseCaseTest {
     Mockito.when(input.getUsersTypeUuid())
         .thenReturn(usersTypeUuid);
 
-    final UsersType currentType = Mockito.mock(UsersType.class);
+    final UserType currentType = Mockito.mock(UserType.class);
     Mockito.when(currentType.getUuid())
         .thenReturn(usersTypeUuid);
 
-    final Users existingUser = Mockito.mock(Users.class);
-    Mockito.when(existingUser.getUsersType())
+    final User existingUser = Mockito.mock(User.class);
+    Mockito.when(existingUser.getUserType())
         .thenReturn(currentType);
     Mockito.when(existingUser.getPasswordHash())
         .thenReturn("hashAntigo");
@@ -59,11 +59,11 @@ class UpdateUsersUseCaseTest {
     Mockito.when(repository.findByUuid(userUuid))
         .thenReturn(Optional.of(existingUser));
 
-    final Users domainToUpdate = Mockito.mock(Users.class);
+    final User domainToUpdate = Mockito.mock(User.class);
     Mockito.when(mapper.toDomain(userUuid, input, "hashAntigo", currentType))
         .thenReturn(domainToUpdate);
 
-    final Users updatedUser = Mockito.mock(Users.class);
+    final User updatedUser = Mockito.mock(User.class);
     Mockito.when(repository.update(userUuid, domainToUpdate))
         .thenReturn(updatedUser);
 
@@ -80,7 +80,7 @@ class UpdateUsersUseCaseTest {
         .findByUuid(userUuid);
 
     Mockito.verify(existingUser, Mockito.times(2))
-        .getUsersType();
+        .getUserType();
     Mockito.verify(existingUser, Mockito.times(1))
         .getPasswordHash();
 
@@ -109,12 +109,12 @@ class UpdateUsersUseCaseTest {
     Mockito.when(input.getUsersTypeUuid())
         .thenReturn(newTypeUuid);
 
-    final UsersType currentType = Mockito.mock(UsersType.class);
+    final UserType currentType = Mockito.mock(UserType.class);
     Mockito.when(currentType.getUuid())
         .thenReturn(currentTypeUuid);
 
-    final Users existingUser = Mockito.mock(Users.class);
-    Mockito.when(existingUser.getUsersType())
+    final User existingUser = Mockito.mock(User.class);
+    Mockito.when(existingUser.getUserType())
         .thenReturn(currentType);
     Mockito.when(existingUser.getPasswordHash())
         .thenReturn("hashAntigo");
@@ -122,15 +122,15 @@ class UpdateUsersUseCaseTest {
     Mockito.when(repository.findByUuid(userUuid))
         .thenReturn(Optional.of(existingUser));
 
-    final UsersType newType = Mockito.mock(UsersType.class);
+    final UserType newType = Mockito.mock(UserType.class);
     Mockito.when(usersTypeGateway.findByUuid(newTypeUuid))
         .thenReturn(Optional.of(newType));
 
-    final Users domainToUpdate = Mockito.mock(Users.class);
+    final User domainToUpdate = Mockito.mock(User.class);
     Mockito.when(mapper.toDomain(userUuid, input, "hashAntigo", newType))
         .thenReturn(domainToUpdate);
 
-    final Users updatedUser = Mockito.mock(Users.class);
+    final User updatedUser = Mockito.mock(User.class);
     Mockito.when(repository.update(userUuid, domainToUpdate))
         .thenReturn(updatedUser);
 
@@ -147,7 +147,7 @@ class UpdateUsersUseCaseTest {
         .findByUuid(userUuid);
 
     Mockito.verify(existingUser, Mockito.times(2))
-        .getUsersType();
+        .getUserType();
     Mockito.verify(existingUser, Mockito.times(1))
         .getPasswordHash();
 
@@ -201,12 +201,12 @@ class UpdateUsersUseCaseTest {
     Mockito.when(input.getUsersTypeUuid())
         .thenReturn(newTypeUuid);
 
-    final UsersType currentType = Mockito.mock(UsersType.class);
+    final UserType currentType = Mockito.mock(UserType.class);
     Mockito.when(currentType.getUuid())
         .thenReturn(currentTypeUuid);
 
-    final Users existingUser = Mockito.mock(Users.class);
-    Mockito.when(existingUser.getUsersType())
+    final User existingUser = Mockito.mock(User.class);
+    Mockito.when(existingUser.getUserType())
         .thenReturn(currentType);
 
     Mockito.when(repository.findByUuid(userUuid))
@@ -225,7 +225,7 @@ class UpdateUsersUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(userUuid);
     Mockito.verify(existingUser, Mockito.times(2))
-        .getUsersType();
+        .getUserType();
 
     Mockito.verify(usersTypeGateway, Mockito.times(1))
         .findByUuid(newTypeUuid);

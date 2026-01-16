@@ -9,8 +9,8 @@ import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.users.mapper.UsersAddressAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersAddress;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.core.domain.repository.AddressGateway;
 import com.connectfood.core.domain.repository.UsersAddressGateway;
 import com.connectfood.core.domain.repository.UsersGateway;
@@ -73,9 +73,9 @@ class CreateUsersAddressUseCaseTest {
     final var userUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    final Users users = Mockito.mock(Users.class);
+    final User user = Mockito.mock(User.class);
     Mockito.when(usersGateway.findByUuid(userUuid))
-        .thenReturn(Optional.of(users));
+        .thenReturn(Optional.of(user));
 
     final Address addressToSave = Mockito.mock(Address.class);
     Mockito.when(mapper.toDomain(input))
@@ -85,16 +85,16 @@ class CreateUsersAddressUseCaseTest {
     Mockito.when(repository.save(addressToSave))
         .thenReturn(savedAddress);
 
-    final UsersAddress usersAddressToSave = Mockito.mock(UsersAddress.class);
-    Mockito.when(usersAddressMapper.toDomain(users, savedAddress))
-        .thenReturn(usersAddressToSave);
+    final UserAddress userAddressToSave = Mockito.mock(UserAddress.class);
+    Mockito.when(usersAddressMapper.toDomain(user, savedAddress))
+        .thenReturn(userAddressToSave);
 
-    final UsersAddress savedUsersAddress = Mockito.mock(UsersAddress.class);
-    Mockito.when(usersAddressGateway.save(usersAddressToSave))
-        .thenReturn(savedUsersAddress);
+    final UserAddress savedUserAddress = Mockito.mock(UserAddress.class);
+    Mockito.when(usersAddressGateway.save(userAddressToSave))
+        .thenReturn(savedUserAddress);
 
     final AddressOutput expectedOutput = Mockito.mock(AddressOutput.class);
-    Mockito.when(savedUsersAddress.getAddress())
+    Mockito.when(savedUserAddress.getAddress())
         .thenReturn(savedAddress);
     Mockito.when(mapper.toOutput(savedAddress))
         .thenReturn(expectedOutput);
@@ -111,10 +111,10 @@ class CreateUsersAddressUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .save(addressToSave);
     Mockito.verify(usersAddressMapper, Mockito.times(1))
-        .toDomain(users, savedAddress);
+        .toDomain(user, savedAddress);
     Mockito.verify(usersAddressGateway, Mockito.times(1))
-        .save(usersAddressToSave);
-    Mockito.verify(savedUsersAddress, Mockito.times(1))
+        .save(userAddressToSave);
+    Mockito.verify(savedUserAddress, Mockito.times(1))
         .getAddress();
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(savedAddress);
@@ -125,7 +125,7 @@ class CreateUsersAddressUseCaseTest {
         repository,
         usersAddressMapper,
         usersAddressGateway,
-        savedUsersAddress
+        savedUserAddress
     );
   }
 }

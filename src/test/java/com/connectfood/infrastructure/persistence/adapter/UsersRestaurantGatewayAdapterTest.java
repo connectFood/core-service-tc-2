@@ -4,10 +4,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.Restaurants;
-import com.connectfood.core.domain.model.Users;
-import com.connectfood.core.domain.model.UsersRestaurant;
-import com.connectfood.infrastructure.persistence.adapter.UsersRestaurantGatewayAdapter;
+import com.connectfood.core.domain.model.Restaurant;
+import com.connectfood.core.domain.model.User;
+import com.connectfood.core.domain.model.UserRestaurant;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersRestaurantEntity;
@@ -50,20 +49,20 @@ class UsersRestaurantGatewayAdapterTest {
     final var userUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
 
-    final Users userDomain = Mockito.mock(Users.class);
+    final User userDomain = Mockito.mock(User.class);
     Mockito.when(userDomain.getUuid())
         .thenReturn(userUuid);
 
-    final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantUuid);
 
-    final UsersRestaurant usersRestaurant = Mockito.mock(UsersRestaurant.class);
-    Mockito.when(usersRestaurant.getUuid())
+    final UserRestaurant userRestaurant = Mockito.mock(UserRestaurant.class);
+    Mockito.when(userRestaurant.getUuid())
         .thenReturn(usersRestaurantUuid);
-    Mockito.when(usersRestaurant.getUser())
+    Mockito.when(userRestaurant.getUser())
         .thenReturn(userDomain);
-    Mockito.when(usersRestaurant.getRestaurant())
+    Mockito.when(userRestaurant.getRestaurant())
         .thenReturn(restaurantDomain);
 
     final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
@@ -72,7 +71,7 @@ class UsersRestaurantGatewayAdapterTest {
     final UsersRestaurantEntity entityToSave = Mockito.mock(UsersRestaurantEntity.class);
     final UsersRestaurantEntity savedEntity = Mockito.mock(UsersRestaurantEntity.class);
 
-    final UsersRestaurant mappedDomain = Mockito.mock(UsersRestaurant.class);
+    final UserRestaurant mappedDomain = Mockito.mock(UserRestaurant.class);
 
     Mockito.when(usersRepository.findByUuid(userUuid))
         .thenReturn(Optional.of(usersEntity));
@@ -85,7 +84,7 @@ class UsersRestaurantGatewayAdapterTest {
     Mockito.when(mapper.toDomain(savedEntity))
         .thenReturn(mappedDomain);
 
-    final UsersRestaurant result = adapter.save(usersRestaurant);
+    final UserRestaurant result = adapter.save(userRestaurant);
 
     Assertions.assertSame(mappedDomain, result);
 
@@ -107,19 +106,19 @@ class UsersRestaurantGatewayAdapterTest {
   void saveShouldThrowWhenUserDoesNotExist() {
     final var userUuid = UUID.randomUUID();
 
-    final Users userDomain = Mockito.mock(Users.class);
+    final User userDomain = Mockito.mock(User.class);
     Mockito.when(userDomain.getUuid())
         .thenReturn(userUuid);
 
 
-    final UsersRestaurant usersRestaurant = Mockito.mock(UsersRestaurant.class);
-    Mockito.when(usersRestaurant.getUser())
+    final UserRestaurant userRestaurant = Mockito.mock(UserRestaurant.class);
+    Mockito.when(userRestaurant.getUser())
         .thenReturn(userDomain);
 
     Mockito.when(usersRepository.findByUuid(userUuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(usersRestaurant));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(userRestaurant));
 
     Mockito.verify(usersRepository, Mockito.times(1))
         .findByUuid(userUuid);
@@ -134,18 +133,18 @@ class UsersRestaurantGatewayAdapterTest {
     final var userUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
 
-    final Users userDomain = Mockito.mock(Users.class);
+    final User userDomain = Mockito.mock(User.class);
     Mockito.when(userDomain.getUuid())
         .thenReturn(userUuid);
 
-    final Restaurants restaurantDomain = Mockito.mock(Restaurants.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
     Mockito.when(restaurantDomain.getUuid())
         .thenReturn(restaurantUuid);
 
-    final UsersRestaurant usersRestaurant = Mockito.mock(UsersRestaurant.class);
-    Mockito.when(usersRestaurant.getUser())
+    final UserRestaurant userRestaurant = Mockito.mock(UserRestaurant.class);
+    Mockito.when(userRestaurant.getUser())
         .thenReturn(userDomain);
-    Mockito.when(usersRestaurant.getRestaurant())
+    Mockito.when(userRestaurant.getRestaurant())
         .thenReturn(restaurantDomain);
 
     final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
@@ -155,7 +154,7 @@ class UsersRestaurantGatewayAdapterTest {
     Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(usersRestaurant));
+    Assertions.assertThrows(NoSuchElementException.class, () -> adapter.save(userRestaurant));
 
     Mockito.verify(usersRepository, Mockito.times(1))
         .findByUuid(userUuid);

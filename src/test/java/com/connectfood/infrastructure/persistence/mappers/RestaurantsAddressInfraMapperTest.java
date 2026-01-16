@@ -3,14 +3,11 @@ package com.connectfood.infrastructure.persistence.mappers;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.Restaurants;
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsAddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
-import com.connectfood.infrastructure.persistence.mappers.AddressInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsAddressInfraMapper;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -50,10 +47,10 @@ class RestaurantsAddressInfraMapperTest {
     final var restaurantsEntity = Mockito.mock(RestaurantsEntity.class);
     final var addressEntity = Mockito.mock(AddressEntity.class);
 
-    final Restaurants restaurantsDomain = Mockito.mock(Restaurants.class);
+    final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
     final Address addressDomain = Mockito.mock(Address.class);
 
-    Mockito.when(restaurantsMapper.toDomain(restaurantsEntity)).thenReturn(restaurantsDomain);
+    Mockito.when(restaurantsMapper.toDomain(restaurantsEntity)).thenReturn(restaurantDomain);
     Mockito.when(addressMapper.toDomain(addressEntity)).thenReturn(addressDomain);
 
     final var entity = Mockito.mock(RestaurantsAddressEntity.class);
@@ -65,7 +62,7 @@ class RestaurantsAddressInfraMapperTest {
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertSame(restaurantsDomain, result.getRestaurants());
+    Assertions.assertSame(restaurantDomain, result.getRestaurant());
     Assertions.assertSame(addressDomain, result.getAddress());
 
     Mockito.verify(restaurantsMapper, Mockito.times(1)).toDomain(restaurantsEntity);
