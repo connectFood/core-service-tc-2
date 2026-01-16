@@ -7,11 +7,11 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemsImagesEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsImagesRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsImageInfraMapper;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemImageEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemImagesRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantItemImageInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -31,13 +31,13 @@ import org.springframework.data.jpa.domain.Specification;
 class RestaurantItemImageGatewayAdapterTest {
 
   @Mock
-  private JpaRestaurantItemsImagesRepository repository;
+  private JpaRestaurantItemImagesRepository repository;
 
   @Mock
-  private RestaurantItemsImageInfraMapper mapper;
+  private RestaurantItemImageInfraMapper mapper;
 
   @Mock
-  private JpaRestaurantItemsRepository restaurantItemsRepository;
+  private JpaRestaurantItemRepository restaurantItemsRepository;
 
   @InjectMocks
   private RestaurantItemImageGatewayAdapter adapter;
@@ -48,16 +48,16 @@ class RestaurantItemImageGatewayAdapterTest {
     final var restaurantItemsUuid = UUID.randomUUID();
     final RestaurantItemImage model = Mockito.mock(RestaurantItemImage.class);
 
-    final RestaurantItemsEntity restaurantItemsEntity = Mockito.mock(RestaurantItemsEntity.class);
+    final RestaurantItemEntity restaurantItemEntity = Mockito.mock(RestaurantItemEntity.class);
 
-    final RestaurantItemsImagesEntity entityToSave = Mockito.mock(RestaurantItemsImagesEntity.class);
-    final RestaurantItemsImagesEntity savedEntity = Mockito.mock(RestaurantItemsImagesEntity.class);
+    final RestaurantItemImageEntity entityToSave = Mockito.mock(RestaurantItemImageEntity.class);
+    final RestaurantItemImageEntity savedEntity = Mockito.mock(RestaurantItemImageEntity.class);
 
     final RestaurantItemImage mappedDomain = Mockito.mock(RestaurantItemImage.class);
 
     Mockito.when(restaurantItemsRepository.findByUuid(restaurantItemsUuid))
-        .thenReturn(Optional.of(restaurantItemsEntity));
-    Mockito.when(mapper.toEntity(model, restaurantItemsEntity))
+        .thenReturn(Optional.of(restaurantItemEntity));
+    Mockito.when(mapper.toEntity(model, restaurantItemEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
@@ -71,7 +71,7 @@ class RestaurantItemImageGatewayAdapterTest {
     Mockito.verify(restaurantItemsRepository, Mockito.times(1))
         .findByUuid(restaurantItemsUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(model, restaurantItemsEntity);
+        .toEntity(model, restaurantItemEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -102,9 +102,9 @@ class RestaurantItemImageGatewayAdapterTest {
     final var uuid = UUID.randomUUID();
     final RestaurantItemImage model = Mockito.mock(RestaurantItemImage.class);
 
-    final RestaurantItemsImagesEntity foundEntity = Mockito.mock(RestaurantItemsImagesEntity.class);
-    final RestaurantItemsImagesEntity entityToSave = Mockito.mock(RestaurantItemsImagesEntity.class);
-    final RestaurantItemsImagesEntity savedEntity = Mockito.mock(RestaurantItemsImagesEntity.class);
+    final RestaurantItemImageEntity foundEntity = Mockito.mock(RestaurantItemImageEntity.class);
+    final RestaurantItemImageEntity entityToSave = Mockito.mock(RestaurantItemImageEntity.class);
+    final RestaurantItemImageEntity savedEntity = Mockito.mock(RestaurantItemImageEntity.class);
 
     final RestaurantItemImage mappedDomain = Mockito.mock(RestaurantItemImage.class);
 
@@ -173,7 +173,7 @@ class RestaurantItemImageGatewayAdapterTest {
   void findByUuidShouldReturnMappedModelWhenFound() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantItemsImagesEntity foundEntity = Mockito.mock(RestaurantItemsImagesEntity.class);
+    final RestaurantItemImageEntity foundEntity = Mockito.mock(RestaurantItemImageEntity.class);
     final RestaurantItemImage mappedDomain = Mockito.mock(RestaurantItemImage.class);
 
     Mockito.when(repository.findByUuid(uuid))
@@ -198,8 +198,8 @@ class RestaurantItemImageGatewayAdapterTest {
   void findAllShouldReturnPagedResultWithDefaultsWhenSortAndDirectionAreNull() {
     final var restaurantItemsUuid = UUID.randomUUID();
 
-    final var entity1 = Mockito.mock(RestaurantItemsImagesEntity.class);
-    final var entity2 = Mockito.mock(RestaurantItemsImagesEntity.class);
+    final var entity1 = Mockito.mock(RestaurantItemImageEntity.class);
+    final var entity2 = Mockito.mock(RestaurantItemImageEntity.class);
 
     final RestaurantItemImage domain1 = Mockito.mock(RestaurantItemImage.class);
     final RestaurantItemImage domain2 = Mockito.mock(RestaurantItemImage.class);
@@ -209,12 +209,12 @@ class RestaurantItemImageGatewayAdapterTest {
     Mockito.when(mapper.toDomain(entity2))
         .thenReturn(domain2);
 
-    final Page<RestaurantItemsImagesEntity> pageResult = new PageImpl<>(List.of(entity1, entity2), Pageable.unpaged(),
+    final Page<RestaurantItemImageEntity> pageResult = new PageImpl<>(List.of(entity1, entity2), Pageable.unpaged(),
         2
     );
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<RestaurantItemsImagesEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantItemImageEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(pageResult);
@@ -230,7 +230,7 @@ class RestaurantItemImageGatewayAdapterTest {
     Assertions.assertEquals(2L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<RestaurantItemsImagesEntity>>any(),
+        .findAll(ArgumentMatchers.<Specification<RestaurantItemImageEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         );
     Mockito.verify(mapper, Mockito.times(1))
@@ -245,16 +245,16 @@ class RestaurantItemImageGatewayAdapterTest {
   void findAllShouldReturnPagedResultUsingProvidedSortAndDirection() {
     final var restaurantItemsUuid = UUID.randomUUID();
 
-    final var entity = Mockito.mock(RestaurantItemsImagesEntity.class);
+    final var entity = Mockito.mock(RestaurantItemImageEntity.class);
     final RestaurantItemImage domain = Mockito.mock(RestaurantItemImage.class);
 
     Mockito.when(mapper.toDomain(entity))
         .thenReturn(domain);
 
-    final Page<RestaurantItemsImagesEntity> pageResult = new PageImpl<>(List.of(entity), Pageable.unpaged(), 1);
+    final Page<RestaurantItemImageEntity> pageResult = new PageImpl<>(List.of(entity), Pageable.unpaged(), 1);
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<RestaurantItemsImagesEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantItemImageEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(pageResult);
@@ -270,7 +270,7 @@ class RestaurantItemImageGatewayAdapterTest {
     Assertions.assertEquals(1L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<RestaurantItemsImagesEntity>>any(),
+        .findAll(ArgumentMatchers.<Specification<RestaurantItemImageEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         );
     Mockito.verify(mapper, Mockito.times(1))

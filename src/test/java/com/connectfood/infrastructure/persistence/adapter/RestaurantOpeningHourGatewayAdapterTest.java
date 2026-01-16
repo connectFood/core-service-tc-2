@@ -5,11 +5,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantOpeningHour;
-import com.connectfood.infrastructure.persistence.entity.RestaurantOpeningHoursEntity;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantOpeningHoursRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
+import com.connectfood.infrastructure.persistence.entity.RestaurantOpeningHourEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantOpeningHourRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantOpeningHourInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,13 +24,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RestaurantOpeningHourGatewayAdapterTest {
 
   @Mock
-  private JpaRestaurantOpeningHoursRepository repository;
+  private JpaRestaurantOpeningHourRepository repository;
 
   @Mock
-  private RestaurantOpeningHoursInfraMapper mapper;
+  private RestaurantOpeningHourInfraMapper mapper;
 
   @Mock
-  private JpaRestaurantsRepository restaurantsRepository;
+  private JpaRestaurantRepository restaurantsRepository;
 
   @InjectMocks
   private RestaurantOpeningHourGatewayAdapter adapter;
@@ -41,10 +41,10 @@ class RestaurantOpeningHourGatewayAdapterTest {
     final var restaurantUuid = UUID.randomUUID();
     final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
 
-    final RestaurantsEntity restaurantEntity = Mockito.mock(RestaurantsEntity.class);
+    final RestaurantEntity restaurantEntity = Mockito.mock(RestaurantEntity.class);
 
-    final RestaurantOpeningHoursEntity entityToSave = Mockito.mock(RestaurantOpeningHoursEntity.class);
-    final RestaurantOpeningHoursEntity savedEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
+    final RestaurantOpeningHourEntity entityToSave = Mockito.mock(RestaurantOpeningHourEntity.class);
+    final RestaurantOpeningHourEntity savedEntity = Mockito.mock(RestaurantOpeningHourEntity.class);
 
     final RestaurantOpeningHour mappedDomain = Mockito.mock(RestaurantOpeningHour.class);
 
@@ -95,9 +95,9 @@ class RestaurantOpeningHourGatewayAdapterTest {
     final var uuid = UUID.randomUUID();
     final RestaurantOpeningHour model = Mockito.mock(RestaurantOpeningHour.class);
 
-    final RestaurantOpeningHoursEntity foundEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
-    final RestaurantOpeningHoursEntity entityToSave = Mockito.mock(RestaurantOpeningHoursEntity.class);
-    final RestaurantOpeningHoursEntity savedEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
+    final RestaurantOpeningHourEntity foundEntity = Mockito.mock(RestaurantOpeningHourEntity.class);
+    final RestaurantOpeningHourEntity entityToSave = Mockito.mock(RestaurantOpeningHourEntity.class);
+    final RestaurantOpeningHourEntity savedEntity = Mockito.mock(RestaurantOpeningHourEntity.class);
 
     final RestaurantOpeningHour mappedDomain = Mockito.mock(RestaurantOpeningHour.class);
 
@@ -166,7 +166,7 @@ class RestaurantOpeningHourGatewayAdapterTest {
   void findByUuidShouldReturnMappedModelWhenFound() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantOpeningHoursEntity foundEntity = Mockito.mock(RestaurantOpeningHoursEntity.class);
+    final RestaurantOpeningHourEntity foundEntity = Mockito.mock(RestaurantOpeningHourEntity.class);
     final RestaurantOpeningHour mappedDomain = Mockito.mock(RestaurantOpeningHour.class);
 
     Mockito.when(repository.findByUuid(uuid))

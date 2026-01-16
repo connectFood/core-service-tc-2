@@ -7,12 +7,12 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantGateway;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsInfraMapper;
-import com.connectfood.infrastructure.persistence.specification.RestaurantsSpecification;
+import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantTypeEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantTypeRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantInfraMapper;
+import com.connectfood.infrastructure.persistence.specification.RestaurantSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,13 +22,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RestaurantGatewayAdapter implements RestaurantGateway {
 
-  private final JpaRestaurantsRepository repository;
-  private final RestaurantsInfraMapper mapper;
-  private final JpaRestaurantsTypeRepository restaurantsTypeRepository;
+  private final JpaRestaurantRepository repository;
+  private final RestaurantInfraMapper mapper;
+  private final JpaRestaurantTypeRepository restaurantsTypeRepository;
 
-  public RestaurantGatewayAdapter(final JpaRestaurantsRepository repository,
-                                  final RestaurantsInfraMapper mapper,
-                                  final JpaRestaurantsTypeRepository restaurantsTypeRepository) {
+  public RestaurantGatewayAdapter(final JpaRestaurantRepository repository,
+                                  final RestaurantInfraMapper mapper,
+                                  final JpaRestaurantTypeRepository restaurantsTypeRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsTypeRepository = restaurantsTypeRepository;
@@ -54,15 +54,15 @@ public class RestaurantGatewayAdapter implements RestaurantGateway {
             .getUuid())
         .orElseThrow();
 
-    RestaurantsTypeEntity restaurantsTypeEntity = entity.getRestaurantsType();
+    RestaurantTypeEntity restaurantTypeEntity = entity.getRestaurantsType();
 
-    if (!restaurantsTypeEntity.getUuid()
+    if (!restaurantTypeEntity.getUuid()
         .equals(restaurant.getRestaurantType()
             .getUuid())) {
-      restaurantsTypeEntity = restaurantType;
+      restaurantTypeEntity = restaurantType;
     }
 
-    entity = repository.save(mapper.toEntity(restaurant, entity, restaurantsTypeEntity));
+    entity = repository.save(mapper.toEntity(restaurant, entity, restaurantTypeEntity));
 
     return mapper.toDomain(entity);
   }
@@ -84,10 +84,10 @@ public class RestaurantGatewayAdapter implements RestaurantGateway {
         )
     );
 
-    final Specification<RestaurantsEntity> spec = Specification.allOf(RestaurantsSpecification.nameContains(name),
-        RestaurantsSpecification.hasRestaurantsTypeUuid(restaurantsTypeUuid),
-        RestaurantsSpecification.streetContains(street), RestaurantsSpecification.cityContains(city),
-        RestaurantsSpecification.stateContains(state)
+    final Specification<RestaurantEntity> spec = Specification.allOf(RestaurantSpecification.nameContains(name),
+        RestaurantSpecification.hasRestaurantsTypeUuid(restaurantsTypeUuid),
+        RestaurantSpecification.streetContains(street), RestaurantSpecification.cityContains(city),
+        RestaurantSpecification.stateContains(state)
     );
 
     final var entities = repository.findAll(spec, pageable);

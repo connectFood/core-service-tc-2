@@ -4,12 +4,12 @@ import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
-import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
+import com.connectfood.infrastructure.persistence.entity.RestaurantTypeEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantTypeRepository;
 
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsTypeInfraMapper;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantTypeInfraMapper;
 
-import com.connectfood.infrastructure.persistence.specification.RestaurantsTypeSpecification;
+import com.connectfood.infrastructure.persistence.specification.RestaurantTypeSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,11 +23,11 @@ import java.util.UUID;
 @Repository
 public class RestaurantTypeGatewayAdapter implements RestaurantTypeGateway {
 
-  private final JpaRestaurantsTypeRepository repository;
-  private final RestaurantsTypeInfraMapper mapper;
+  private final JpaRestaurantTypeRepository repository;
+  private final RestaurantTypeInfraMapper mapper;
 
-  public RestaurantTypeGatewayAdapter(final JpaRestaurantsTypeRepository repository,
-                                      final RestaurantsTypeInfraMapper mapper) {
+  public RestaurantTypeGatewayAdapter(final JpaRestaurantTypeRepository repository,
+                                      final RestaurantTypeInfraMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }
@@ -63,8 +63,8 @@ public class RestaurantTypeGatewayAdapter implements RestaurantTypeGateway {
         Sort.Direction.fromString(direction), sort == null ? "id" : sort)
     );
 
-    final Specification<RestaurantsTypeEntity> spec =
-        Specification.allOf(RestaurantsTypeSpecification.nameContains(name));
+    final Specification<RestaurantTypeEntity> spec =
+        Specification.allOf(RestaurantTypeSpecification.nameContains(name));
 
     final var entities = repository.findAll(spec, pageable);
     final var results = entities.getContent()

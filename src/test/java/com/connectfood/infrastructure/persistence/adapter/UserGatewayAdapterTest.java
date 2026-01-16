@@ -8,11 +8,11 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.infrastructure.persistence.entity.UsersEntity;
-import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersTypeRepository;
-import com.connectfood.infrastructure.persistence.mappers.UsersInfraMapper;
+import com.connectfood.infrastructure.persistence.entity.UserEntity;
+import com.connectfood.infrastructure.persistence.entity.UserTypeEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserTypeRepository;
+import com.connectfood.infrastructure.persistence.mappers.UserInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,13 +34,13 @@ import org.springframework.data.jpa.domain.Specification;
 class UserGatewayAdapterTest {
 
   @Mock
-  private JpaUsersRepository repository;
+  private JpaUserRepository repository;
 
   @Mock
-  private UsersInfraMapper mapper;
+  private UserInfraMapper mapper;
 
   @Mock
-  private JpaUsersTypeRepository usersTypeRepository;
+  private JpaUserTypeRepository usersTypeRepository;
 
   @InjectMocks
   private UserGatewayAdapter adapter;
@@ -57,16 +57,16 @@ class UserGatewayAdapterTest {
     Mockito.when(user.getUserType())
         .thenReturn(userTypeDomain);
 
-    final UsersTypeEntity usersTypeEntity = Mockito.mock(UsersTypeEntity.class);
+    final UserTypeEntity userTypeEntity = Mockito.mock(UserTypeEntity.class);
 
-    final UsersEntity entityToSave = Mockito.mock(UsersEntity.class);
-    final UsersEntity savedEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity entityToSave = Mockito.mock(UserEntity.class);
+    final UserEntity savedEntity = Mockito.mock(UserEntity.class);
 
     final User mappedDomain = Mockito.mock(User.class);
 
     Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
-        .thenReturn(Optional.of(usersTypeEntity));
-    Mockito.when(mapper.toEntity(user, usersTypeEntity))
+        .thenReturn(Optional.of(userTypeEntity));
+    Mockito.when(mapper.toEntity(user, userTypeEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
@@ -80,7 +80,7 @@ class UserGatewayAdapterTest {
     Mockito.verify(usersTypeRepository, Mockito.times(1))
         .findByUuid(usersTypeUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(user, usersTypeEntity);
+        .toEntity(user, userTypeEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -125,15 +125,15 @@ class UserGatewayAdapterTest {
     Mockito.when(user.getUserType())
         .thenReturn(userTypeDomain);
 
-    final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity foundEntity = Mockito.mock(UserEntity.class);
 
-    final UsersTypeEntity existingTypeEntity = Mockito.mock(UsersTypeEntity.class);
+    final UserTypeEntity existingTypeEntity = Mockito.mock(UserTypeEntity.class);
     Mockito.when(existingTypeEntity.getUuid())
         .thenReturn(usersTypeUuid);
     Mockito.when(foundEntity.getUsersType())
         .thenReturn(existingTypeEntity);
 
-    final UsersTypeEntity fetchedTypeEntity = Mockito.mock(UsersTypeEntity.class);
+    final UserTypeEntity fetchedTypeEntity = Mockito.mock(UserTypeEntity.class);
     Mockito.when(fetchedTypeEntity.getUuid())
         .thenReturn(usersTypeUuid);
 
@@ -142,8 +142,8 @@ class UserGatewayAdapterTest {
     Mockito.when(usersTypeRepository.findByUuid(usersTypeUuid))
         .thenReturn(Optional.of(fetchedTypeEntity));
 
-    final UsersEntity entityToSave = Mockito.mock(UsersEntity.class);
-    final UsersEntity savedEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity entityToSave = Mockito.mock(UserEntity.class);
+    final UserEntity savedEntity = Mockito.mock(UserEntity.class);
     final User mappedDomain = Mockito.mock(User.class);
 
     Mockito.when(mapper.toEntity(user, foundEntity, existingTypeEntity))
@@ -184,16 +184,16 @@ class UserGatewayAdapterTest {
     Mockito.when(user.getUserType())
         .thenReturn(userTypeDomain);
 
-    final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity foundEntity = Mockito.mock(UserEntity.class);
 
     final var existingTypeUuid = UUID.randomUUID();
-    final UsersTypeEntity existingTypeEntity = Mockito.mock(UsersTypeEntity.class);
+    final UserTypeEntity existingTypeEntity = Mockito.mock(UserTypeEntity.class);
     Mockito.when(existingTypeEntity.getUuid())
         .thenReturn(existingTypeUuid);
     Mockito.when(foundEntity.getUsersType())
         .thenReturn(existingTypeEntity);
 
-    final UsersTypeEntity fetchedTypeEntity = Mockito.mock(UsersTypeEntity.class);
+    final UserTypeEntity fetchedTypeEntity = Mockito.mock(UserTypeEntity.class);
     Mockito.when(fetchedTypeEntity.getUuid())
         .thenReturn(newTypeUuid);
 
@@ -202,8 +202,8 @@ class UserGatewayAdapterTest {
     Mockito.when(usersTypeRepository.findByUuid(newTypeUuid))
         .thenReturn(Optional.of(fetchedTypeEntity));
 
-    final UsersEntity entityToSave = Mockito.mock(UsersEntity.class);
-    final UsersEntity savedEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity entityToSave = Mockito.mock(UserEntity.class);
+    final UserEntity savedEntity = Mockito.mock(UserEntity.class);
     final User mappedDomain = Mockito.mock(User.class);
 
     Mockito.when(mapper.toEntity(user, foundEntity, fetchedTypeEntity))
@@ -261,7 +261,7 @@ class UserGatewayAdapterTest {
     Mockito.when(user.getUserType())
         .thenReturn(userTypeDomain);
 
-    final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity foundEntity = Mockito.mock(UserEntity.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(foundEntity));
 
@@ -302,7 +302,7 @@ class UserGatewayAdapterTest {
   void findByUuidShouldReturnMappedModelWhenFound() {
     final var uuid = UUID.randomUUID();
 
-    final UsersEntity foundEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity foundEntity = Mockito.mock(UserEntity.class);
     final User mappedDomain = Mockito.mock(User.class);
 
     Mockito.when(repository.findByUuid(uuid))
@@ -327,8 +327,8 @@ class UserGatewayAdapterTest {
   void findAllShouldReturnPagedResultWithDefaultsWhenSortAndDirectionAreNull() {
     final var usersTypeUuid = UUID.randomUUID();
 
-    final UsersEntity entity1 = Mockito.mock(UsersEntity.class);
-    final UsersEntity entity2 = Mockito.mock(UsersEntity.class);
+    final UserEntity entity1 = Mockito.mock(UserEntity.class);
+    final UserEntity entity2 = Mockito.mock(UserEntity.class);
 
     final User domain1 = Mockito.mock(User.class);
     final User domain2 = Mockito.mock(User.class);
@@ -338,13 +338,13 @@ class UserGatewayAdapterTest {
     Mockito.when(mapper.toDomain(entity2))
         .thenReturn(domain2);
 
-    final Page<UsersEntity> pageResult =
+    final Page<UserEntity> pageResult =
         new PageImpl<>(List.of(entity1, entity2), Pageable.unpaged(), 2);
 
     final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<UsersEntity>>any(),
+            ArgumentMatchers.<Specification<UserEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(pageResult);
@@ -368,7 +368,7 @@ class UserGatewayAdapterTest {
     Assertions.assertEquals(2L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<UsersEntity>>any(), pageableCaptor.capture());
+        .findAll(ArgumentMatchers.<Specification<UserEntity>>any(), pageableCaptor.capture());
 
     final Pageable usedPageable = pageableCaptor.getValue();
     Assertions.assertEquals(0, usedPageable.getPageNumber());
@@ -385,19 +385,19 @@ class UserGatewayAdapterTest {
   @Test
   @DisplayName("Deve listar paginado respeitando sort e direction informados")
   void findAllShouldReturnPagedResultUsingProvidedSortAndDirection() {
-    final UsersEntity entity = Mockito.mock(UsersEntity.class);
+    final UserEntity entity = Mockito.mock(UserEntity.class);
     final User domain = Mockito.mock(User.class);
 
     Mockito.when(mapper.toDomain(entity))
         .thenReturn(domain);
 
-    final Page<UsersEntity> pageResult =
+    final Page<UserEntity> pageResult =
         new PageImpl<>(List.of(entity), Pageable.unpaged(), 1);
 
     final ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<UsersEntity>>any(),
+            ArgumentMatchers.<Specification<UserEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(pageResult);
@@ -421,7 +421,7 @@ class UserGatewayAdapterTest {
     Assertions.assertEquals(1L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<UsersEntity>>any(), pageableCaptor.capture());
+        .findAll(ArgumentMatchers.<Specification<UserEntity>>any(), pageableCaptor.capture());
 
     final Pageable usedPageable = pageableCaptor.getValue();
     Assertions.assertEquals(1, usedPageable.getPageNumber());

@@ -7,12 +7,12 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UserGateway;
-import com.connectfood.infrastructure.persistence.entity.UsersEntity;
-import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersTypeRepository;
-import com.connectfood.infrastructure.persistence.mappers.UsersInfraMapper;
-import com.connectfood.infrastructure.persistence.specification.UsersSpecification;
+import com.connectfood.infrastructure.persistence.entity.UserEntity;
+import com.connectfood.infrastructure.persistence.entity.UserTypeEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserTypeRepository;
+import com.connectfood.infrastructure.persistence.mappers.UserInfraMapper;
+import com.connectfood.infrastructure.persistence.specification.UserSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,14 +22,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserGatewayAdapter implements UserGateway {
 
-  private final JpaUsersRepository repository;
-  private final UsersInfraMapper mapper;
-  private final JpaUsersTypeRepository usersTypeRepository;
+  private final JpaUserRepository repository;
+  private final UserInfraMapper mapper;
+  private final JpaUserTypeRepository usersTypeRepository;
 
   public UserGatewayAdapter(
-      final JpaUsersRepository repository,
-      final UsersInfraMapper mapper,
-      final JpaUsersTypeRepository usersTypeRepository) {
+      final JpaUserRepository repository,
+      final UserInfraMapper mapper,
+      final JpaUserTypeRepository usersTypeRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.usersTypeRepository = usersTypeRepository;
@@ -55,14 +55,14 @@ public class UserGatewayAdapter implements UserGateway {
             .getUuid())
         .orElseThrow();
 
-    UsersTypeEntity usersTypeEntity = entity.getUsersType();
+    UserTypeEntity userTypeEntity = entity.getUsersType();
 
-    if (!usersTypeEntity.getUuid()
+    if (!userTypeEntity.getUuid()
         .equals(userType.getUuid())) {
-      usersTypeEntity = userType;
+      userTypeEntity = userType;
     }
 
-    entity = repository.save(mapper.toEntity(user, entity, usersTypeEntity));
+    entity = repository.save(mapper.toEntity(user, entity, userTypeEntity));
 
     return mapper.toDomain(entity);
   }
@@ -84,8 +84,8 @@ public class UserGatewayAdapter implements UserGateway {
         )
     );
 
-    final Specification<UsersEntity> spec = Specification.allOf(UsersSpecification.nameContains(fullName),
-        UsersSpecification.emailContains(email), UsersSpecification.hasUsersTypeUuid(usersTypeUuid)
+    final Specification<UserEntity> spec = Specification.allOf(UserSpecification.nameContains(fullName),
+        UserSpecification.emailContains(email), UserSpecification.hasUsersTypeUuid(usersTypeUuid)
     );
 
     final var entities = repository.findAll(spec, pageable);

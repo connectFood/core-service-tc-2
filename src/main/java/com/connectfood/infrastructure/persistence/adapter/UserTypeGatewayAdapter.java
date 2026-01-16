@@ -7,10 +7,10 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.UserTypeGateway;
-import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersTypeRepository;
-import com.connectfood.infrastructure.persistence.mappers.UsersTypeInfraMapper;
-import com.connectfood.infrastructure.persistence.specification.UsersTypeSpecification;
+import com.connectfood.infrastructure.persistence.entity.UserTypeEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserTypeRepository;
+import com.connectfood.infrastructure.persistence.mappers.UserTypeInfraMapper;
+import com.connectfood.infrastructure.persistence.specification.UserTypeSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserTypeGatewayAdapter implements UserTypeGateway {
 
-  private final JpaUsersTypeRepository repository;
-  private final UsersTypeInfraMapper mapper;
+  private final JpaUserTypeRepository repository;
+  private final UserTypeInfraMapper mapper;
 
-  public UserTypeGatewayAdapter(final JpaUsersTypeRepository repository, final UsersTypeInfraMapper mapper) {
+  public UserTypeGatewayAdapter(final JpaUserTypeRepository repository, final UserTypeInfraMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }
@@ -62,7 +62,7 @@ public class UserTypeGatewayAdapter implements UserTypeGateway {
         )
     );
 
-    final Specification<UsersTypeEntity> spec = Specification.allOf(UsersTypeSpecification.nameContains(name));
+    final Specification<UserTypeEntity> spec = Specification.allOf(UserTypeSpecification.nameContains(name));
 
     final var entities = repository.findAll(spec, pageable);
 

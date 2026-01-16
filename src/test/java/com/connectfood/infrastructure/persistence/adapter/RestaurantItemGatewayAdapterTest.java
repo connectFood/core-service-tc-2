@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.model.Restaurant;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsInfraMapper;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantItemInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -32,13 +32,13 @@ import org.springframework.data.jpa.domain.Specification;
 class RestaurantItemGatewayAdapterTest {
 
   @Mock
-  private JpaRestaurantItemsRepository repository;
+  private JpaRestaurantItemRepository repository;
 
   @Mock
-  private RestaurantItemsInfraMapper mapper;
+  private RestaurantItemInfraMapper mapper;
 
   @Mock
-  private JpaRestaurantsRepository restaurantsRepository;
+  private JpaRestaurantRepository restaurantsRepository;
 
   @InjectMocks
   private RestaurantItemGatewayAdapter adapter;
@@ -56,15 +56,15 @@ class RestaurantItemGatewayAdapterTest {
     Mockito.when(model.getRestaurant())
         .thenReturn(restaurantDomain);
 
-    final var restaurantEntity = new RestaurantsEntity();
+    final var restaurantEntity = new RestaurantEntity();
     Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurantEntity));
 
-    final var toSaveEntity = new RestaurantItemsEntity();
+    final var toSaveEntity = new RestaurantItemEntity();
     Mockito.when(mapper.toEntity(model, restaurantEntity))
         .thenReturn(toSaveEntity);
 
-    final var savedEntity = new RestaurantItemsEntity();
+    final var savedEntity = new RestaurantItemEntity();
     Mockito.when(repository.save(toSaveEntity))
         .thenReturn(savedEntity);
 
@@ -118,15 +118,15 @@ class RestaurantItemGatewayAdapterTest {
 
     final RestaurantItem model = Mockito.mock(RestaurantItem.class);
 
-    final var existingEntity = new RestaurantItemsEntity();
+    final var existingEntity = new RestaurantItemEntity();
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(existingEntity));
 
-    final var updatedEntity = new RestaurantItemsEntity();
+    final var updatedEntity = new RestaurantItemEntity();
     Mockito.when(mapper.toEntity(model, existingEntity))
         .thenReturn(updatedEntity);
 
-    final var savedEntity = new RestaurantItemsEntity();
+    final var savedEntity = new RestaurantItemEntity();
     Mockito.when(repository.save(updatedEntity))
         .thenReturn(savedEntity);
 
@@ -168,7 +168,7 @@ class RestaurantItemGatewayAdapterTest {
   void shouldReturnOptionalWithDomainWhenFound() {
     final var uuid = UUID.randomUUID();
 
-    final var entity = new RestaurantItemsEntity();
+    final var entity = new RestaurantItemEntity();
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(entity));
 
@@ -196,8 +196,8 @@ class RestaurantItemGatewayAdapterTest {
     final var sort = "id";
     final var direction = "ASC";
 
-    final var entity1 = new RestaurantItemsEntity();
-    final var entity2 = new RestaurantItemsEntity();
+    final var entity1 = new RestaurantItemEntity();
+    final var entity2 = new RestaurantItemEntity();
 
     final var entitiesPage = new PageImpl<>(
         List.of(entity1, entity2),
@@ -206,7 +206,7 @@ class RestaurantItemGatewayAdapterTest {
     );
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<RestaurantItemsEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantItemEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(entitiesPage);
@@ -231,7 +231,7 @@ class RestaurantItemGatewayAdapterTest {
     final var pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
     Mockito.verify(repository)
         .findAll(
-            ArgumentMatchers.<Specification<RestaurantItemsEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantItemEntity>>any(),
             pageableCaptor.capture()
         );
 
@@ -255,14 +255,14 @@ class RestaurantItemGatewayAdapterTest {
   void shouldUseDefaultsWhenSortAndDirectionAreNull() {
     final var restaurantUuid = UUID.randomUUID();
 
-    final var entitiesPage = new PageImpl<RestaurantItemsEntity>(
+    final var entitiesPage = new PageImpl<RestaurantItemEntity>(
         List.of(),
         PageRequest.of(0, 10),
         0L
     );
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<RestaurantItemsEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantItemEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(entitiesPage);
@@ -277,7 +277,7 @@ class RestaurantItemGatewayAdapterTest {
     final var pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
     Mockito.verify(repository)
         .findAll(
-            ArgumentMatchers.<Specification<RestaurantItemsEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantItemEntity>>any(),
             pageableCaptor.capture()
         );
 

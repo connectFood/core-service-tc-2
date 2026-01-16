@@ -8,12 +8,12 @@ import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
-import com.connectfood.infrastructure.persistence.entity.UsersAddressEntity;
-import com.connectfood.infrastructure.persistence.entity.UsersEntity;
+import com.connectfood.infrastructure.persistence.entity.UserAddressEntity;
+import com.connectfood.infrastructure.persistence.entity.UserEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
-import com.connectfood.infrastructure.persistence.mappers.UsersAddressInfraMapper;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserAddressRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserRepository;
+import com.connectfood.infrastructure.persistence.mappers.UserAddressInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,13 +28,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserAddressGatewayAdapterTest {
 
   @Mock
-  private JpaUsersAddressRepository repository;
+  private JpaUserAddressRepository repository;
 
   @Mock
-  private UsersAddressInfraMapper mapper;
+  private UserAddressInfraMapper mapper;
 
   @Mock
-  private JpaUsersRepository usersRepository;
+  private JpaUserRepository usersRepository;
 
   @Mock
   private JpaAddressRepository addressRepository;
@@ -65,19 +65,19 @@ class UserAddressGatewayAdapterTest {
     Mockito.when(userAddress.getAddress())
         .thenReturn(address);
 
-    final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity userEntity = Mockito.mock(UserEntity.class);
     final AddressEntity addressEntity = Mockito.mock(AddressEntity.class);
 
     Mockito.when(usersRepository.findByUuid(usersUuid))
-        .thenReturn(Optional.of(usersEntity));
+        .thenReturn(Optional.of(userEntity));
     Mockito.when(addressRepository.findByUuid(addressUuid))
         .thenReturn(Optional.of(addressEntity));
 
-    final UsersAddressEntity entityToSave = Mockito.mock(UsersAddressEntity.class);
-    Mockito.when(mapper.toEntity(usersAddressUuid, usersEntity, addressEntity))
+    final UserAddressEntity entityToSave = Mockito.mock(UserAddressEntity.class);
+    Mockito.when(mapper.toEntity(usersAddressUuid, userEntity, addressEntity))
         .thenReturn(entityToSave);
 
-    final UsersAddressEntity savedEntity = Mockito.mock(UsersAddressEntity.class);
+    final UserAddressEntity savedEntity = Mockito.mock(UserAddressEntity.class);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
 
@@ -94,7 +94,7 @@ class UserAddressGatewayAdapterTest {
     Mockito.verify(addressRepository, Mockito.times(1))
         .findByUuid(addressUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(usersAddressUuid, usersEntity, addressEntity);
+        .toEntity(usersAddressUuid, userEntity, addressEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -146,10 +146,10 @@ class UserAddressGatewayAdapterTest {
     Mockito.when(userAddress.getAddress())
         .thenReturn(address);
 
-    final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity userEntity = Mockito.mock(UserEntity.class);
 
     Mockito.when(usersRepository.findByUuid(usersUuid))
-        .thenReturn(Optional.of(usersEntity));
+        .thenReturn(Optional.of(userEntity));
     Mockito.when(addressRepository.findByUuid(addressUuid))
         .thenReturn(Optional.empty());
 
@@ -187,7 +187,7 @@ class UserAddressGatewayAdapterTest {
   void findByUsersUuidShouldReturnMappedModelWhenFound() {
     final var usersUuid = UUID.randomUUID();
 
-    final UsersAddressEntity entity = Mockito.mock(UsersAddressEntity.class);
+    final UserAddressEntity entity = Mockito.mock(UserAddressEntity.class);
     final UserAddress mappedDomain = Mockito.mock(UserAddress.class);
 
     Mockito.when(repository.findByUsersUuid(usersUuid))

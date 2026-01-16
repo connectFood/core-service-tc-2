@@ -7,13 +7,13 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserRestaurant;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
-import com.connectfood.infrastructure.persistence.entity.UsersEntity;
-import com.connectfood.infrastructure.persistence.entity.UsersRestaurantEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersRestaurantRepository;
-import com.connectfood.infrastructure.persistence.mappers.UsersRestaurantInfraMapper;
+import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
+import com.connectfood.infrastructure.persistence.entity.UserEntity;
+import com.connectfood.infrastructure.persistence.entity.UserRestaurantEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.UserRestaurantInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,16 +28,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserRestaurantGatewayAdapterTest {
 
   @Mock
-  private JpaUsersRestaurantRepository repository;
+  private JpaUserRestaurantRepository repository;
 
   @Mock
-  private UsersRestaurantInfraMapper mapper;
+  private UserRestaurantInfraMapper mapper;
 
   @Mock
-  private JpaUsersRepository usersRepository;
+  private JpaUserRepository usersRepository;
 
   @Mock
-  private JpaRestaurantsRepository restaurantsRepository;
+  private JpaRestaurantRepository restaurantsRepository;
 
   @InjectMocks
   private UserRestaurantGatewayAdapter adapter;
@@ -65,19 +65,19 @@ class UserRestaurantGatewayAdapterTest {
     Mockito.when(userRestaurant.getRestaurant())
         .thenReturn(restaurantDomain);
 
-    final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
-    final RestaurantsEntity restaurantsEntity = Mockito.mock(RestaurantsEntity.class);
+    final UserEntity userEntity = Mockito.mock(UserEntity.class);
+    final RestaurantEntity restaurantEntity = Mockito.mock(RestaurantEntity.class);
 
-    final UsersRestaurantEntity entityToSave = Mockito.mock(UsersRestaurantEntity.class);
-    final UsersRestaurantEntity savedEntity = Mockito.mock(UsersRestaurantEntity.class);
+    final UserRestaurantEntity entityToSave = Mockito.mock(UserRestaurantEntity.class);
+    final UserRestaurantEntity savedEntity = Mockito.mock(UserRestaurantEntity.class);
 
     final UserRestaurant mappedDomain = Mockito.mock(UserRestaurant.class);
 
     Mockito.when(usersRepository.findByUuid(userUuid))
-        .thenReturn(Optional.of(usersEntity));
+        .thenReturn(Optional.of(userEntity));
     Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurantsEntity));
-    Mockito.when(mapper.toEntity(usersRestaurantUuid, usersEntity, restaurantsEntity))
+        .thenReturn(Optional.of(restaurantEntity));
+    Mockito.when(mapper.toEntity(usersRestaurantUuid, userEntity, restaurantEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
@@ -93,7 +93,7 @@ class UserRestaurantGatewayAdapterTest {
     Mockito.verify(restaurantsRepository, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(usersRestaurantUuid, usersEntity, restaurantsEntity);
+        .toEntity(usersRestaurantUuid, userEntity, restaurantEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -147,10 +147,10 @@ class UserRestaurantGatewayAdapterTest {
     Mockito.when(userRestaurant.getRestaurant())
         .thenReturn(restaurantDomain);
 
-    final UsersEntity usersEntity = Mockito.mock(UsersEntity.class);
+    final UserEntity userEntity = Mockito.mock(UserEntity.class);
 
     Mockito.when(usersRepository.findByUuid(userUuid))
-        .thenReturn(Optional.of(usersEntity));
+        .thenReturn(Optional.of(userEntity));
     Mockito.when(restaurantsRepository.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 

@@ -8,12 +8,12 @@ import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsAddressEntity;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantAddressEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsAddressInfraMapper;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantAddressRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantAddressInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,13 +28,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RestaurantAddressGatewayAdapterTest {
 
   @Mock
-  private JpaRestaurantsAddressRepository repository;
+  private JpaRestaurantAddressRepository repository;
 
   @Mock
-  private RestaurantsAddressInfraMapper mapper;
+  private RestaurantAddressInfraMapper mapper;
 
   @Mock
-  private JpaRestaurantsRepository restaurantsRepository;
+  private JpaRestaurantRepository restaurantsRepository;
 
   @Mock
   private JpaAddressRepository addressRepository;
@@ -65,19 +65,19 @@ class RestaurantAddressGatewayAdapterTest {
     Mockito.when(restaurantsAddress.getAddress())
         .thenReturn(addressDomain);
 
-    final RestaurantsEntity restaurantsEntity = Mockito.mock(RestaurantsEntity.class);
+    final RestaurantEntity restaurantEntity = Mockito.mock(RestaurantEntity.class);
     final AddressEntity addressEntity = Mockito.mock(AddressEntity.class);
 
-    final RestaurantsAddressEntity entityToSave = Mockito.mock(RestaurantsAddressEntity.class);
-    final RestaurantsAddressEntity savedEntity = Mockito.mock(RestaurantsAddressEntity.class);
+    final RestaurantAddressEntity entityToSave = Mockito.mock(RestaurantAddressEntity.class);
+    final RestaurantAddressEntity savedEntity = Mockito.mock(RestaurantAddressEntity.class);
 
     final RestaurantsAddress mappedDomain = Mockito.mock(RestaurantsAddress.class);
 
     Mockito.when(restaurantsRepository.findByUuid(restaurantsUuid))
-        .thenReturn(Optional.of(restaurantsEntity));
+        .thenReturn(Optional.of(restaurantEntity));
     Mockito.when(addressRepository.findByUuid(addressUuid))
         .thenReturn(Optional.of(addressEntity));
-    Mockito.when(mapper.toEntity(restaurantsAddressUuid, restaurantsEntity, addressEntity))
+    Mockito.when(mapper.toEntity(restaurantsAddressUuid, restaurantEntity, addressEntity))
         .thenReturn(entityToSave);
     Mockito.when(repository.save(entityToSave))
         .thenReturn(savedEntity);
@@ -93,7 +93,7 @@ class RestaurantAddressGatewayAdapterTest {
     Mockito.verify(addressRepository, Mockito.times(1))
         .findByUuid(addressUuid);
     Mockito.verify(mapper, Mockito.times(1))
-        .toEntity(restaurantsAddressUuid, restaurantsEntity, addressEntity);
+        .toEntity(restaurantsAddressUuid, restaurantEntity, addressEntity);
     Mockito.verify(repository, Mockito.times(1))
         .save(entityToSave);
     Mockito.verify(mapper, Mockito.times(1))
@@ -146,10 +146,10 @@ class RestaurantAddressGatewayAdapterTest {
     Mockito.when(restaurantsAddress.getAddress())
         .thenReturn(addressDomain);
 
-    final RestaurantsEntity restaurantsEntity = Mockito.mock(RestaurantsEntity.class);
+    final RestaurantEntity restaurantEntity = Mockito.mock(RestaurantEntity.class);
 
     Mockito.when(restaurantsRepository.findByUuid(restaurantsUuid))
-        .thenReturn(Optional.of(restaurantsEntity));
+        .thenReturn(Optional.of(restaurantEntity));
     Mockito.when(addressRepository.findByUuid(addressUuid))
         .thenReturn(Optional.empty());
 
@@ -187,7 +187,7 @@ class RestaurantAddressGatewayAdapterTest {
   void findByRestaurantsUuidShouldReturnMappedModelWhenFound() {
     final var restaurantsUuid = UUID.randomUUID();
 
-    final RestaurantsAddressEntity foundEntity = Mockito.mock(RestaurantsAddressEntity.class);
+    final RestaurantAddressEntity foundEntity = Mockito.mock(RestaurantAddressEntity.class);
     final RestaurantsAddress mappedDomain = Mockito.mock(RestaurantsAddress.class);
 
     Mockito.when(repository.findByRestaurantsUuid(restaurantsUuid))

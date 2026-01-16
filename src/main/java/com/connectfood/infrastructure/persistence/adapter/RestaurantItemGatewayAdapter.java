@@ -7,11 +7,11 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantItemGateway;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemsEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsInfraMapper;
-import com.connectfood.infrastructure.persistence.specification.RestaurantItemsSpecification;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantItemInfraMapper;
+import com.connectfood.infrastructure.persistence.specification.RestaurantItemSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class RestaurantItemGatewayAdapter implements RestaurantItemGateway {
 
-  private final JpaRestaurantItemsRepository repository;
-  private final RestaurantItemsInfraMapper mapper;
-  private final JpaRestaurantsRepository restaurantsRepository;
+  private final JpaRestaurantItemRepository repository;
+  private final RestaurantItemInfraMapper mapper;
+  private final JpaRestaurantRepository restaurantsRepository;
 
   public RestaurantItemGatewayAdapter(
-      final JpaRestaurantItemsRepository repository,
-      final RestaurantItemsInfraMapper mapper,
-      final JpaRestaurantsRepository restaurantsRepository) {
+      final JpaRestaurantItemRepository repository,
+      final RestaurantItemInfraMapper mapper,
+      final JpaRestaurantRepository restaurantsRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsRepository = restaurantsRepository;
@@ -75,8 +75,8 @@ public class RestaurantItemGatewayAdapter implements RestaurantItemGateway {
         )
     );
 
-    final Specification<RestaurantItemsEntity> spec =
-        Specification.allOf(RestaurantItemsSpecification.hasRestaurantUuid(restaurantUuid));
+    final Specification<RestaurantItemEntity> spec =
+        Specification.allOf(RestaurantItemSpecification.hasRestaurantUuid(restaurantUuid));
 
     final var entities = repository.findAll(spec, pageable);
 

@@ -7,11 +7,11 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.commons.PageModel;
 import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemsImagesEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsImagesRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantItemsImageInfraMapper;
-import com.connectfood.infrastructure.persistence.specification.RestaurantItemsImagesSpecification;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemImageEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemImagesRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantItemImageInfraMapper;
+import com.connectfood.infrastructure.persistence.specification.RestaurantItemImageSpecification;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class RestaurantItemImageGatewayAdapter implements RestaurantItemImageGateway {
 
-  private final JpaRestaurantItemsImagesRepository repository;
-  private final RestaurantItemsImageInfraMapper mapper;
-  private final JpaRestaurantItemsRepository restaurantItemsRepository;
+  private final JpaRestaurantItemImagesRepository repository;
+  private final RestaurantItemImageInfraMapper mapper;
+  private final JpaRestaurantItemRepository restaurantItemsRepository;
 
   public RestaurantItemImageGatewayAdapter(
-      final JpaRestaurantItemsImagesRepository repository,
-      final RestaurantItemsImageInfraMapper mapper,
-      final JpaRestaurantItemsRepository restaurantItemsRepository) {
+      final JpaRestaurantItemImagesRepository repository,
+      final RestaurantItemImageInfraMapper mapper,
+      final JpaRestaurantItemRepository restaurantItemsRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantItemsRepository = restaurantItemsRepository;
@@ -73,8 +73,8 @@ public class RestaurantItemImageGatewayAdapter implements RestaurantItemImageGat
         )
     );
 
-    final Specification<RestaurantItemsImagesEntity> spec =
-        Specification.allOf(RestaurantItemsImagesSpecification.hasRestaurantItemsUuid(restaurantItemsUuid));
+    final Specification<RestaurantItemImageEntity> spec =
+        Specification.allOf(RestaurantItemImageSpecification.hasRestaurantItemsUuid(restaurantItemsUuid));
 
     final var entities = repository.findAll(spec, pageable);
 

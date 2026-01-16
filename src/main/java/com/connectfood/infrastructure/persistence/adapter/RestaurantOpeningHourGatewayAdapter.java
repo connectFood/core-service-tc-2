@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantOpeningHour;
 import com.connectfood.core.domain.repository.RestaurantOpeningHourGateway;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantOpeningHoursRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantOpeningHoursInfraMapper;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantOpeningHourRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantOpeningHourInfraMapper;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class RestaurantOpeningHourGatewayAdapter implements RestaurantOpeningHourGateway {
 
-  private final JpaRestaurantOpeningHoursRepository repository;
-  private final RestaurantOpeningHoursInfraMapper mapper;
-  private final JpaRestaurantsRepository restaurantsRepository;
+  private final JpaRestaurantOpeningHourRepository repository;
+  private final RestaurantOpeningHourInfraMapper mapper;
+  private final JpaRestaurantRepository restaurantsRepository;
 
   public RestaurantOpeningHourGatewayAdapter(
-      final JpaRestaurantOpeningHoursRepository repository,
-      final RestaurantOpeningHoursInfraMapper mapper,
-      final JpaRestaurantsRepository restaurantsRepository) {
+      final JpaRestaurantOpeningHourRepository repository,
+      final RestaurantOpeningHourInfraMapper mapper,
+      final JpaRestaurantRepository restaurantsRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsRepository = restaurantsRepository;

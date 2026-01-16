@@ -6,23 +6,23 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.core.domain.repository.UserAddressGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
-import com.connectfood.infrastructure.persistence.mappers.UsersAddressInfraMapper;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserAddressRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaUserRepository;
+import com.connectfood.infrastructure.persistence.mappers.UserAddressInfraMapper;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserAddressGatewayAdapter implements UserAddressGateway {
 
-  private final JpaUsersAddressRepository repository;
-  private final UsersAddressInfraMapper mapper;
-  private final JpaUsersRepository usersRepository;
+  private final JpaUserAddressRepository repository;
+  private final UserAddressInfraMapper mapper;
+  private final JpaUserRepository usersRepository;
   private final JpaAddressRepository addressRepository;
 
-  public UserAddressGatewayAdapter(final JpaUsersAddressRepository repository,
-                                   final UsersAddressInfraMapper mapper,
-                                   final JpaUsersRepository usersRepository,
+  public UserAddressGatewayAdapter(final JpaUserAddressRepository repository,
+                                   final UserAddressInfraMapper mapper,
+                                   final JpaUserRepository usersRepository,
                                    final JpaAddressRepository addressRepository) {
     this.repository = repository;
     this.mapper = mapper;

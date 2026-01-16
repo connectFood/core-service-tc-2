@@ -6,24 +6,24 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.repository.RestaurantAddressGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsAddressRepository;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsAddressInfraMapper;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantAddressRepository;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantAddressInfraMapper;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RestaurantAddressGatewayAdapter implements RestaurantAddressGateway {
 
-  private final JpaRestaurantsAddressRepository repository;
-  private final RestaurantsAddressInfraMapper mapper;
-  private final JpaRestaurantsRepository restaurantsRepository;
+  private final JpaRestaurantAddressRepository repository;
+  private final RestaurantAddressInfraMapper mapper;
+  private final JpaRestaurantRepository restaurantsRepository;
   private final JpaAddressRepository addressRepository;
 
   public RestaurantAddressGatewayAdapter(
-      final JpaRestaurantsAddressRepository repository,
-      final RestaurantsAddressInfraMapper mapper,
-      final JpaRestaurantsRepository restaurantsRepository,
+      final JpaRestaurantAddressRepository repository,
+      final RestaurantAddressInfraMapper mapper,
+      final JpaRestaurantRepository restaurantsRepository,
       final JpaAddressRepository addressRepository
   ) {
     this.repository = repository;

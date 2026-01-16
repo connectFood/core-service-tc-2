@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
-import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
-import com.connectfood.infrastructure.persistence.mappers.RestaurantsTypeInfraMapper;
+import com.connectfood.infrastructure.persistence.entity.RestaurantTypeEntity;
+import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantTypeRepository;
+import com.connectfood.infrastructure.persistence.mappers.RestaurantTypeInfraMapper;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,10 +29,10 @@ import org.springframework.data.jpa.domain.Specification;
 class RestaurantTypeGatewayAdapterTest {
 
   @Mock
-  private JpaRestaurantsTypeRepository repository;
+  private JpaRestaurantTypeRepository repository;
 
   @Mock
-  private RestaurantsTypeInfraMapper mapper;
+  private RestaurantTypeInfraMapper mapper;
 
   @InjectMocks
   private RestaurantTypeGatewayAdapter adapter;
@@ -42,8 +42,8 @@ class RestaurantTypeGatewayAdapterTest {
   void saveShouldPersistAndReturnMappedModel() {
     final RestaurantType model = Mockito.mock(RestaurantType.class);
 
-    final RestaurantsTypeEntity entityToSave = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsTypeEntity savedEntity = Mockito.mock(RestaurantsTypeEntity.class);
+    final RestaurantTypeEntity entityToSave = Mockito.mock(RestaurantTypeEntity.class);
+    final RestaurantTypeEntity savedEntity = Mockito.mock(RestaurantTypeEntity.class);
 
     final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
 
@@ -74,9 +74,9 @@ class RestaurantTypeGatewayAdapterTest {
 
     final RestaurantType model = Mockito.mock(RestaurantType.class);
 
-    final RestaurantsTypeEntity foundEntity = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsTypeEntity entityToSave = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsTypeEntity savedEntity = Mockito.mock(RestaurantsTypeEntity.class);
+    final RestaurantTypeEntity foundEntity = Mockito.mock(RestaurantTypeEntity.class);
+    final RestaurantTypeEntity entityToSave = Mockito.mock(RestaurantTypeEntity.class);
+    final RestaurantTypeEntity savedEntity = Mockito.mock(RestaurantTypeEntity.class);
 
     final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
 
@@ -145,7 +145,7 @@ class RestaurantTypeGatewayAdapterTest {
   void findByIdShouldReturnMappedModelWhenFound() {
     final var uuid = UUID.randomUUID();
 
-    final RestaurantsTypeEntity foundEntity = Mockito.mock(RestaurantsTypeEntity.class);
+    final RestaurantTypeEntity foundEntity = Mockito.mock(RestaurantTypeEntity.class);
     final RestaurantType mappedDomain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(repository.findByUuid(uuid))
@@ -168,8 +168,8 @@ class RestaurantTypeGatewayAdapterTest {
   @Test
   @DisplayName("Deve listar paginado com defaults quando sort e direction forem null")
   void findAllShouldReturnPagedResultWithDefaultsWhenSortAndDirectionAreNull() {
-    final RestaurantsTypeEntity entity1 = Mockito.mock(RestaurantsTypeEntity.class);
-    final RestaurantsTypeEntity entity2 = Mockito.mock(RestaurantsTypeEntity.class);
+    final RestaurantTypeEntity entity1 = Mockito.mock(RestaurantTypeEntity.class);
+    final RestaurantTypeEntity entity2 = Mockito.mock(RestaurantTypeEntity.class);
 
     final RestaurantType domain1 = Mockito.mock(RestaurantType.class);
     final RestaurantType domain2 = Mockito.mock(RestaurantType.class);
@@ -179,11 +179,11 @@ class RestaurantTypeGatewayAdapterTest {
     Mockito.when(mapper.toDomain(entity2))
         .thenReturn(domain2);
 
-    final Page<RestaurantsTypeEntity> pageResult =
+    final Page<RestaurantTypeEntity> pageResult =
         new PageImpl<>(List.of(entity1, entity2), Pageable.unpaged(), 2);
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<RestaurantsTypeEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantTypeEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(pageResult);
@@ -197,7 +197,7 @@ class RestaurantTypeGatewayAdapterTest {
     Assertions.assertEquals(2L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<RestaurantsTypeEntity>>any(), ArgumentMatchers.any(Pageable.class));
+        .findAll(ArgumentMatchers.<Specification<RestaurantTypeEntity>>any(), ArgumentMatchers.any(Pageable.class));
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(entity1);
     Mockito.verify(mapper, Mockito.times(1))
@@ -208,17 +208,17 @@ class RestaurantTypeGatewayAdapterTest {
   @Test
   @DisplayName("Deve listar paginado respeitando sort e direction informados")
   void findAllShouldReturnPagedResultUsingProvidedSortAndDirection() {
-    final RestaurantsTypeEntity entity = Mockito.mock(RestaurantsTypeEntity.class);
+    final RestaurantTypeEntity entity = Mockito.mock(RestaurantTypeEntity.class);
     final RestaurantType domain = Mockito.mock(RestaurantType.class);
 
     Mockito.when(mapper.toDomain(entity))
         .thenReturn(domain);
 
-    final Page<RestaurantsTypeEntity> pageResult =
+    final Page<RestaurantTypeEntity> pageResult =
         new PageImpl<>(List.of(entity), Pageable.unpaged(), 1);
 
     Mockito.when(repository.findAll(
-            ArgumentMatchers.<Specification<RestaurantsTypeEntity>>any(),
+            ArgumentMatchers.<Specification<RestaurantTypeEntity>>any(),
             ArgumentMatchers.any(Pageable.class)
         ))
         .thenReturn(pageResult);
@@ -232,7 +232,7 @@ class RestaurantTypeGatewayAdapterTest {
     Assertions.assertEquals(1L, result.total());
 
     Mockito.verify(repository, Mockito.times(1))
-        .findAll(ArgumentMatchers.<Specification<RestaurantsTypeEntity>>any(), ArgumentMatchers.any(Pageable.class));
+        .findAll(ArgumentMatchers.<Specification<RestaurantTypeEntity>>any(), ArgumentMatchers.any(Pageable.class));
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(entity);
     Mockito.verifyNoMoreInteractions(repository, mapper);
