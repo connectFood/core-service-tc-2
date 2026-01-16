@@ -1,0 +1,91 @@
+package com.connectfood.infrastructure.persistence.mappers;
+
+import java.util.UUID;
+
+import com.connectfood.core.domain.model.UserType;
+import com.connectfood.infrastructure.persistence.entity.UserTypeEntity;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+class UserTypeInfraMapperTest {
+
+  private final UserTypeInfraMapper mapper = new UserTypeInfraMapper();
+
+  @Test
+  @DisplayName("Deve criar o mapper pelo construtor padrão")
+  void shouldCreateMapperUsingDefaultConstructor() {
+    final var instance = new UserTypeInfraMapper();
+    Assertions.assertNotNull(instance);
+  }
+
+  @Test
+  @DisplayName("Deve retornar null ao converter entity null para domínio")
+  void shouldReturnNullWhenToDomainReceivesNull() {
+    final UserType result = mapper.toDomain(null);
+    Assertions.assertNull(result);
+  }
+
+  @Test
+  @DisplayName("Deve converter entity para domínio corretamente")
+  void shouldConvertEntityToDomainCorrectly() {
+    final var uuid = UUID.randomUUID();
+
+    final var entity = new UserTypeEntity();
+    entity.setUuid(uuid);
+    entity.setName("ADMIN");
+    entity.setDescription("Administrator role");
+
+    final UserType result = mapper.toDomain(entity);
+
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(uuid, result.getUuid());
+    Assertions.assertEquals("ADMIN", result.getName());
+    Assertions.assertEquals("Administrator role", result.getDescription());
+  }
+
+  @Test
+  @DisplayName("Deve retornar null ao converter model null para entity")
+  void shouldReturnNullWhenToEntityReceivesNull() {
+    final UserTypeEntity result = mapper.toEntity((UserType) null);
+    Assertions.assertNull(result);
+  }
+
+  @Test
+  @DisplayName("Deve converter model para entity corretamente")
+  void shouldConvertModelToEntityCorrectly() {
+    final var uuid = UUID.randomUUID();
+
+    final var model = new UserType(uuid, "OWNER", "Owner role");
+
+    final UserTypeEntity result = mapper.toEntity(model);
+
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(uuid, result.getUuid());
+    Assertions.assertEquals("OWNER", result.getName());
+    Assertions.assertEquals("Owner role", result.getDescription());
+  }
+
+  @Test
+  @DisplayName("Deve atualizar a entity existente com base no model e preservar o UUID da entity")
+  void shouldUpdateExistingEntityUsingModel() {
+    final var uuidOriginal = UUID.randomUUID();
+
+    final var entity = new UserTypeEntity();
+    entity.setUuid(uuidOriginal);
+    entity.setName("OLD_NAME");
+    entity.setDescription("Old description");
+
+    final var model = new UserType(UUID.randomUUID(), "NEW_NAME", "New description");
+
+    final UserTypeEntity result = mapper.toEntity(model, entity);
+
+    Assertions.assertSame(entity, result);
+
+    Assertions.assertEquals(uuidOriginal, result.getUuid());
+
+    Assertions.assertEquals("NEW_NAME", result.getName());
+    Assertions.assertEquals("New description", result.getDescription());
+  }
+}

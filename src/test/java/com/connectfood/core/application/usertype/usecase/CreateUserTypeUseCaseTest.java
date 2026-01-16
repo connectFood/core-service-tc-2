@@ -1,10 +1,10 @@
 package com.connectfood.core.application.usertype.usecase;
 
-import com.connectfood.core.application.usertype.dto.UsersTypeInput;
-import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
-import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
-import com.connectfood.core.domain.model.UsersType;
-import com.connectfood.core.domain.repository.UsersTypeRepository;
+import com.connectfood.core.application.usertype.dto.UserTypeInput;
+import com.connectfood.core.application.usertype.dto.UserTypeOutput;
+import com.connectfood.core.application.usertype.mapper.UserTypeAppMapper;
+import com.connectfood.core.domain.model.UserType;
+import com.connectfood.core.domain.repository.UserTypeGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ import java.util.UUID;
 class CreateUserTypeUseCaseTest {
 
   @Mock
-  private UsersTypeRepository repository;
+  private UserTypeGateway repository;
 
   @Mock
-  private UsersTypeAppMapper mapper;
+  private UserTypeAppMapper mapper;
 
   @InjectMocks
   private CreateUserTypeUseCase useCase;
@@ -31,9 +31,9 @@ class CreateUserTypeUseCaseTest {
   @Test
   @DisplayName("Deve criar UserType com sucesso")
   void shouldCreateUserTypeSuccessfully() {
-    final var input = new UsersTypeInput("ADMIN", "Administrador");
-    final var domainObj = new UsersType(UUID.randomUUID(), "ADMIN", "Administrador");
-    final var output = new UsersTypeOutput(domainObj.getUuid(), "ADMIN", "Administrador");
+    final var input = new UserTypeInput("ADMIN", "Administrador");
+    final var domainObj = new UserType(UUID.randomUUID(), "ADMIN", "Administrador");
+    final var output = new UserTypeOutput(domainObj.getUuid(), "ADMIN", "Administrador");
 
     Mockito.when(mapper.toDomain(input)).thenReturn(domainObj);
     Mockito.when(repository.save(domainObj)).thenReturn(domainObj);

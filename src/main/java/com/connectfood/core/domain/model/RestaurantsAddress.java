@@ -10,11 +10,11 @@ import java.util.UUID;
 public class RestaurantsAddress {
 
   private final UUID uuid;
-  private final Restaurants restaurants;
+  private final Restaurant restaurant;
   private final Address address;
 
-  public RestaurantsAddress(final UUID uuid, final Restaurants restaurants, final Address address) {
-    if(restaurants == null) {
+  public RestaurantsAddress(final UUID uuid, final Restaurant restaurant, final Address address) {
+    if(restaurant == null) {
       throw new BadRequestException("Restaurant is required");
     }
 
@@ -23,12 +23,12 @@ public class RestaurantsAddress {
     }
 
     this.uuid = uuid == null ? UUID.randomUUID() : uuid;
-    this.restaurants = restaurants;
+    this.restaurant = restaurant;
     this.address = address;
   }
 
-  public RestaurantsAddress(final Restaurants restaurants, final Address address) {
-    this(null, restaurants, address);
+  public RestaurantsAddress(final Restaurant restaurant, final Address address) {
+    this(null, restaurant, address);
   }
 
 }
