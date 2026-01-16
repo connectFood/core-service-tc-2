@@ -10,9 +10,10 @@ import com.connectfood.core.domain.repository.UsersTypeRepository;
 import com.connectfood.core.domain.utils.PasswordUtils;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class CreateUsersUseCase {
 
   private final UsersRepository repository;
