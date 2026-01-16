@@ -2,7 +2,7 @@ package com.connectfood.infrastructure.persistence.adapter;
 
 import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
+import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
 import com.connectfood.infrastructure.persistence.entity.RestaurantsTypeEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsTypeRepository;
@@ -21,13 +21,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class RestaurantsTypeGatewayAdapter implements RestaurantsTypeGateway {
+public class RestaurantTypeGatewayAdapter implements RestaurantTypeGateway {
 
   private final JpaRestaurantsTypeRepository repository;
   private final RestaurantsTypeInfraMapper mapper;
 
-  public RestaurantsTypeGatewayAdapter(final JpaRestaurantsTypeRepository repository,
-                                       final RestaurantsTypeInfraMapper mapper) {
+  public RestaurantTypeGatewayAdapter(final JpaRestaurantsTypeRepository repository,
+                                      final RestaurantsTypeInfraMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }

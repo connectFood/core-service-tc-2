@@ -3,7 +3,7 @@ package com.connectfood.core.application.users.usecase;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserType;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class RemoveUsersUseCaseTest {
 
   @Mock
-  private UsersGateway repository;
+  private UserGateway repository;
 
   @InjectMocks
   private RemoveUsersUseCase useCase;

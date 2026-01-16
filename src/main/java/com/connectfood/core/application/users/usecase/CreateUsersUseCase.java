@@ -5,8 +5,8 @@ import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.UsersGateway;
-import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.repository.UserGateway;
+import com.connectfood.core.domain.repository.UserTypeGateway;
 import com.connectfood.core.domain.utils.PasswordGateway;
 
 import org.springframework.stereotype.Service;
@@ -15,21 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CreateUsersUseCase {
 
-  private final UsersGateway repository;
+  private final UserGateway repository;
   private final UsersAppMapper mapper;
-  private final UsersTypeGateway usersTypeGateway;
+  private final UserTypeGateway userTypeGateway;
   private final PasswordGateway passwordGateway;
   private final CreateUsersAddressUseCase createUsersAddressUseCase;
 
   public CreateUsersUseCase(
-      final UsersGateway repository,
+      final UserGateway repository,
       final UsersAppMapper mapper,
-      final UsersTypeGateway usersTypeGateway,
+      final UserTypeGateway userTypeGateway,
       final PasswordGateway passwordGateway,
       final CreateUsersAddressUseCase createUsersAddressUseCase) {
     this.repository = repository;
     this.mapper = mapper;
-    this.usersTypeGateway = usersTypeGateway;
+    this.userTypeGateway = userTypeGateway;
     this.passwordGateway = passwordGateway;
     this.createUsersAddressUseCase = createUsersAddressUseCase;
   }
@@ -41,7 +41,7 @@ public class CreateUsersUseCase {
     final var passwordHash = passwordGateway.encode(input.getPassword());
 
     final var usersType =
-        usersTypeGateway.findByUuid(input.getUsersTypeUuid())
+        userTypeGateway.findByUuid(input.getUsersTypeUuid())
             .orElseThrow(() -> new NotFoundException("Users type not found"));
 
     final var users = repository.save(mapper.toDomain(input, passwordHash, usersType));

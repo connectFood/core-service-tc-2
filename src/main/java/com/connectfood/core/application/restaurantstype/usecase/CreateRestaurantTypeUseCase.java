@@ -3,7 +3,7 @@ package com.connectfood.core.application.restaurantstype.usecase;
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeInput;
 import com.connectfood.core.application.restaurantstype.dto.RestaurantsTypeOutput;
 import com.connectfood.core.application.restaurantstype.mapper.RestaurantsTypeAppMapper;
-import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
+import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CreateRestaurantTypeUseCase {
 
-  private final RestaurantsTypeGateway repository;
+  private final RestaurantTypeGateway repository;
   private final RestaurantsTypeAppMapper mapper;
 
-  public CreateRestaurantTypeUseCase(final RestaurantsTypeGateway repository,
+  public CreateRestaurantTypeUseCase(final RestaurantTypeGateway repository,
       final RestaurantsTypeAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;

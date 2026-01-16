@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantsAddressGatewayAdapterTest {
+class RestaurantAddressGatewayAdapterTest {
 
   @Mock
   private JpaRestaurantsAddressRepository repository;
@@ -40,7 +40,7 @@ class RestaurantsAddressGatewayAdapterTest {
   private JpaAddressRepository addressRepository;
 
   @InjectMocks
-  private RestaurantsAddressGatewayAdapter adapter;
+  private RestaurantAddressGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar RestaurantsAddress mapeado")

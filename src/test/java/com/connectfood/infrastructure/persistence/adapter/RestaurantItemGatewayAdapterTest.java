@@ -29,7 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantItemsGatewayAdapterTest {
+class RestaurantItemGatewayAdapterTest {
 
   @Mock
   private JpaRestaurantItemsRepository repository;
@@ -41,7 +41,7 @@ class RestaurantItemsGatewayAdapterTest {
   private JpaRestaurantsRepository restaurantsRepository;
 
   @InjectMocks
-  private RestaurantItemsGatewayAdapter adapter;
+  private RestaurantItemGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar o item quando o restaurant existir e retornar o domain mapeado")

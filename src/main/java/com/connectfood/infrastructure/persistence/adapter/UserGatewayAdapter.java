@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 import com.connectfood.infrastructure.persistence.entity.UsersEntity;
 import com.connectfood.infrastructure.persistence.entity.UsersTypeEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
@@ -20,13 +20,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UsersGatewayAdapter implements UsersGateway {
+public class UserGatewayAdapter implements UserGateway {
 
   private final JpaUsersRepository repository;
   private final UsersInfraMapper mapper;
   private final JpaUsersTypeRepository usersTypeRepository;
 
-  public UsersGatewayAdapter(
+  public UserGatewayAdapter(
       final JpaUsersRepository repository,
       final UsersInfraMapper mapper,
       final JpaUsersTypeRepository usersTypeRepository) {

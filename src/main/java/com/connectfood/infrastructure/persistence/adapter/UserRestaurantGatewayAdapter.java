@@ -1,7 +1,7 @@
 package com.connectfood.infrastructure.persistence.adapter;
 
 import com.connectfood.core.domain.model.UserRestaurant;
-import com.connectfood.core.domain.repository.UsersRestaurantGateway;
+import com.connectfood.core.domain.repository.UserRestaurantGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantsRepository;
 import com.connectfood.infrastructure.persistence.jpa.JpaUsersRepository;
 import com.connectfood.infrastructure.persistence.jpa.JpaUsersRestaurantRepository;
@@ -10,17 +10,17 @@ import com.connectfood.infrastructure.persistence.mappers.UsersRestaurantInfraMa
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UsersRestaurantGatewayAdapter implements UsersRestaurantGateway {
+public class UserRestaurantGatewayAdapter implements UserRestaurantGateway {
 
   private final JpaUsersRestaurantRepository repository;
   private final UsersRestaurantInfraMapper mapper;
   private final JpaUsersRepository usersRepository;
   private final JpaRestaurantsRepository restaurantsRepository;
 
-  public UsersRestaurantGatewayAdapter(final JpaUsersRestaurantRepository repository,
-                                       final UsersRestaurantInfraMapper mapper,
-                                       final JpaUsersRepository usersRepository,
-                                       final JpaRestaurantsRepository restaurantsRepository) {
+  public UserRestaurantGatewayAdapter(final JpaUsersRestaurantRepository repository,
+                                      final UsersRestaurantInfraMapper mapper,
+                                      final JpaUsersRepository usersRepository,
+                                      final JpaRestaurantsRepository restaurantsRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.usersRepository = usersRepository;

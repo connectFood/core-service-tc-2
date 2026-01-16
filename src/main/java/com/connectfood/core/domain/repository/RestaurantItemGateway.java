@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.model.commons.PageModel;
 
-public interface RestaurantItemsGateway {
+public interface RestaurantItemGateway {
 
   RestaurantItem save(RestaurantItem restaurantItem);
 

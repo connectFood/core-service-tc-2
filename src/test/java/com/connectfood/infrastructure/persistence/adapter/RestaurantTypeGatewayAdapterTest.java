@@ -26,7 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantsTypeGatewayAdapterTest {
+class RestaurantTypeGatewayAdapterTest {
 
   @Mock
   private JpaRestaurantsTypeRepository repository;
@@ -35,7 +35,7 @@ class RestaurantsTypeGatewayAdapterTest {
   private RestaurantsTypeInfraMapper mapper;
 
   @InjectMocks
-  private RestaurantsTypeGatewayAdapter adapter;
+  private RestaurantTypeGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")

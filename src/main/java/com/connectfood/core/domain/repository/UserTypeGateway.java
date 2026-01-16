@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
 
-public interface UsersTypeGateway {
+public interface UserTypeGateway {
 
   UserType save(UserType userType);
 

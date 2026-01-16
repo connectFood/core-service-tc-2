@@ -10,7 +10,7 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
-import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
+import com.connectfood.core.domain.repository.RestaurantAddressGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class UpdateRestaurantsAddressUseCase {
 
-  private final RestaurantsAddressGateway repository;
+  private final RestaurantAddressGateway repository;
   private final AddressAppMapper mapper;
   private final RequestUserGuard guard;
   private final AddressGateway addressGateway;
 
   public UpdateRestaurantsAddressUseCase(
-      final RestaurantsAddressGateway repository,
+      final RestaurantAddressGateway repository,
       final AddressAppMapper mapper,
       final RequestUserGuard guard,
       final AddressGateway addressGateway

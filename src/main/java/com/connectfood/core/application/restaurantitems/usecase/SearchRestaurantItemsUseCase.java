@@ -7,8 +7,8 @@ import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutput;
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantItemsGateway;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
+import com.connectfood.core.domain.repository.RestaurantItemGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,23 +16,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class SearchRestaurantItemsUseCase {
 
-  private final RestaurantItemsGateway repository;
+  private final RestaurantItemGateway repository;
   private final RestaurantItemsAppMapper mapper;
-  private final RestaurantsGateway restaurantsGateway;
+  private final RestaurantGateway restaurantGateway;
 
   public SearchRestaurantItemsUseCase(
-      final RestaurantItemsGateway repository,
+      final RestaurantItemGateway repository,
       final RestaurantItemsAppMapper mapper,
-      final RestaurantsGateway restaurantsGateway) {
+      final RestaurantGateway restaurantGateway) {
     this.repository = repository;
     this.mapper = mapper;
-    this.restaurantsGateway = restaurantsGateway;
+    this.restaurantGateway = restaurantGateway;
   }
 
   @Transactional(readOnly = true)
   public PageOutput<List<RestaurantItemsOutput>> execute(final UUID restaurantUuid, final Integer page,
       final Integer size, final String sort, final String direction) {
-    restaurantsGateway.findByUuid(restaurantUuid)
+    restaurantGateway.findByUuid(restaurantUuid)
         .orElseThrow(() -> new NotFoundException("Restaurant not found"));
 
     final var models = repository.findAll(restaurantUuid, page, size, sort, direction);

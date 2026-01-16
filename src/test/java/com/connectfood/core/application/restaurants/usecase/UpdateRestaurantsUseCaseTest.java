@@ -12,8 +12,8 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
-import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
+import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UpdateRestaurantsUseCaseTest {
 
   @Mock
-  private RestaurantsGateway repository;
+  private RestaurantGateway repository;
 
   @Mock
   private RestaurantsAppMapper mapper;
@@ -37,7 +37,7 @@ class UpdateRestaurantsUseCaseTest {
   private RequestUserGuard guard;
 
   @Mock
-  private RestaurantsTypeGateway restaurantsTypeGateway;
+  private RestaurantTypeGateway restaurantTypeGateway;
 
   @InjectMocks
   private UpdateRestaurantsUseCase useCase;
@@ -96,7 +96,7 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
 
-    Mockito.verifyNoInteractions(restaurantsTypeGateway);
+    Mockito.verifyNoInteractions(restaurantTypeGateway);
 
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(restaurantUuid, input, currentType);
@@ -138,7 +138,7 @@ class UpdateRestaurantsUseCaseTest {
         .thenReturn(newTypeUuid);
 
     final RestaurantType newType = Mockito.mock(RestaurantType.class);
-    Mockito.when(restaurantsTypeGateway.findById(newTypeUuid))
+    Mockito.when(restaurantTypeGateway.findById(newTypeUuid))
         .thenReturn(Optional.of(newType));
 
     final Restaurant mappedDomain = Mockito.mock(Restaurant.class);
@@ -170,7 +170,7 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
 
-    Mockito.verify(restaurantsTypeGateway, Mockito.times(1))
+    Mockito.verify(restaurantTypeGateway, Mockito.times(1))
         .findById(newTypeUuid);
 
     Mockito.verify(mapper, Mockito.times(1))
@@ -183,7 +183,7 @@ class UpdateRestaurantsUseCaseTest {
         .toOutput(updatedRestaurant);
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, mapper, restaurantsTypeGateway, existingRestaurant, currentType
+        guard, repository, mapper, restaurantTypeGateway, existingRestaurant, currentType
     );
   }
 
@@ -212,7 +212,7 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
-    Mockito.verifyNoInteractions(restaurantsTypeGateway, mapper);
+    Mockito.verifyNoInteractions(restaurantTypeGateway, mapper);
 
     Mockito.verify(repository, Mockito.never())
         .update(Mockito.any(), Mockito.any());
@@ -245,7 +245,7 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.when(input.getRestaurantsTypeUuid())
         .thenReturn(newTypeUuid);
 
-    Mockito.when(restaurantsTypeGateway.findById(newTypeUuid))
+    Mockito.when(restaurantTypeGateway.findById(newTypeUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -267,7 +267,7 @@ class UpdateRestaurantsUseCaseTest {
     Mockito.verify(currentType, Mockito.times(1))
         .getUuid();
 
-    Mockito.verify(restaurantsTypeGateway, Mockito.times(1))
+    Mockito.verify(restaurantTypeGateway, Mockito.times(1))
         .findById(newTypeUuid);
 
     Mockito.verifyNoInteractions(mapper);
@@ -276,7 +276,7 @@ class UpdateRestaurantsUseCaseTest {
         .update(Mockito.any(), Mockito.any());
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, restaurantsTypeGateway, existingRestaurant, currentType
+        guard, repository, restaurantTypeGateway, existingRestaurant, currentType
     );
   }
 }

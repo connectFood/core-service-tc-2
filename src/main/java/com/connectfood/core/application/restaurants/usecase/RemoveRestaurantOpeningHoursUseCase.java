@@ -6,7 +6,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
+import com.connectfood.core.domain.repository.RestaurantOpeningHourGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class RemoveRestaurantOpeningHoursUseCase {
 
-  private final RestaurantOpeningHoursGateway repository;
+  private final RestaurantOpeningHourGateway repository;
   private final RequestUserGuard guard;
 
   public RemoveRestaurantOpeningHoursUseCase(
-      final RestaurantOpeningHoursGateway repository,
+      final RestaurantOpeningHourGateway repository,
       final RequestUserGuard guard
   ) {
     this.repository = repository;

@@ -8,8 +8,8 @@ import com.connectfood.core.application.address.mapper.AddressAppMapper;
 import com.connectfood.core.application.users.mapper.UsersAddressAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.AddressGateway;
-import com.connectfood.core.domain.repository.UsersAddressGateway;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UserAddressGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,31 +19,31 @@ public class CreateUsersAddressUseCase {
 
   private final AddressGateway repository;
   private final AddressAppMapper mapper;
-  private final UsersGateway usersGateway;
-  private final UsersAddressGateway usersAddressGateway;
+  private final UserGateway userGateway;
+  private final UserAddressGateway userAddressGateway;
   private final UsersAddressAppMapper usersAddressMapper;
 
   public CreateUsersAddressUseCase(
       final AddressGateway repository,
       final AddressAppMapper mapper,
-      final UsersGateway usersGateway,
-      final UsersAddressGateway usersAddressGateway,
+      final UserGateway userGateway,
+      final UserAddressGateway userAddressGateway,
       final UsersAddressAppMapper usersAddressMapper) {
     this.repository = repository;
     this.mapper = mapper;
-    this.usersGateway = usersGateway;
-    this.usersAddressGateway = usersAddressGateway;
+    this.userGateway = userGateway;
+    this.userAddressGateway = userAddressGateway;
     this.usersAddressMapper = usersAddressMapper;
   }
 
   @Transactional
   public AddressOutput execute(final UUID userUuid, final AddressInput input) {
-    final var users = usersGateway.findByUuid(userUuid)
+    final var users = userGateway.findByUuid(userUuid)
         .orElseThrow(() -> new NotFoundException("User not found"));
 
     final var address = repository.save(mapper.toDomain(input));
 
-    final var usersAddress = usersAddressGateway.save(usersAddressMapper.toDomain(users, address));
+    final var usersAddress = userAddressGateway.save(usersAddressMapper.toDomain(users, address));
 
     return mapper.toOutput(usersAddress.getAddress());
   }

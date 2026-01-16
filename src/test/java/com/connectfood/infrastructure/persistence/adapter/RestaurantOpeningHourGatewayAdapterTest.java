@@ -21,7 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantOpeningHoursGatewayAdapterTest {
+class RestaurantOpeningHourGatewayAdapterTest {
 
   @Mock
   private JpaRestaurantOpeningHoursRepository repository;
@@ -33,7 +33,7 @@ class RestaurantOpeningHoursGatewayAdapterTest {
   private JpaRestaurantsRepository restaurantsRepository;
 
   @InjectMocks
-  private RestaurantOpeningHoursGatewayAdapter adapter;
+  private RestaurantOpeningHourGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")

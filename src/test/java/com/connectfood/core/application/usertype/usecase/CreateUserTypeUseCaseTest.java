@@ -4,7 +4,7 @@ import com.connectfood.core.application.usertype.dto.UsersTypeInput;
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.model.UserType;
-import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.repository.UserTypeGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import java.util.UUID;
 class CreateUserTypeUseCaseTest {
 
   @Mock
-  private UsersTypeGateway repository;
+  private UserTypeGateway repository;
 
   @Mock
   private UsersTypeAppMapper mapper;

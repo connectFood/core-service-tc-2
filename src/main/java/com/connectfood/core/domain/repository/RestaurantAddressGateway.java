@@ -5,7 +5,7 @@ import com.connectfood.core.domain.model.RestaurantsAddress;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface RestaurantsAddressGateway {
+public interface RestaurantAddressGateway {
 
   RestaurantsAddress save(RestaurantsAddress restaurantsAddress);
 

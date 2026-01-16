@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class SearchUsersUseCase {
 
-  private final UsersGateway repository;
+  private final UserGateway repository;
   private final UsersAppMapper mapper;
 
-  public SearchUsersUseCase(final UsersGateway repository, final UsersAppMapper mapper) {
+  public SearchUsersUseCase(final UserGateway repository, final UsersAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }

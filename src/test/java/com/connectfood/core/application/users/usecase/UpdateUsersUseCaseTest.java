@@ -9,8 +9,8 @@ import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserType;
-import com.connectfood.core.domain.repository.UsersGateway;
-import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.repository.UserGateway;
+import com.connectfood.core.domain.repository.UserTypeGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +25,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UpdateUsersUseCaseTest {
 
   @Mock
-  private UsersGateway repository;
+  private UserGateway repository;
 
   @Mock
   private UsersAppMapper mapper;
 
   @Mock
-  private UsersTypeGateway usersTypeGateway;
+  private UserTypeGateway userTypeGateway;
 
   @InjectMocks
   private UpdateUsersUseCase useCase;
@@ -84,7 +84,7 @@ class UpdateUsersUseCaseTest {
     Mockito.verify(existingUser, Mockito.times(1))
         .getPasswordHash();
 
-    Mockito.verifyNoInteractions(usersTypeGateway);
+    Mockito.verifyNoInteractions(userTypeGateway);
 
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(userUuid, input, "hashAntigo", currentType);
@@ -123,7 +123,7 @@ class UpdateUsersUseCaseTest {
         .thenReturn(Optional.of(existingUser));
 
     final UserType newType = Mockito.mock(UserType.class);
-    Mockito.when(usersTypeGateway.findByUuid(newTypeUuid))
+    Mockito.when(userTypeGateway.findByUuid(newTypeUuid))
         .thenReturn(Optional.of(newType));
 
     final User domainToUpdate = Mockito.mock(User.class);
@@ -151,7 +151,7 @@ class UpdateUsersUseCaseTest {
     Mockito.verify(existingUser, Mockito.times(1))
         .getPasswordHash();
 
-    Mockito.verify(usersTypeGateway, Mockito.times(1))
+    Mockito.verify(userTypeGateway, Mockito.times(1))
         .findByUuid(newTypeUuid);
 
     Mockito.verify(mapper, Mockito.times(1))
@@ -163,7 +163,7 @@ class UpdateUsersUseCaseTest {
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(updatedUser);
 
-    Mockito.verifyNoMoreInteractions(repository, mapper, usersTypeGateway, existingUser);
+    Mockito.verifyNoMoreInteractions(repository, mapper, userTypeGateway, existingUser);
   }
 
   @Test
@@ -186,7 +186,7 @@ class UpdateUsersUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(userUuid);
 
-    Mockito.verifyNoInteractions(mapper, usersTypeGateway);
+    Mockito.verifyNoInteractions(mapper, userTypeGateway);
     Mockito.verifyNoMoreInteractions(repository);
   }
 
@@ -212,7 +212,7 @@ class UpdateUsersUseCaseTest {
     Mockito.when(repository.findByUuid(userUuid))
         .thenReturn(Optional.of(existingUser));
 
-    Mockito.when(usersTypeGateway.findByUuid(newTypeUuid))
+    Mockito.when(userTypeGateway.findByUuid(newTypeUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -227,13 +227,13 @@ class UpdateUsersUseCaseTest {
     Mockito.verify(existingUser, Mockito.times(2))
         .getUserType();
 
-    Mockito.verify(usersTypeGateway, Mockito.times(1))
+    Mockito.verify(userTypeGateway, Mockito.times(1))
         .findByUuid(newTypeUuid);
 
     Mockito.verifyNoInteractions(mapper);
     Mockito.verify(repository, Mockito.never())
         .update(Mockito.any(), Mockito.any());
 
-    Mockito.verifyNoMoreInteractions(repository, usersTypeGateway, existingUser);
+    Mockito.verifyNoMoreInteractions(repository, userTypeGateway, existingUser);
   }
 }

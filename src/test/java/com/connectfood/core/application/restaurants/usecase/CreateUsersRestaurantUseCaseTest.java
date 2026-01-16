@@ -10,9 +10,9 @@ import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserRestaurant;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
-import com.connectfood.core.domain.repository.UsersGateway;
-import com.connectfood.core.domain.repository.UsersRestaurantGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
+import com.connectfood.core.domain.repository.UserGateway;
+import com.connectfood.core.domain.repository.UserRestaurantGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,13 +27,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateUsersRestaurantUseCaseTest {
 
   @Mock
-  private UsersRestaurantGateway repository;
+  private UserRestaurantGateway repository;
 
   @Mock
-  private UsersGateway usersGateway;
+  private UserGateway userGateway;
 
   @Mock
-  private RestaurantsGateway restaurantsGateway;
+  private RestaurantGateway restaurantGateway;
 
   @Mock
   private UsersRestaurantAppMapper mapper;
@@ -50,7 +50,7 @@ class CreateUsersRestaurantUseCaseTest {
     final var usersUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
 
-    Mockito.when(usersGateway.findByUuid(usersUuid))
+    Mockito.when(userGateway.findByUuid(usersUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -60,10 +60,10 @@ class CreateUsersRestaurantUseCaseTest {
 
     Assertions.assertEquals("User not found", ex.getMessage());
 
-    Mockito.verify(usersGateway, Mockito.times(1))
+    Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(usersUuid);
-    Mockito.verifyNoInteractions(restaurantsGateway, repository, mapper, usersMapper);
-    Mockito.verifyNoMoreInteractions(usersGateway);
+    Mockito.verifyNoInteractions(restaurantGateway, repository, mapper, usersMapper);
+    Mockito.verifyNoMoreInteractions(userGateway);
   }
 
   @Test
@@ -73,10 +73,10 @@ class CreateUsersRestaurantUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
 
     final User user = Mockito.mock(User.class);
-    Mockito.when(usersGateway.findByUuid(usersUuid))
+    Mockito.when(userGateway.findByUuid(usersUuid))
         .thenReturn(Optional.of(user));
 
-    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
+    Mockito.when(restaurantGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -86,13 +86,13 @@ class CreateUsersRestaurantUseCaseTest {
 
     Assertions.assertEquals("Restaurant not found", ex.getMessage());
 
-    Mockito.verify(usersGateway, Mockito.times(1))
+    Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(usersUuid);
-    Mockito.verify(restaurantsGateway, Mockito.times(1))
+    Mockito.verify(restaurantGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
     Mockito.verifyNoInteractions(repository, mapper, usersMapper);
-    Mockito.verifyNoMoreInteractions(usersGateway, restaurantsGateway);
+    Mockito.verifyNoMoreInteractions(userGateway, restaurantGateway);
   }
 
   @Test
@@ -102,11 +102,11 @@ class CreateUsersRestaurantUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
 
     final User user = Mockito.mock(User.class);
-    Mockito.when(usersGateway.findByUuid(usersUuid))
+    Mockito.when(userGateway.findByUuid(usersUuid))
         .thenReturn(Optional.of(user));
 
     final Restaurant restaurant = Mockito.mock(Restaurant.class);
-    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
+    Mockito.when(restaurantGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurant));
 
     final UserRestaurant userRestaurantDomain = Mockito.mock(UserRestaurant.class);
@@ -128,9 +128,9 @@ class CreateUsersRestaurantUseCaseTest {
     Assertions.assertNotNull(result);
     Assertions.assertSame(usersOutput, result);
 
-    Mockito.verify(usersGateway, Mockito.times(1))
+    Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(usersUuid);
-    Mockito.verify(restaurantsGateway, Mockito.times(1))
+    Mockito.verify(restaurantGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(user, restaurant);
@@ -140,8 +140,8 @@ class CreateUsersRestaurantUseCaseTest {
         .toOutput(user);
 
     Mockito.verifyNoMoreInteractions(
-        usersGateway,
-        restaurantsGateway,
+        userGateway,
+        restaurantGateway,
         mapper,
         repository,
         usersMapper

@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UsersRestaurantGatewayAdapterTest {
+class UserRestaurantGatewayAdapterTest {
 
   @Mock
   private JpaUsersRestaurantRepository repository;
@@ -40,7 +40,7 @@ class UsersRestaurantGatewayAdapterTest {
   private JpaRestaurantsRepository restaurantsRepository;
 
   @InjectMocks
-  private UsersRestaurantGatewayAdapter adapter;
+  private UserRestaurantGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar UsersRestaurant mapeado")

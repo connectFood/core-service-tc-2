@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
+import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemsImagesEntity;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsImagesRepository;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantItemsRepository;
@@ -20,13 +20,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class RestaurantItemsImagesGatewayAdapter implements RestaurantItemsImagesGateway {
+public class RestaurantItemImageGatewayAdapter implements RestaurantItemImageGateway {
 
   private final JpaRestaurantItemsImagesRepository repository;
   private final RestaurantItemsImageInfraMapper mapper;
   private final JpaRestaurantItemsRepository restaurantItemsRepository;
 
-  public RestaurantItemsImagesGatewayAdapter(
+  public RestaurantItemImageGatewayAdapter(
       final JpaRestaurantItemsImagesRepository repository,
       final RestaurantItemsImageInfraMapper mapper,
       final JpaRestaurantItemsRepository restaurantItemsRepository) {

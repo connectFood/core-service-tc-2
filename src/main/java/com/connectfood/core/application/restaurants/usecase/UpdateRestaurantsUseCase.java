@@ -10,8 +10,8 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantType;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
-import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
+import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,21 +19,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class UpdateRestaurantsUseCase {
 
-  private final RestaurantsGateway repository;
+  private final RestaurantGateway repository;
   private final RestaurantsAppMapper mapper;
   private final RequestUserGuard guard;
-  private final RestaurantsTypeGateway restaurantsTypeGateway;
+  private final RestaurantTypeGateway restaurantTypeGateway;
 
   public UpdateRestaurantsUseCase(
-      final RestaurantsGateway repository,
+      final RestaurantGateway repository,
       final RestaurantsAppMapper mapper,
       final RequestUserGuard guard,
-      final RestaurantsTypeGateway restaurantsTypeGateway
+      final RestaurantTypeGateway restaurantTypeGateway
   ) {
     this.repository = repository;
     this.mapper = mapper;
     this.guard = guard;
-    this.restaurantsTypeGateway = restaurantsTypeGateway;
+    this.restaurantTypeGateway = restaurantTypeGateway;
   }
 
   @Transactional
@@ -47,7 +47,7 @@ public class UpdateRestaurantsUseCase {
     if (!restaurants.getRestaurantType()
         .getUuid()
         .equals(input.getRestaurantsTypeUuid())) {
-      restaurantType = restaurantsTypeGateway.findById(input.getRestaurantsTypeUuid())
+      restaurantType = restaurantTypeGateway.findById(input.getRestaurantsTypeUuid())
           .orElseThrow(() -> new NotFoundException("Restaurant type not found"));
     }
 

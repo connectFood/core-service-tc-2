@@ -11,8 +11,8 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
-import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
+import com.connectfood.core.domain.repository.RestaurantAddressGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +23,8 @@ public class CreateRestaurantsAddressUseCase {
   private final AddressGateway repository;
   private final AddressAppMapper mapper;
   private final RequestUserGuard guard;
-  private final RestaurantsGateway restaurantsGateway;
-  private final RestaurantsAddressGateway restaurantsAddressGateway;
+  private final RestaurantGateway restaurantGateway;
+  private final RestaurantAddressGateway restaurantAddressGateway;
   private final RestaurantsAddressAppMapper restaurantsAddressMapper;
 
 
@@ -32,26 +32,26 @@ public class CreateRestaurantsAddressUseCase {
       final AddressGateway repository,
       final AddressAppMapper mapper,
       final RequestUserGuard guard,
-      final RestaurantsGateway restaurantsGateway,
-      final RestaurantsAddressGateway restaurantsAddressGateway,
+      final RestaurantGateway restaurantGateway,
+      final RestaurantAddressGateway restaurantAddressGateway,
       final RestaurantsAddressAppMapper restaurantsAddressMapper
   ) {
     this.repository = repository;
     this.mapper = mapper;
     this.guard = guard;
-    this.restaurantsGateway = restaurantsGateway;
-    this.restaurantsAddressGateway = restaurantsAddressGateway;
+    this.restaurantGateway = restaurantGateway;
+    this.restaurantAddressGateway = restaurantAddressGateway;
     this.restaurantsAddressMapper = restaurantsAddressMapper;
   }
 
   @Transactional
   public AddressOutput execute(final RequestUser requestUser, final UUID restaurantUuid, final AddressInput input) {
     guard.requireRole(requestUser, UsersType.OWNER.name());
-    final var restaurants = restaurantsGateway.findByUuid(restaurantUuid)
+    final var restaurants = restaurantGateway.findByUuid(restaurantUuid)
         .orElseThrow(() -> new NotFoundException("Restaurant not found"));
 
     final var address = repository.save(mapper.toDomain(input));
-    final var restaurantsAddress = restaurantsAddressGateway.save(restaurantsAddressMapper.toDomain(restaurants,
+    final var restaurantsAddress = restaurantAddressGateway.save(restaurantsAddressMapper.toDomain(restaurants,
         address
     ));
 

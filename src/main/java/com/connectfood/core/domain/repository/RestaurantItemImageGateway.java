@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.commons.PageModel;
 
-public interface RestaurantItemsImagesGateway {
+public interface RestaurantItemImageGateway {
 
   RestaurantItemImage save(UUID restaurantItemsUuid, RestaurantItemImage restaurantItemImage);
 

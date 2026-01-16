@@ -8,7 +8,7 @@ import com.connectfood.core.application.restaurants.mapper.RestaurantOpeningHour
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.RestaurantOpeningHoursGateway;
+import com.connectfood.core.domain.repository.RestaurantOpeningHourGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CreateRestaurantOpeningHoursUseCase {
 
-  private final RestaurantOpeningHoursGateway repository;
+  private final RestaurantOpeningHourGateway repository;
   private final RestaurantOpeningHoursAppMapper mapper;
   private final RequestUserGuard guard;
 
   public CreateRestaurantOpeningHoursUseCase(
-      final RestaurantOpeningHoursGateway repository,
+      final RestaurantOpeningHourGateway repository,
       final RestaurantOpeningHoursAppMapper mapper,
       final RequestUserGuard guard
   ) {

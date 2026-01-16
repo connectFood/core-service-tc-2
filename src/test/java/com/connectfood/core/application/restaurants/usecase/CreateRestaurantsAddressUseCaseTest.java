@@ -15,8 +15,8 @@ import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
-import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
+import com.connectfood.core.domain.repository.RestaurantAddressGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -40,10 +40,10 @@ class CreateRestaurantsAddressUseCaseTest {
   private RequestUserGuard guard;
 
   @Mock
-  private RestaurantsGateway restaurantsGateway;
+  private RestaurantGateway restaurantGateway;
 
   @Mock
-  private RestaurantsAddressGateway restaurantsAddressGateway;
+  private RestaurantAddressGateway restaurantAddressGateway;
 
   @Mock
   private RestaurantsAddressAppMapper restaurantsAddressMapper;
@@ -61,7 +61,7 @@ class CreateRestaurantsAddressUseCaseTest {
     final AddressInput input = Mockito.mock(AddressInput.class);
 
     final Restaurant restaurant = Mockito.mock(Restaurant.class);
-    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
+    Mockito.when(restaurantGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.of(restaurant));
 
     final Address addressDomainToSave = Mockito.mock(Address.class);
@@ -77,7 +77,7 @@ class CreateRestaurantsAddressUseCaseTest {
         .thenReturn(restaurantsAddressDomain);
 
     final RestaurantsAddress savedRestaurantsAddress = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantsAddressGateway.save(restaurantsAddressDomain))
+    Mockito.when(restaurantAddressGateway.save(restaurantsAddressDomain))
         .thenReturn(savedRestaurantsAddress);
 
     final Address linkedAddress = Mockito.mock(Address.class);
@@ -96,7 +96,7 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
-    Mockito.verify(restaurantsGateway, Mockito.times(1))
+    Mockito.verify(restaurantGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
     Mockito.verify(mapper, Mockito.times(1))
@@ -108,7 +108,7 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.verify(restaurantsAddressMapper, Mockito.times(1))
         .toDomain(restaurant, savedAddress);
 
-    Mockito.verify(restaurantsAddressGateway, Mockito.times(1))
+    Mockito.verify(restaurantAddressGateway, Mockito.times(1))
         .save(restaurantsAddressDomain);
 
     Mockito.verify(mapper, Mockito.times(1))
@@ -116,11 +116,11 @@ class CreateRestaurantsAddressUseCaseTest {
 
     Mockito.verifyNoMoreInteractions(
         guard,
-        restaurantsGateway,
+        restaurantGateway,
         mapper,
         repository,
         restaurantsAddressMapper,
-        restaurantsAddressGateway
+        restaurantAddressGateway
     );
   }
 
@@ -133,7 +133,7 @@ class CreateRestaurantsAddressUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    Mockito.when(restaurantsGateway.findByUuid(restaurantUuid))
+    Mockito.when(restaurantGateway.findByUuid(restaurantUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -146,10 +146,10 @@ class CreateRestaurantsAddressUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
-    Mockito.verify(restaurantsGateway, Mockito.times(1))
+    Mockito.verify(restaurantGateway, Mockito.times(1))
         .findByUuid(restaurantUuid);
 
-    Mockito.verifyNoInteractions(mapper, repository, restaurantsAddressMapper, restaurantsAddressGateway);
-    Mockito.verifyNoMoreInteractions(guard, restaurantsGateway);
+    Mockito.verifyNoInteractions(mapper, repository, restaurantsAddressMapper, restaurantAddressGateway);
+    Mockito.verifyNoMoreInteractions(guard, restaurantGateway);
   }
 }

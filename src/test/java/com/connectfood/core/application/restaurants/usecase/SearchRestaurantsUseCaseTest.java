@@ -8,7 +8,7 @@ import com.connectfood.core.application.restaurants.dto.RestaurantsOutput;
 import com.connectfood.core.application.restaurants.mapper.RestaurantsAppMapper;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class SearchRestaurantsUseCaseTest {
 
   @Mock
-  private RestaurantsGateway repository;
+  private RestaurantGateway repository;
 
   @Mock
   private RestaurantsAppMapper mapper;

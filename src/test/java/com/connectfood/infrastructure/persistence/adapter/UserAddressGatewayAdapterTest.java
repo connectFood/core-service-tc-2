@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UsersAddressGatewayAdapterTest {
+class UserAddressGatewayAdapterTest {
 
   @Mock
   private JpaUsersAddressRepository repository;
@@ -40,7 +40,7 @@ class UsersAddressGatewayAdapterTest {
   private JpaAddressRepository addressRepository;
 
   @InjectMocks
-  private UsersAddressGatewayAdapter adapter;
+  private UserAddressGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")

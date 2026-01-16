@@ -31,7 +31,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantsGatewayAdapterTest {
+class RestaurantGatewayAdapterTest {
 
   @Mock
   private JpaRestaurantsRepository repository;
@@ -43,7 +43,7 @@ class RestaurantsGatewayAdapterTest {
   private JpaRestaurantsTypeRepository restaurantsTypeRepository;
 
   @InjectMocks
-  private RestaurantsGatewayAdapter adapter;
+  private RestaurantGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")

@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.RestaurantOpeningHour;
 
-public interface RestaurantOpeningHoursGateway {
+public interface RestaurantOpeningHourGateway {
 
   RestaurantOpeningHour save(RestaurantOpeningHour model, final UUID restaurantUuid);
 

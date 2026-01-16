@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface RestaurantsTypeGateway {
+public interface RestaurantTypeGateway {
 
   RestaurantType save(RestaurantType restaurantType);
 

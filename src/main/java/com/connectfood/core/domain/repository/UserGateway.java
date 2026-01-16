@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.commons.PageModel;
 
-public interface UsersGateway {
+public interface UserGateway {
 
   User save(User user);
 

@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantItemsGateway;
+import com.connectfood.core.domain.repository.RestaurantItemGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class RemoveRestaurantItemsUseCase {
 
-  private final RestaurantItemsGateway repository;
+  private final RestaurantItemGateway repository;
   private final RequestUserGuard guard;
 
   public RemoveRestaurantItemsUseCase(
-      final RestaurantItemsGateway repository,
+      final RestaurantItemGateway repository,
       final RequestUserGuard guard
   ) {
     this.repository = repository;

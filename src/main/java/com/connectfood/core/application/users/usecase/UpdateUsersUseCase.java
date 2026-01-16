@@ -7,8 +7,8 @@ import com.connectfood.core.application.users.dto.UsersOutput;
 import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.UserType;
-import com.connectfood.core.domain.repository.UsersGateway;
-import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.repository.UserGateway;
+import com.connectfood.core.domain.repository.UserTypeGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,17 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class UpdateUsersUseCase {
 
-  private final UsersGateway repository;
+  private final UserGateway repository;
   private final UsersAppMapper mapper;
-  private final UsersTypeGateway usersTypeGateway;
+  private final UserTypeGateway userTypeGateway;
 
   public UpdateUsersUseCase(
-      final UsersGateway repository,
+      final UserGateway repository,
       final UsersAppMapper mapper,
-      final UsersTypeGateway usersTypeGateway) {
+      final UserTypeGateway userTypeGateway) {
     this.repository = repository;
     this.mapper = mapper;
-    this.usersTypeGateway = usersTypeGateway;
+    this.userTypeGateway = userTypeGateway;
   }
 
   @Transactional
@@ -39,7 +39,7 @@ public class UpdateUsersUseCase {
     if (!users.getUserType()
         .getUuid()
         .equals(input.getUsersTypeUuid())) {
-      userType = usersTypeGateway.findByUuid(input.getUsersTypeUuid())
+      userType = userTypeGateway.findByUuid(input.getUsersTypeUuid())
           .orElseThrow(() -> new NotFoundException("User type not found"));
     }
 

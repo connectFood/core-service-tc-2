@@ -12,8 +12,8 @@ import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserAddress;
 import com.connectfood.core.domain.repository.AddressGateway;
-import com.connectfood.core.domain.repository.UsersAddressGateway;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UserAddressGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,10 +34,10 @@ class CreateUsersAddressUseCaseTest {
   private AddressAppMapper mapper;
 
   @Mock
-  private UsersGateway usersGateway;
+  private UserGateway userGateway;
 
   @Mock
-  private UsersAddressGateway usersAddressGateway;
+  private UserAddressGateway userAddressGateway;
 
   @Mock
   private UsersAddressAppMapper usersAddressMapper;
@@ -51,7 +51,7 @@ class CreateUsersAddressUseCaseTest {
     final var userUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    Mockito.when(usersGateway.findByUuid(userUuid))
+    Mockito.when(userGateway.findByUuid(userUuid))
         .thenReturn(Optional.empty());
 
     final var ex = Assertions.assertThrows(
@@ -61,10 +61,10 @@ class CreateUsersAddressUseCaseTest {
 
     Assertions.assertEquals("User not found", ex.getMessage());
 
-    Mockito.verify(usersGateway, Mockito.times(1))
+    Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(userUuid);
-    Mockito.verifyNoInteractions(repository, mapper, usersAddressGateway, usersAddressMapper);
-    Mockito.verifyNoMoreInteractions(usersGateway);
+    Mockito.verifyNoInteractions(repository, mapper, userAddressGateway, usersAddressMapper);
+    Mockito.verifyNoMoreInteractions(userGateway);
   }
 
   @Test
@@ -74,7 +74,7 @@ class CreateUsersAddressUseCaseTest {
     final AddressInput input = Mockito.mock(AddressInput.class);
 
     final User user = Mockito.mock(User.class);
-    Mockito.when(usersGateway.findByUuid(userUuid))
+    Mockito.when(userGateway.findByUuid(userUuid))
         .thenReturn(Optional.of(user));
 
     final Address addressToSave = Mockito.mock(Address.class);
@@ -90,7 +90,7 @@ class CreateUsersAddressUseCaseTest {
         .thenReturn(userAddressToSave);
 
     final UserAddress savedUserAddress = Mockito.mock(UserAddress.class);
-    Mockito.when(usersAddressGateway.save(userAddressToSave))
+    Mockito.when(userAddressGateway.save(userAddressToSave))
         .thenReturn(savedUserAddress);
 
     final AddressOutput expectedOutput = Mockito.mock(AddressOutput.class);
@@ -104,7 +104,7 @@ class CreateUsersAddressUseCaseTest {
     Assertions.assertNotNull(result);
     Assertions.assertSame(expectedOutput, result);
 
-    Mockito.verify(usersGateway, Mockito.times(1))
+    Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(userUuid);
     Mockito.verify(mapper, Mockito.times(1))
         .toDomain(input);
@@ -112,7 +112,7 @@ class CreateUsersAddressUseCaseTest {
         .save(addressToSave);
     Mockito.verify(usersAddressMapper, Mockito.times(1))
         .toDomain(user, savedAddress);
-    Mockito.verify(usersAddressGateway, Mockito.times(1))
+    Mockito.verify(userAddressGateway, Mockito.times(1))
         .save(userAddressToSave);
     Mockito.verify(savedUserAddress, Mockito.times(1))
         .getAddress();
@@ -120,11 +120,11 @@ class CreateUsersAddressUseCaseTest {
         .toOutput(savedAddress);
 
     Mockito.verifyNoMoreInteractions(
-        usersGateway,
+        userGateway,
         mapper,
         repository,
         usersAddressMapper,
-        usersAddressGateway,
+        userAddressGateway,
         savedUserAddress
     );
   }

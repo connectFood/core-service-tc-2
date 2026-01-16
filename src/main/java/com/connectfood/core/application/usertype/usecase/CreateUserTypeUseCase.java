@@ -4,7 +4,7 @@ import com.connectfood.core.application.usertype.dto.UsersTypeInput;
 import com.connectfood.core.application.usertype.dto.UsersTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UsersTypeAppMapper;
 import com.connectfood.core.domain.exception.ConflictException;
-import com.connectfood.core.domain.repository.UsersTypeGateway;
+import com.connectfood.core.domain.repository.UserTypeGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CreateUserTypeUseCase {
 
-  private final UsersTypeGateway repository;
+  private final UserTypeGateway repository;
   private final UsersTypeAppMapper mapper;
 
 
-  public CreateUserTypeUseCase(final UsersTypeGateway repository, final UsersTypeAppMapper mapper) {
+  public CreateUserTypeUseCase(final UserTypeGateway repository, final UsersTypeAppMapper mapper) {
     this.repository = repository;
     this.mapper = mapper;
   }

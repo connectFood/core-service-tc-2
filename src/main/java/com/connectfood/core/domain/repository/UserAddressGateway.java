@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.UserAddress;
 
-public interface UsersAddressGateway {
+public interface UserAddressGateway {
 
   UserAddress save(UserAddress userAddress);
 

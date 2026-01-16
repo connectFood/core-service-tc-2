@@ -17,31 +17,31 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.model.RestaurantItemImage;
-import com.connectfood.core.domain.repository.RestaurantItemsImagesGateway;
-import com.connectfood.core.domain.repository.RestaurantItemsGateway;
+import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
+import com.connectfood.core.domain.repository.RestaurantItemGateway;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class UpdateRestaurantItemsUseCase {
 
-  private final RestaurantItemsGateway repository;
+  private final RestaurantItemGateway repository;
   private final RestaurantItemsAppMapper mapper;
   private final RequestUserGuard guard;
   private final RestaurantItemsImagesAppMapper restaurantItemsImagesMapper;
-  private final RestaurantItemsImagesGateway restaurantItemsImagesGateway;
+  private final RestaurantItemImageGateway restaurantItemImageGateway;
 
   public UpdateRestaurantItemsUseCase(
-      final RestaurantItemsGateway repository,
+      final RestaurantItemGateway repository,
       final RestaurantItemsAppMapper mapper,
       final RequestUserGuard guard,
       final RestaurantItemsImagesAppMapper restaurantItemsImagesMapper,
-      final RestaurantItemsImagesGateway restaurantItemsImagesGateway) {
+      final RestaurantItemImageGateway restaurantItemImageGateway) {
     this.repository = repository;
     this.mapper = mapper;
     this.guard = guard;
     this.restaurantItemsImagesMapper = restaurantItemsImagesMapper;
-    this.restaurantItemsImagesGateway = restaurantItemsImagesGateway;
+    this.restaurantItemImageGateway = restaurantItemImageGateway;
   }
 
   public RestaurantItemsOutput execute(final RequestUser requestUser, final UUID uuid,
@@ -84,19 +84,19 @@ public class UpdateRestaurantItemsUseCase {
             current.getDescription(), image.getDescription());
 
         if (changed) {
-          persistedImages.add(restaurantItemsImagesGateway.update(image.getUuid(), model));
+          persistedImages.add(restaurantItemImageGateway.update(image.getUuid(), model));
         } else {
           persistedImages.add(current);
         }
       } else {
-        persistedImages.add(restaurantItemsImagesGateway.save(restaurantItem.getUuid(), model));
+        persistedImages.add(restaurantItemImageGateway.save(restaurantItem.getUuid(), model));
       }
     }
 
     for (var current : restaurantItem.getImages()) {
       final var currentUuid = current.getUuid();
       if (currentUuid != null && !incomingUuids.contains(currentUuid)) {
-        restaurantItemsImagesGateway.delete(currentUuid);
+        restaurantItemImageGateway.delete(currentUuid);
       }
     }
 

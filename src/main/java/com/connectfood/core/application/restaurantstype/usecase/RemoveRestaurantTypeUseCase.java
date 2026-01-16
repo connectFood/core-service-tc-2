@@ -1,7 +1,7 @@
 package com.connectfood.core.application.restaurantstype.usecase;
 
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
+import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +11,9 @@ import java.util.UUID;
 @Component
 public class RemoveRestaurantTypeUseCase {
 
-  private final RestaurantsTypeGateway repository;
+  private final RestaurantTypeGateway repository;
 
-  public RemoveRestaurantTypeUseCase(final RestaurantsTypeGateway repository) {
+  public RemoveRestaurantTypeUseCase(final RestaurantTypeGateway repository) {
     this.repository = repository;
   }
 

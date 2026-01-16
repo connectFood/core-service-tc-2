@@ -10,9 +10,9 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.enums.UsersType;
-import com.connectfood.core.domain.repository.RestaurantsGateway;
-import com.connectfood.core.domain.repository.RestaurantsTypeGateway;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.RestaurantGateway;
+import com.connectfood.core.domain.repository.RestaurantTypeGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,32 +20,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CreateRestaurantsUseCase {
 
-  private final RestaurantsGateway repository;
+  private final RestaurantGateway repository;
   private final RestaurantsAppMapper mapper;
   private final RequestUserGuard guard;
-  private final RestaurantsTypeGateway restaurantsTypeGateway;
+  private final RestaurantTypeGateway restaurantTypeGateway;
   private final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase;
   private final CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase;
-  private final UsersGateway usersGateway;
+  private final UserGateway userGateway;
   private final CreateUsersRestaurantUseCase createUsersRestaurantUseCase;
 
   public CreateRestaurantsUseCase(
-      final RestaurantsGateway repository,
+      final RestaurantGateway repository,
       final RestaurantsAppMapper mapper,
       final RequestUserGuard guard,
-      final RestaurantsTypeGateway restaurantsTypeGateway,
+      final RestaurantTypeGateway restaurantTypeGateway,
       final CreateRestaurantsAddressUseCase createRestaurantsAddressUseCase,
       final CreateRestaurantOpeningHoursUseCase createRestaurantOpeningHoursUseCase,
-      final UsersGateway usersGateway,
+      final UserGateway userGateway,
       final CreateUsersRestaurantUseCase createUsersRestaurantUseCase
   ) {
     this.repository = repository;
     this.mapper = mapper;
     this.guard = guard;
-    this.restaurantsTypeGateway = restaurantsTypeGateway;
+    this.restaurantTypeGateway = restaurantTypeGateway;
     this.createRestaurantsAddressUseCase = createRestaurantsAddressUseCase;
     this.createRestaurantOpeningHoursUseCase = createRestaurantOpeningHoursUseCase;
-    this.usersGateway = usersGateway;
+    this.userGateway = userGateway;
     this.createUsersRestaurantUseCase = createUsersRestaurantUseCase;
   }
 
@@ -53,10 +53,10 @@ public class CreateRestaurantsUseCase {
   public RestaurantsOutput execute(final RequestUser requestUser, final RestaurantsInput input) {
     guard.requireRole(requestUser, UsersType.OWNER.name());
 
-    final var users = usersGateway.findByUuid(input.getUsersUuid())
+    final var users = userGateway.findByUuid(input.getUsersUuid())
         .orElseThrow(() -> new NotFoundException("User not found"));
 
-    final var restaurantsType = restaurantsTypeGateway
+    final var restaurantsType = restaurantTypeGateway
         .findById(input.getRestaurantsTypeUuid())
         .orElseThrow(() -> new NotFoundException("Restaurants Type not found"));
 

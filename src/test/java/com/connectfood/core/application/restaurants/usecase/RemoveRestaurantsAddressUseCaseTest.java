@@ -10,7 +10,7 @@ import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.RestaurantsAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
-import com.connectfood.core.domain.repository.RestaurantsAddressGateway;
+import com.connectfood.core.domain.repository.RestaurantAddressGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RemoveRestaurantsAddressUseCaseTest {
 
   @Mock
-  private RestaurantsAddressGateway repository;
+  private RestaurantAddressGateway repository;
 
   @Mock
   private AddressGateway addressGateway;

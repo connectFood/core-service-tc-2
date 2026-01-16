@@ -28,7 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantItemsImagesGatewayAdapterTest {
+class RestaurantItemImageGatewayAdapterTest {
 
   @Mock
   private JpaRestaurantItemsImagesRepository repository;
@@ -40,7 +40,7 @@ class RestaurantItemsImagesGatewayAdapterTest {
   private JpaRestaurantItemsRepository restaurantItemsRepository;
 
   @InjectMocks
-  private RestaurantItemsImagesGatewayAdapter adapter;
+  private RestaurantItemImageGatewayAdapter adapter;
 
   @Test
   @DisplayName("Deve salvar e retornar o model mapeado")

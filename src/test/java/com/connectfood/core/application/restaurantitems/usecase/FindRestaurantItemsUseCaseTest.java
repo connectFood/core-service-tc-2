@@ -7,7 +7,7 @@ import com.connectfood.core.application.restaurantitems.dto.RestaurantItemsOutpu
 import com.connectfood.core.application.restaurantitems.mapper.RestaurantItemsAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItem;
-import com.connectfood.core.domain.repository.RestaurantItemsGateway;
+import com.connectfood.core.domain.repository.RestaurantItemGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class FindRestaurantItemsUseCaseTest {
 
   @Mock
-  private RestaurantItemsGateway repository;
+  private RestaurantItemGateway repository;
 
   @Mock
   private RestaurantItemsAppMapper mapper;

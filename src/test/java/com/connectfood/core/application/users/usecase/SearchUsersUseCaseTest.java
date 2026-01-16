@@ -5,7 +5,7 @@ import com.connectfood.core.application.users.mapper.UsersAppMapper;
 import com.connectfood.core.domain.model.User;
 import com.connectfood.core.domain.model.UserType;
 import com.connectfood.core.domain.model.commons.PageModel;
-import com.connectfood.core.domain.repository.UsersGateway;
+import com.connectfood.core.domain.repository.UserGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 class SearchUsersUseCaseTest {
 
   @Mock
-  private UsersGateway repository;
+  private UserGateway repository;
 
   @Mock
   private UsersAppMapper mapper;
