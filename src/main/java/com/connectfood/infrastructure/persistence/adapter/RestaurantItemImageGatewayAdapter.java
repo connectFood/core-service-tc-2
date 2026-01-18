@@ -91,4 +91,14 @@ public class RestaurantItemImageGatewayAdapter implements RestaurantItemImageGat
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
   }
+
+  @Override
+  public boolean existsByRestaurantItemUuid(final UUID restaurantItemUuid) {
+    return repository.existsByRestaurantItemsUuid(restaurantItemUuid);
+  }
+
+  @Override
+  public void deleteByRestaurantItemUuid(final UUID restaurantItemUuid) {
+    repository.deleteByRestaurantItemsUuid(restaurantItemUuid);
+  }
 }

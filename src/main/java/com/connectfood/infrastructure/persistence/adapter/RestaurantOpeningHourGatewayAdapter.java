@@ -61,4 +61,14 @@ public class RestaurantOpeningHourGatewayAdapter implements RestaurantOpeningHou
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
   }
+
+  @Override
+  public boolean existsByRestaurantUuid(final UUID restaurantUuid) {
+    return repository.existsByRestaurantUuid(restaurantUuid);
+  }
+
+  @Override
+  public void deleteByRestaurantUuid(final UUID restaurantUuid) {
+    repository.deleteByRestaurantUuid(restaurantUuid);
+  }
 }

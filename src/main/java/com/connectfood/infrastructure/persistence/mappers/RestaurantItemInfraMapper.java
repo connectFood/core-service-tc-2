@@ -5,8 +5,8 @@ import java.util.List;
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.model.RestaurantItemImage;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
 
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class RestaurantItemInfraMapper {
   private final RestaurantItemImageInfraMapper restaurantItemsImageMapper;
 
   public RestaurantItemInfraMapper(final RestaurantInfraMapper restaurantsMapper,
-                                   final RestaurantItemImageInfraMapper restaurantItemsImageMapper) {
+      final RestaurantItemImageInfraMapper restaurantItemsImageMapper) {
     this.restaurantsMapper = restaurantsMapper;
     this.restaurantItemsImageMapper = restaurantItemsImageMapper;
   }
@@ -40,7 +40,7 @@ public class RestaurantItemInfraMapper {
         entity.getDescription(),
         entity.getValue(),
         RestaurantItemServiceType.valueOf(entity.getRequestType()),
-        entity.getRestaurant() != null ? restaurantsMapper.toDomain(entity.getRestaurant()) : null,
+        entity.getRestaurant() != null ? restaurantsMapper.toDomainSimple(entity.getRestaurant()) : null,
         images
     );
   }

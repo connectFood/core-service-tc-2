@@ -19,4 +19,8 @@ public interface RestaurantItemImageGateway {
       String direction);
 
   void delete(UUID uuid);
+
+  boolean existsByRestaurantItemUuid(UUID restaurantItemUuid);
+
+  void deleteByRestaurantItemUuid(UUID restaurantItemUuid);
 }

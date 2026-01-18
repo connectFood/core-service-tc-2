@@ -64,7 +64,7 @@ public class RestaurantItemAppMapper {
         model.getDescription(),
         model.getValue(),
         model.getRequestType(),
-        model.getRestaurant() != null ? restaurantsMapper.toOutput(model.getRestaurant()) : null,
+        model.getRestaurant() != null ? restaurantsMapper.toOutputAll(model.getRestaurant()) : null,
         model.getImages() != null ? model.getImages()
             .stream()
             .map(restaurantItemsImagesMapper::toOutput)
@@ -83,7 +83,7 @@ public class RestaurantItemAppMapper {
         model.getDescription(),
         model.getValue(),
         model.getRequestType(),
-        model.getRestaurant() != null ? restaurantsMapper.toOutput(model.getRestaurant()) : null,
+        model.getRestaurant() != null ? restaurantsMapper.toOutputAll(model.getRestaurant()) : null,
         images.stream()
             .map(restaurantItemsImagesMapper::toOutput)
             .toList()

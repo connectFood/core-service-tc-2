@@ -1,5 +1,7 @@
 package com.connectfood.infrastructure.persistence.adapter;
 
+import java.util.UUID;
+
 import com.connectfood.core.domain.model.UserRestaurant;
 import com.connectfood.core.domain.repository.UserRestaurantGateway;
 import com.connectfood.infrastructure.persistence.jpa.JpaRestaurantRepository;
@@ -18,9 +20,9 @@ public class UserRestaurantGatewayAdapter implements UserRestaurantGateway {
   private final JpaRestaurantRepository restaurantsRepository;
 
   public UserRestaurantGatewayAdapter(final JpaUserRestaurantRepository repository,
-                                      final UserRestaurantInfraMapper mapper,
-                                      final JpaUserRepository usersRepository,
-                                      final JpaRestaurantRepository restaurantsRepository) {
+      final UserRestaurantInfraMapper mapper,
+      final JpaUserRepository usersRepository,
+      final JpaRestaurantRepository restaurantsRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.usersRepository = usersRepository;
@@ -39,5 +41,15 @@ public class UserRestaurantGatewayAdapter implements UserRestaurantGateway {
     final var entity = repository.save(mapper.toEntity(usersAddress.getUuid(), users, address));
 
     return mapper.toDomain(entity);
+  }
+
+  @Override
+  public boolean existsByRestaurantsUuid(final UUID restaurantUuid) {
+    return repository.existsByRestaurantsUuid(restaurantUuid);
+  }
+
+  @Override
+  public void deleteByRestaurantsUuid(final UUID restaurantUuid) {
+    repository.deleteByRestaurantsUuid(restaurantUuid);
   }
 }

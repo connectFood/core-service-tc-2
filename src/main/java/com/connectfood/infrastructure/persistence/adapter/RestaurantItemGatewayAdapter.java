@@ -92,4 +92,18 @@ public class RestaurantItemGatewayAdapter implements RestaurantItemGateway {
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
   }
+
+  @Override
+  public boolean existsByRestaurantUuid(final UUID restaurantUuid) {
+    return repository.existsByRestaurantUuid(restaurantUuid);
+  }
+
+  @Override
+  public List<RestaurantItem> findAllByRestaurantUuid(final UUID restaurantUuid) {
+    final var entities = repository.findAllByRestaurantUuid(restaurantUuid);
+
+    return entities.stream()
+        .map(mapper::toDomain)
+        .toList();
+  }
 }

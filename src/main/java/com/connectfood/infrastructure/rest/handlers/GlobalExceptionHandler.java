@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(ForbiddenException.class)
   public ResponseEntity<ProblemDetailsResponse> handleForbiddenException(
-      final ConflictException exception, final HttpServletRequest request) {
+      final ForbiddenException exception, final HttpServletRequest request) {
     return buildApiErrorResponse(
         exception.getMessage(), HttpStatus.FORBIDDEN, request.getRequestURI());
   }

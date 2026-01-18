@@ -6,6 +6,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.RestaurantItemGateway;
+import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +16,16 @@ public class RemoveRestaurantItemUseCase {
 
   private final RestaurantItemGateway repository;
   private final RequestUserGuard guard;
+  private final RestaurantItemImageGateway restaurantItemImageGateway;
 
   public RemoveRestaurantItemUseCase(
       final RestaurantItemGateway repository,
-      final RequestUserGuard guard
+      final RequestUserGuard guard,
+      final RestaurantItemImageGateway restaurantItemImageGateway
   ) {
     this.repository = repository;
     this.guard = guard;
+    this.restaurantItemImageGateway = restaurantItemImageGateway;
   }
 
   @Transactional
@@ -30,6 +34,12 @@ public class RemoveRestaurantItemUseCase {
 
     repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurant Items not found"));
+
+    final var existsImages = restaurantItemImageGateway.existsByRestaurantItemUuid(uuid);
+
+    if (existsImages) {
+      restaurantItemImageGateway.deleteByRestaurantItemUuid(uuid);
+    }
 
     repository.delete(uuid);
   }

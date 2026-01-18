@@ -19,4 +19,8 @@ public interface RestaurantItemGateway {
       String direction);
 
   void delete(UUID uuid);
+
+  boolean existsByRestaurantUuid(UUID restaurantUuid);
+
+  List<RestaurantItem> findAllByRestaurantUuid(UUID restaurantUuid);
 }

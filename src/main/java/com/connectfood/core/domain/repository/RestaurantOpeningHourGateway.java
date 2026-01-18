@@ -14,4 +14,8 @@ public interface RestaurantOpeningHourGateway {
   Optional<RestaurantOpeningHour> findByUuid(UUID uuid);
 
   void delete(UUID uuid);
+
+  boolean existsByRestaurantUuid(UUID restaurantUuid);
+
+  void deleteByRestaurantUuid(UUID restaurantUuid);
 }

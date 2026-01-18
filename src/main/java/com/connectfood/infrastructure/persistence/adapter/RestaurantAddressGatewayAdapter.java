@@ -57,4 +57,9 @@ public class RestaurantAddressGatewayAdapter implements RestaurantAddressGateway
   public void delete(UUID uuid) {
     repository.deleteByUuid(uuid);
   }
+
+  @Override
+  public boolean existsByRestaurantsUuid(final UUID restaurantUuid) {
+    return repository.existsByRestaurantsUuid(restaurantUuid);
+  }
 }

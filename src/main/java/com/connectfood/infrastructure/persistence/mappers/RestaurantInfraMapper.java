@@ -43,6 +43,18 @@ public class RestaurantInfraMapper {
     );
   }
 
+  public Restaurant toDomainSimple(final RestaurantEntity entity) {
+    if (entity == null) {
+      return null;
+    }
+
+    return new Restaurant(
+        entity.getUuid(),
+        entity.getName(),
+        entity.getRestaurantsType() != null ? restaurantsTypeMapper.toDomain(entity.getRestaurantsType()) : null
+    );
+  }
+
   public RestaurantEntity toEntity(final Restaurant model, final RestaurantTypeEntity restaurantTypeEntity) {
     if (model == null) {
       return null;
