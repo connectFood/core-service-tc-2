@@ -79,4 +79,9 @@ public class RestaurantTypeGatewayAdapter implements RestaurantTypeGateway {
   public void delete(final UUID uuid) {
     repository.deleteByUuid(uuid);
   }
+
+  @Override
+  public boolean existsByName(final String name) {
+    return repository.existsByName(name);
+  }
 }

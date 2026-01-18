@@ -19,4 +19,6 @@ public interface RestaurantGateway {
       String state, Integer page, Integer size, String sort, String direction);
 
   void delete(UUID uuid);
+
+  boolean existsByRestaurant(String name, UUID restaurantsTypeUuid, UUID usersUuid);
 }

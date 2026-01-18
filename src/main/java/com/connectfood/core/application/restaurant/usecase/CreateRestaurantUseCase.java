@@ -1,13 +1,15 @@
 package com.connectfood.core.application.restaurant.usecase;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourOutput;
 import com.connectfood.core.application.restaurant.dto.RestaurantInput;
+import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourOutput;
 import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
 import com.connectfood.core.application.restaurant.mapper.RestaurantAppMapper;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
+import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantGateway;
@@ -53,6 +55,8 @@ public class CreateRestaurantUseCase {
   public RestaurantOutput execute(final RequestUser requestUser, final RestaurantInput input) {
     guard.requireRole(requestUser, UsersType.OWNER.name());
 
+    validateRestaurantExists(input.getName(), input.getRestaurantsTypeUuid(), input.getUsersUuid());
+
     final var users = userGateway.findByUuid(input.getUsersUuid())
         .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -72,5 +76,13 @@ public class CreateRestaurantUseCase {
     }
 
     return mapper.toOutput(restaurants, openingHours, address, usersPersisted);
+  }
+
+  private void validateRestaurantExists(final String name, final UUID restaurantTypeUuid, final UUID userUuid) {
+    final var exists = repository.existsByRestaurant(name, restaurantTypeUuid, userUuid);
+
+    if (exists) {
+      throw new ConflictException("Restaurant already exists");
+    }
   }
 }

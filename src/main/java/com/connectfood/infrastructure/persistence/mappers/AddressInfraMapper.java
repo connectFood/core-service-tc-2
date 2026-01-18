@@ -36,6 +36,7 @@ public class AddressInfraMapper {
     }
 
     var entity = new AddressEntity();
+    entity.setUuid(model.getUuid());
     return setEntity(entity, model);
   }
 

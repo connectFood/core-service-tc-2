@@ -18,4 +18,6 @@ public interface RestaurantTypeGateway {
   PageModel<List<RestaurantType>> findAll(String name, Integer page, Integer size, String sort, String direction);
 
   void delete(UUID uuid);
+
+  boolean existsByName(String name);
 }

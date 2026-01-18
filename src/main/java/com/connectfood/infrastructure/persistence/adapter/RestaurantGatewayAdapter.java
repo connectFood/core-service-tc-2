@@ -27,8 +27,8 @@ public class RestaurantGatewayAdapter implements RestaurantGateway {
   private final JpaRestaurantTypeRepository restaurantsTypeRepository;
 
   public RestaurantGatewayAdapter(final JpaRestaurantRepository repository,
-                                  final RestaurantInfraMapper mapper,
-                                  final JpaRestaurantTypeRepository restaurantsTypeRepository) {
+      final RestaurantInfraMapper mapper,
+      final JpaRestaurantTypeRepository restaurantsTypeRepository) {
     this.repository = repository;
     this.mapper = mapper;
     this.restaurantsTypeRepository = restaurantsTypeRepository;
@@ -103,5 +103,10 @@ public class RestaurantGatewayAdapter implements RestaurantGateway {
   @Override
   public void delete(UUID uuid) {
     repository.deleteByUuid(uuid);
+  }
+
+  @Override
+  public boolean existsByRestaurant(final String name, final UUID restaurantsTypeUuid, final UUID usersUuid) {
+    return repository.existsByNameAndRestaurantsTypeUuidAndUsersUuid(name, restaurantsTypeUuid, usersUuid);
   }
 }
