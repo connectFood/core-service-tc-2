@@ -57,32 +57,45 @@ public class RemoveRestaurantUseCase {
     repository.findByUuid(uuid)
         .orElseThrow(() -> new NotFoundException("Restaurants not found"));
 
-    final var existsItems = restaurantItemGateway.existsByRestaurantUuid(uuid);
+    removeItems(uuid);
+    removeOpeningHours(uuid);
+    removeAddress(uuid);
+    removeUser(uuid);
+
+    repository.delete(uuid);
+  }
+
+  private void removeItems(final UUID restaurantUuid) {
+    final var existsItems = restaurantItemGateway.existsByRestaurantUuid(restaurantUuid);
 
     if (existsItems) {
-      final var restaurantItems = restaurantItemGateway.findAllByRestaurantUuid(uuid);
+      final var restaurantItems = restaurantItemGateway.findAllByRestaurantUuid(restaurantUuid);
 
       for (final var restaurantItem : restaurantItems) {
-        final var existsImages = restaurantItemImageGateway.existsByRestaurantItemUuid(uuid);
+        final var existsImages = restaurantItemImageGateway.existsByRestaurantItemUuid(restaurantUuid);
 
         if (existsImages) {
-          restaurantItemImageGateway.deleteByRestaurantItemUuid(uuid);
+          restaurantItemImageGateway.deleteByRestaurantItemUuid(restaurantUuid);
         }
 
         restaurantItemGateway.delete(restaurantItem.getUuid());
       }
     }
+  }
 
-    final var existsOpeningHour = restaurantOpeningHourGateway.existsByRestaurantUuid(uuid);
+  private void removeOpeningHours(final UUID restaurantUuid) {
+    final var existsOpeningHour = restaurantOpeningHourGateway.existsByRestaurantUuid(restaurantUuid);
 
     if (existsOpeningHour) {
-      restaurantOpeningHourGateway.deleteByRestaurantUuid(uuid);
+      restaurantOpeningHourGateway.deleteByRestaurantUuid(restaurantUuid);
     }
+  }
 
-    final var existsAddress = restaurantAddressGateway.existsByRestaurantsUuid(uuid);
+  private void removeAddress(final UUID restaurantUuid) {
+    final var existsAddress = restaurantAddressGateway.existsByRestaurantsUuid(restaurantUuid);
 
     if (existsAddress) {
-      final var restaurantAddress = restaurantAddressGateway.findByRestaurantsUuid(uuid)
+      final var restaurantAddress = restaurantAddressGateway.findByRestaurantsUuid(restaurantUuid)
           .orElseThrow();
 
       restaurantAddressGateway.delete(restaurantAddress.getUuid());
@@ -90,13 +103,13 @@ public class RemoveRestaurantUseCase {
       addressGateway.delete(restaurantAddress.getAddress()
           .getUuid());
     }
+  }
 
-    final var existsUsers = userRestaurantGateway.existsByRestaurantsUuid(uuid);
+  private void removeUser(final UUID restaurantUuid) {
+    final var existsUsers = userRestaurantGateway.existsByRestaurantsUuid(restaurantUuid);
 
     if (existsUsers) {
-      userRestaurantGateway.deleteByRestaurantsUuid(uuid);
+      userRestaurantGateway.deleteByRestaurantsUuid(restaurantUuid);
     }
-
-    repository.delete(uuid);
   }
 }
