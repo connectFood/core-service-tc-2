@@ -7,10 +7,10 @@ import com.connectfood.core.application.usertype.dto.UserTypeOutput;
 import com.connectfood.core.application.usertype.mapper.UserTypeAppMapper;
 import com.connectfood.core.domain.repository.UserTypeGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class SearchUsersTypeUseCase {
 
   private final UserTypeGateway repository;
@@ -23,7 +23,7 @@ public class SearchUsersTypeUseCase {
 
   @Transactional(readOnly = true)
   public PageOutput<List<UserTypeOutput>> execute(final String name, final Integer page, final Integer size,
-                                                  final String sort, final String direction) {
+      final String sort, final String direction) {
     final var usersTypes = repository.findAll(name, page, size, sort, direction);
 
     final var results = usersTypes.content()

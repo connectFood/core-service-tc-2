@@ -6,10 +6,10 @@ import com.connectfood.core.application.restauranttype.mapper.RestaurantTypeAppM
 import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class CreateRestaurantTypeUseCase {
 
   private final RestaurantTypeGateway repository;

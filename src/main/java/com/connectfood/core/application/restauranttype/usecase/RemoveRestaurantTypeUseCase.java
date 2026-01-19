@@ -1,14 +1,14 @@
 package com.connectfood.core.application.restauranttype.usecase;
 
+import java.util.UUID;
+
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.repository.RestaurantTypeGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
-@Component
+@Service
 public class RemoveRestaurantTypeUseCase {
 
   private final RestaurantTypeGateway repository;

@@ -12,10 +12,10 @@ import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
 import com.connectfood.core.domain.repository.RestaurantAddressGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class UpdateRestaurantAddressUseCase {
 
   private final RestaurantAddressGateway repository;

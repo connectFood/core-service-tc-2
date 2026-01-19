@@ -10,10 +10,10 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.RestaurantOpeningHourGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class CreateRestaurantOpeningHourUseCase {
 
   private final RestaurantOpeningHourGateway repository;

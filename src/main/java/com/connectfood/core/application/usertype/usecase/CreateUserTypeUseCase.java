@@ -6,10 +6,10 @@ import com.connectfood.core.application.usertype.mapper.UserTypeAppMapper;
 import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.repository.UserTypeGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class CreateUserTypeUseCase {
 
   private final UserTypeGateway repository;

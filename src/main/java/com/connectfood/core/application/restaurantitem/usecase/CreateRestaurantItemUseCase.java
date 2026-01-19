@@ -12,14 +12,14 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItemImage;
-import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
-import com.connectfood.core.domain.repository.RestaurantItemGateway;
 import com.connectfood.core.domain.repository.RestaurantGateway;
+import com.connectfood.core.domain.repository.RestaurantItemGateway;
+import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class CreateRestaurantItemUseCase {
 
   private final RestaurantItemGateway repository;

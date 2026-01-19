@@ -8,10 +8,10 @@ import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
 import com.connectfood.core.application.restaurant.mapper.RestaurantAppMapper;
 import com.connectfood.core.domain.repository.RestaurantGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class SearchRestaurantsUseCase {
 
   private final RestaurantGateway repository;

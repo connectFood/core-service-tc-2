@@ -8,10 +8,10 @@ import com.connectfood.core.application.user.dto.UserOutput;
 import com.connectfood.core.application.user.mapper.UserAppMapper;
 import com.connectfood.core.domain.repository.UserGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class SearchUsersUseCase {
 
   private final UserGateway repository;

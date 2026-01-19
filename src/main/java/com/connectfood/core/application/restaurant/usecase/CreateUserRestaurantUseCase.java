@@ -10,10 +10,10 @@ import com.connectfood.core.domain.repository.RestaurantGateway;
 import com.connectfood.core.domain.repository.UserGateway;
 import com.connectfood.core.domain.repository.UserRestaurantGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class CreateUserRestaurantUseCase {
 
   private final UserRestaurantGateway repository;

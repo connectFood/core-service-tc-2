@@ -14,11 +14,11 @@ import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
 import com.connectfood.core.domain.repository.RestaurantOpeningHourGateway;
 import com.connectfood.core.domain.repository.UserRestaurantGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 
-@Component
+@Service
 public class RemoveRestaurantUseCase {
 
   private final RestaurantGateway repository;

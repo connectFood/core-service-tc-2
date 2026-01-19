@@ -7,13 +7,13 @@ import com.connectfood.core.application.dto.commons.PageOutput;
 import com.connectfood.core.application.restaurantitem.dto.RestaurantItemOutput;
 import com.connectfood.core.application.restaurantitem.mapper.RestaurantItemAppMapper;
 import com.connectfood.core.domain.exception.NotFoundException;
-import com.connectfood.core.domain.repository.RestaurantItemGateway;
 import com.connectfood.core.domain.repository.RestaurantGateway;
+import com.connectfood.core.domain.repository.RestaurantItemGateway;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class SearchRestaurantItemsUseCase {
 
   private final RestaurantItemGateway repository;
