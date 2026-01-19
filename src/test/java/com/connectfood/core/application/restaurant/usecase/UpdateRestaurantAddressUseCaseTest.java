@@ -10,7 +10,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.RestaurantAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
 import com.connectfood.core.domain.repository.RestaurantAddressGateway;
@@ -51,14 +51,14 @@ class UpdateRestaurantAddressUseCaseTest {
     final var restaurantUuid = UUID.randomUUID();
     final AddressInput input = Mockito.mock(AddressInput.class);
 
-    final RestaurantsAddress restaurantsAddress = Mockito.mock(RestaurantsAddress.class);
+    final RestaurantAddress restaurantAddress = Mockito.mock(RestaurantAddress.class);
     final Address currentAddress = Mockito.mock(Address.class);
     final var addressUuid = UUID.randomUUID();
 
     Mockito.when(repository.findByRestaurantsUuid(restaurantUuid))
-        .thenReturn(Optional.of(restaurantsAddress));
+        .thenReturn(Optional.of(restaurantAddress));
 
-    Mockito.when(restaurantsAddress.getAddress())
+    Mockito.when(restaurantAddress.getAddress())
         .thenReturn(currentAddress);
 
     Mockito.when(currentAddress.getUuid())
@@ -87,7 +87,7 @@ class UpdateRestaurantAddressUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByRestaurantsUuid(restaurantUuid);
 
-    Mockito.verify(restaurantsAddress, Mockito.times(1))
+    Mockito.verify(restaurantAddress, Mockito.times(1))
         .getAddress();
 
     Mockito.verify(currentAddress, Mockito.times(1))
@@ -103,7 +103,7 @@ class UpdateRestaurantAddressUseCaseTest {
         .toOutput(updated);
 
     Mockito.verifyNoMoreInteractions(
-        guard, repository, mapper, addressGateway, restaurantsAddress, currentAddress
+        guard, repository, mapper, addressGateway, restaurantAddress, currentAddress
     );
   }
 

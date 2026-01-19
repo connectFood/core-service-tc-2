@@ -72,10 +72,10 @@ public class RemoveRestaurantUseCase {
       final var restaurantItems = restaurantItemGateway.findAllByRestaurantUuid(restaurantUuid);
 
       for (final var restaurantItem : restaurantItems) {
-        final var existsImages = restaurantItemImageGateway.existsByRestaurantItemUuid(restaurantUuid);
+        final var existsImages = restaurantItemImageGateway.existsByRestaurantItemUuid(restaurantItem.getUuid());
 
         if (existsImages) {
-          restaurantItemImageGateway.deleteByRestaurantItemUuid(restaurantUuid);
+          restaurantItemImageGateway.deleteByRestaurantItemUuid(restaurantItem.getUuid());
         }
 
         restaurantItemGateway.delete(restaurantItem.getUuid());

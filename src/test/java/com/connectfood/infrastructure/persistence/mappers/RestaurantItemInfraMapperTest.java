@@ -4,20 +4,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.model.RestaurantItemImage;
-import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.enums.RestaurantItemServiceType;
-import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
+import com.connectfood.infrastructure.persistence.entity.RestaurantItemEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantItemImageEntity;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -55,7 +53,7 @@ class RestaurantItemInfraMapperTest {
     final RestaurantEntity restaurantEntity = Mockito.mock(RestaurantEntity.class);
     final Restaurant restaurantDomain = Mockito.mock(Restaurant.class);
 
-    Mockito.when(restaurantsMapper.toDomain(restaurantEntity))
+    Mockito.when(restaurantsMapper.toDomainSimple(restaurantEntity))
         .thenReturn(restaurantDomain);
 
     final RestaurantItemEntity entity = Mockito.mock(RestaurantItemEntity.class);
@@ -84,11 +82,14 @@ class RestaurantItemInfraMapperTest {
     Assertions.assertEquals(RestaurantItemServiceType.DELIVERY, result.getRequestType());
     Assertions.assertSame(restaurantDomain, result.getRestaurant());
     Assertions.assertNotNull(result.getImages());
-    Assertions.assertTrue(result.getImages().isEmpty());
+    Assertions.assertTrue(result.getImages()
+        .isEmpty());
 
     Mockito.verify(restaurantsMapper, Mockito.times(1))
-        .toDomain(restaurantEntity);
+        .toDomainSimple(restaurantEntity);
+
     Mockito.verifyNoInteractions(restaurantItemsImageMapper);
+    Mockito.verifyNoMoreInteractions(restaurantsMapper);
   }
 
   @Test
@@ -119,7 +120,8 @@ class RestaurantItemInfraMapperTest {
     Assertions.assertEquals(RestaurantItemServiceType.DELIVERY, result.getRequestType());
     Assertions.assertNull(result.getRestaurant());
     Assertions.assertNotNull(result.getImages());
-    Assertions.assertTrue(result.getImages().isEmpty());
+    Assertions.assertTrue(result.getImages()
+        .isEmpty());
 
     Mockito.verifyNoInteractions(restaurantsMapper, restaurantItemsImageMapper);
   }
@@ -162,7 +164,9 @@ class RestaurantItemInfraMapperTest {
     final var result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
-    Assertions.assertEquals(2, result.getImages().size());
+    Assertions.assertEquals(2, result.getImages()
+        .size()
+    );
     Assertions.assertEquals(List.of(img1, img2), result.getImages());
 
     Mockito.verify(restaurantItemsImageMapper, Mockito.times(1))

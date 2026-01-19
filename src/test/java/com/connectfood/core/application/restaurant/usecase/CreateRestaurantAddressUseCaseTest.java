@@ -12,7 +12,7 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Restaurant;
-import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.RestaurantAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
 import com.connectfood.core.domain.repository.RestaurantAddressGateway;
@@ -72,16 +72,16 @@ class CreateRestaurantAddressUseCaseTest {
     Mockito.when(repository.save(addressDomainToSave))
         .thenReturn(savedAddress);
 
-    final RestaurantsAddress restaurantsAddressDomain = Mockito.mock(RestaurantsAddress.class);
+    final RestaurantAddress restaurantAddressDomain = Mockito.mock(RestaurantAddress.class);
     Mockito.when(restaurantsAddressMapper.toDomain(restaurant, savedAddress))
-        .thenReturn(restaurantsAddressDomain);
+        .thenReturn(restaurantAddressDomain);
 
-    final RestaurantsAddress savedRestaurantsAddress = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantAddressGateway.save(restaurantsAddressDomain))
-        .thenReturn(savedRestaurantsAddress);
+    final RestaurantAddress savedRestaurantAddress = Mockito.mock(RestaurantAddress.class);
+    Mockito.when(restaurantAddressGateway.save(restaurantAddressDomain))
+        .thenReturn(savedRestaurantAddress);
 
     final Address linkedAddress = Mockito.mock(Address.class);
-    Mockito.when(savedRestaurantsAddress.getAddress())
+    Mockito.when(savedRestaurantAddress.getAddress())
         .thenReturn(linkedAddress);
 
     final AddressOutput output = Mockito.mock(AddressOutput.class);
@@ -109,7 +109,7 @@ class CreateRestaurantAddressUseCaseTest {
         .toDomain(restaurant, savedAddress);
 
     Mockito.verify(restaurantAddressGateway, Mockito.times(1))
-        .save(restaurantsAddressDomain);
+        .save(restaurantAddressDomain);
 
     Mockito.verify(mapper, Mockito.times(1))
         .toOutput(linkedAddress);

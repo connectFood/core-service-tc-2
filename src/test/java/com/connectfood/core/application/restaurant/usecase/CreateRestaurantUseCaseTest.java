@@ -6,14 +6,15 @@ import java.util.UUID;
 
 import com.connectfood.core.application.address.dto.AddressInput;
 import com.connectfood.core.application.address.dto.AddressOutput;
+import com.connectfood.core.application.restaurant.dto.RestaurantInput;
 import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourInput;
 import com.connectfood.core.application.restaurant.dto.RestaurantOpeningHourOutput;
-import com.connectfood.core.application.restaurant.dto.RestaurantInput;
 import com.connectfood.core.application.restaurant.dto.RestaurantOutput;
 import com.connectfood.core.application.restaurant.mapper.RestaurantAppMapper;
 import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.application.user.dto.UserOutput;
+import com.connectfood.core.domain.exception.ConflictException;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Restaurant;
 import com.connectfood.core.domain.model.RestaurantType;
@@ -63,16 +64,71 @@ class CreateRestaurantUseCaseTest {
   private CreateRestaurantUseCase useCase;
 
   @Test
+  @DisplayName("Não deve criar restaurante quando restaurante já existir (nome + tipo + usuário)")
+  void shouldThrowConflictWhenRestaurantAlreadyExists() {
+    final var requestUserUuid = UUID.randomUUID();
+    final var requestUser = new RequestUser(requestUserUuid);
+
+    final var usersUuid = UUID.randomUUID();
+    final var restaurantsTypeUuid = UUID.randomUUID();
+    final var restaurantName = "Any Restaurant";
+
+    final RestaurantInput input = Mockito.mock(RestaurantInput.class);
+    Mockito.when(input.getUsersUuid())
+        .thenReturn(usersUuid);
+    Mockito.when(input.getRestaurantsTypeUuid())
+        .thenReturn(restaurantsTypeUuid);
+    Mockito.when(input.getName())
+        .thenReturn(restaurantName);
+
+    Mockito.when(repository.existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid))
+        .thenReturn(true);
+
+    final var ex = Assertions.assertThrows(
+        ConflictException.class,
+        () -> useCase.execute(requestUser, input)
+    );
+
+    Assertions.assertEquals("Restaurant already exists", ex.getMessage());
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, UsersType.OWNER.name());
+
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid);
+
+    Mockito.verifyNoInteractions(
+        userGateway,
+        restaurantTypeGateway,
+        mapper,
+        createRestaurantAddressUseCase,
+        createRestaurantOpeningHourUseCase,
+        createUserRestaurantUseCase
+    );
+
+    Mockito.verifyNoMoreInteractions(guard, repository);
+  }
+
+  @Test
   @DisplayName("Não deve criar restaurante quando usuário não existir")
   void shouldThrowExceptionWhenUserNotFound() {
     final var requestUserUuid = UUID.randomUUID();
     final var requestUser = new RequestUser(requestUserUuid);
 
     final var usersUuid = UUID.randomUUID();
+    final var restaurantsTypeUuid = UUID.randomUUID();
+    final var restaurantName = "Any Restaurant";
 
     final RestaurantInput input = Mockito.mock(RestaurantInput.class);
     Mockito.when(input.getUsersUuid())
         .thenReturn(usersUuid);
+    Mockito.when(input.getRestaurantsTypeUuid())
+        .thenReturn(restaurantsTypeUuid);
+    Mockito.when(input.getName())
+        .thenReturn(restaurantName);
+
+    Mockito.when(repository.existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid))
+        .thenReturn(false);
 
     Mockito.when(userGateway.findByUuid(usersUuid))
         .thenReturn(Optional.empty());
@@ -87,19 +143,21 @@ class CreateRestaurantUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid);
+
     Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(usersUuid);
 
     Mockito.verifyNoInteractions(
         restaurantTypeGateway,
-        repository,
         mapper,
         createRestaurantAddressUseCase,
         createRestaurantOpeningHourUseCase,
         createUserRestaurantUseCase
     );
 
-    Mockito.verifyNoMoreInteractions(guard, userGateway);
+    Mockito.verifyNoMoreInteractions(guard, repository, userGateway);
   }
 
   @Test
@@ -110,12 +168,18 @@ class CreateRestaurantUseCaseTest {
 
     final var usersUuid = UUID.randomUUID();
     final var restaurantsTypeUuid = UUID.randomUUID();
+    final var restaurantName = "Any Restaurant";
 
     final RestaurantInput input = Mockito.mock(RestaurantInput.class);
     Mockito.when(input.getUsersUuid())
         .thenReturn(usersUuid);
     Mockito.when(input.getRestaurantsTypeUuid())
         .thenReturn(restaurantsTypeUuid);
+    Mockito.when(input.getName())
+        .thenReturn(restaurantName);
+
+    Mockito.when(repository.existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid))
+        .thenReturn(false);
 
     final User user = Mockito.mock(User.class);
     Mockito.when(userGateway.findByUuid(usersUuid))
@@ -134,6 +198,9 @@ class CreateRestaurantUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid);
+
     Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(usersUuid);
 
@@ -141,14 +208,13 @@ class CreateRestaurantUseCaseTest {
         .findById(restaurantsTypeUuid);
 
     Mockito.verifyNoInteractions(
-        repository,
         mapper,
         createRestaurantAddressUseCase,
         createRestaurantOpeningHourUseCase,
         createUserRestaurantUseCase
     );
 
-    Mockito.verifyNoMoreInteractions(guard, userGateway, restaurantTypeGateway);
+    Mockito.verifyNoMoreInteractions(guard, repository, userGateway, restaurantTypeGateway);
   }
 
   @Test
@@ -160,6 +226,7 @@ class CreateRestaurantUseCaseTest {
     final var usersUuid = UUID.randomUUID();
     final var restaurantsTypeUuid = UUID.randomUUID();
     final var restaurantUuid = UUID.randomUUID();
+    final var restaurantName = "Any Restaurant";
 
     final AddressInput addressInput = Mockito.mock(AddressInput.class);
 
@@ -171,10 +238,15 @@ class CreateRestaurantUseCaseTest {
         .thenReturn(usersUuid);
     Mockito.when(input.getRestaurantsTypeUuid())
         .thenReturn(restaurantsTypeUuid);
+    Mockito.when(input.getName())
+        .thenReturn(restaurantName);
     Mockito.when(input.getAddress())
         .thenReturn(addressInput);
     Mockito.when(input.getOpeningHours())
         .thenReturn(List.of(oh1, oh2));
+
+    Mockito.when(repository.existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid))
+        .thenReturn(false);
 
     final User user = Mockito.mock(User.class);
     Mockito.when(user.getUuid())
@@ -229,6 +301,9 @@ class CreateRestaurantUseCaseTest {
     Mockito.verify(guard, Mockito.times(1))
         .requireRole(requestUser, UsersType.OWNER.name());
 
+    Mockito.verify(repository, Mockito.times(1))
+        .existsByRestaurant(restaurantName, restaurantsTypeUuid, usersUuid);
+
     Mockito.verify(userGateway, Mockito.times(1))
         .findByUuid(usersUuid);
 
@@ -258,10 +333,10 @@ class CreateRestaurantUseCaseTest {
 
     Mockito.verifyNoMoreInteractions(
         guard,
+        repository,
         userGateway,
         restaurantTypeGateway,
         mapper,
-        repository,
         createRestaurantAddressUseCase,
         createUserRestaurantUseCase,
         createRestaurantOpeningHourUseCase

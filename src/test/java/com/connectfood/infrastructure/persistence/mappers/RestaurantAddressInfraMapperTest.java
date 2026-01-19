@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.connectfood.core.domain.model.Address;
 import com.connectfood.core.domain.model.Restaurant;
-import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.RestaurantAddress;
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantAddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantEntity;
@@ -33,7 +33,7 @@ class RestaurantAddressInfraMapperTest {
   @Test
   @DisplayName("Deve retornar null quando entity for null")
   void toDomainShouldReturnNullWhenEntityIsNull() {
-    final RestaurantsAddress result = mapper.toDomain(null);
+    final RestaurantAddress result = mapper.toDomain(null);
 
     Assertions.assertNull(result);
     Mockito.verifyNoInteractions(restaurantsMapper, addressMapper);
@@ -58,7 +58,7 @@ class RestaurantAddressInfraMapperTest {
     Mockito.when(entity.getRestaurants()).thenReturn(restaurantsEntity);
     Mockito.when(entity.getAddress()).thenReturn(addressEntity);
 
-    final RestaurantsAddress result = mapper.toDomain(entity);
+    final RestaurantAddress result = mapper.toDomain(entity);
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());

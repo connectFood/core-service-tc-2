@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class RestaurantsAddressTest {
+class RestaurantAddressTest {
 
   @Test
   @DisplayName("Deve criar RestaurantsAddress com UUID explícito e dados válidos")
@@ -18,7 +18,7 @@ class RestaurantsAddressTest {
     final Restaurant restaurant = Mockito.mock(Restaurant.class);
     final Address address = Mockito.mock(Address.class);
 
-    final var restaurantsAddress = new RestaurantsAddress(uuid, restaurant, address);
+    final var restaurantsAddress = new RestaurantAddress(uuid, restaurant, address);
 
     Assertions.assertEquals(uuid, restaurantsAddress.getUuid());
     Assertions.assertEquals(restaurant, restaurantsAddress.getRestaurant());
@@ -31,7 +31,7 @@ class RestaurantsAddressTest {
     final Restaurant restaurant = Mockito.mock(Restaurant.class);
     final Address address = Mockito.mock(Address.class);
 
-    final var restaurantsAddress = new RestaurantsAddress(restaurant, address);
+    final var restaurantsAddress = new RestaurantAddress(restaurant, address);
 
     Assertions.assertNotNull(restaurantsAddress.getUuid());
     Assertions.assertEquals(restaurant, restaurantsAddress.getRestaurant());
@@ -45,7 +45,7 @@ class RestaurantsAddressTest {
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantsAddress(null, address)
+        () -> new RestaurantAddress(null, address)
     );
 
     Assertions.assertEquals("Restaurant is required", exception.getMessage());
@@ -58,7 +58,7 @@ class RestaurantsAddressTest {
 
     final var exception = Assertions.assertThrows(
         BadRequestException.class,
-        () -> new RestaurantsAddress(restaurant, null)
+        () -> new RestaurantAddress(restaurant, null)
     );
 
     Assertions.assertEquals("Address is required", exception.getMessage());

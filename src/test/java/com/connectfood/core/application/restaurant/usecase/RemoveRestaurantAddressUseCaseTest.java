@@ -7,7 +7,7 @@ import com.connectfood.core.application.security.RequestUser;
 import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.Address;
-import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.RestaurantAddress;
 import com.connectfood.core.domain.model.enums.UsersType;
 import com.connectfood.core.domain.repository.AddressGateway;
 import com.connectfood.core.domain.repository.RestaurantAddressGateway;
@@ -78,14 +78,14 @@ class RemoveRestaurantAddressUseCaseTest {
     Mockito.when(address.getUuid())
         .thenReturn(addressUuid);
 
-    final RestaurantsAddress restaurantsAddress = Mockito.mock(RestaurantsAddress.class);
-    Mockito.when(restaurantsAddress.getUuid())
+    final RestaurantAddress restaurantAddress = Mockito.mock(RestaurantAddress.class);
+    Mockito.when(restaurantAddress.getUuid())
         .thenReturn(restaurantsAddressUuid);
-    Mockito.when(restaurantsAddress.getAddress())
+    Mockito.when(restaurantAddress.getAddress())
         .thenReturn(address);
 
     Mockito.when(repository.findByRestaurantsUuid(restaurantsUuid))
-        .thenReturn(Optional.of(restaurantsAddress));
+        .thenReturn(Optional.of(restaurantAddress));
 
     Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, restaurantsUuid));
 

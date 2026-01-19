@@ -8,6 +8,7 @@ import com.connectfood.core.application.security.RequestUserGuard;
 import com.connectfood.core.domain.exception.NotFoundException;
 import com.connectfood.core.domain.model.RestaurantItem;
 import com.connectfood.core.domain.repository.RestaurantItemGateway;
+import com.connectfood.core.domain.repository.RestaurantItemImageGateway;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,20 +28,24 @@ class RemoveRestaurantItemUseCaseTest {
   @Mock
   private RequestUserGuard guard;
 
+  @Mock
+  private RestaurantItemImageGateway restaurantItemImageGateway;
+
   @InjectMocks
   private RemoveRestaurantItemUseCase useCase;
 
   @Test
-  @DisplayName("Deve remover item de restaurante quando ele existir")
-  void shouldRemoveRestaurantItemsWhenExists() {
-    final var requestUserUuid = UUID.randomUUID();
-    final var requestUser = new RequestUser(requestUserUuid);
-
+  @DisplayName("Deve remover item de restaurante quando ele existir e não houver imagens")
+  void shouldRemoveRestaurantItemsWhenExistsAndNoImages() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var uuid = UUID.randomUUID();
 
     final RestaurantItem model = Mockito.mock(RestaurantItem.class);
     Mockito.when(repository.findByUuid(uuid))
         .thenReturn(Optional.of(model));
+
+    Mockito.when(restaurantItemImageGateway.existsByRestaurantItemUuid(uuid))
+        .thenReturn(false);
 
     Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, uuid));
 
@@ -50,18 +55,55 @@ class RemoveRestaurantItemUseCaseTest {
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
 
+    Mockito.verify(restaurantItemImageGateway, Mockito.times(1))
+        .existsByRestaurantItemUuid(uuid);
+
+    Mockito.verify(restaurantItemImageGateway, Mockito.never())
+        .deleteByRestaurantItemUuid(Mockito.any());
+
     Mockito.verify(repository, Mockito.times(1))
         .delete(uuid);
 
-    Mockito.verifyNoMoreInteractions(guard, repository);
+    Mockito.verifyNoMoreInteractions(guard, repository, restaurantItemImageGateway);
+  }
+
+  @Test
+  @DisplayName("Deve remover item de restaurante quando ele existir e houver imagens (deleta imagens antes)")
+  void shouldRemoveRestaurantItemsWhenExistsAndHasImages() {
+    final var requestUser = new RequestUser(UUID.randomUUID());
+    final var uuid = UUID.randomUUID();
+
+    final RestaurantItem model = Mockito.mock(RestaurantItem.class);
+    Mockito.when(repository.findByUuid(uuid))
+        .thenReturn(Optional.of(model));
+
+    Mockito.when(restaurantItemImageGateway.existsByRestaurantItemUuid(uuid))
+        .thenReturn(true);
+
+    Assertions.assertDoesNotThrow(() -> useCase.execute(requestUser, uuid));
+
+    Mockito.verify(guard, Mockito.times(1))
+        .requireRole(requestUser, "OWNER");
+
+    Mockito.verify(repository, Mockito.times(1))
+        .findByUuid(uuid);
+
+    Mockito.verify(restaurantItemImageGateway, Mockito.times(1))
+        .existsByRestaurantItemUuid(uuid);
+
+    Mockito.verify(restaurantItemImageGateway, Mockito.times(1))
+        .deleteByRestaurantItemUuid(uuid);
+
+    Mockito.verify(repository, Mockito.times(1))
+        .delete(uuid);
+
+    Mockito.verifyNoMoreInteractions(guard, repository, restaurantItemImageGateway);
   }
 
   @Test
   @DisplayName("Não deve remover item de restaurante quando não existir e deve lançar NotFoundException")
   void shouldThrowNotFoundExceptionWhenRestaurantItemsDoesNotExist() {
-    final var requestUserUuid = UUID.randomUUID();
-    final var requestUser = new RequestUser(requestUserUuid);
-
+    final var requestUser = new RequestUser(UUID.randomUUID());
     final var uuid = UUID.randomUUID();
 
     Mockito.when(repository.findByUuid(uuid))
@@ -79,6 +121,8 @@ class RemoveRestaurantItemUseCaseTest {
 
     Mockito.verify(repository, Mockito.times(1))
         .findByUuid(uuid);
+
+    Mockito.verifyNoInteractions(restaurantItemImageGateway);
 
     Mockito.verify(repository, Mockito.never())
         .delete(Mockito.any());

@@ -3,13 +3,13 @@ package com.connectfood.core.domain.repository;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.RestaurantAddress;
 
 public interface RestaurantAddressGateway {
 
-  RestaurantsAddress save(RestaurantsAddress restaurantsAddress);
+  RestaurantAddress save(RestaurantAddress restaurantAddress);
 
-  Optional<RestaurantsAddress> findByRestaurantsUuid(UUID uuid);
+  Optional<RestaurantAddress> findByRestaurantsUuid(UUID uuid);
 
   void delete(UUID uuid);
 

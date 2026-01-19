@@ -71,8 +71,9 @@ class AddressInfraMapperTest {
   @Test
   @DisplayName("Deve converter model para entity corretamente (sem sobrescrever UUID)")
   void shouldConvertModelToEntityCorrectly() {
+    final var uuid =  UUID.randomUUID();
     final var model = new Address(
-        UUID.randomUUID(),
+        uuid,
         "Rua A",
         "10",
         "Casa",
@@ -87,8 +88,7 @@ class AddressInfraMapperTest {
 
     Assertions.assertNotNull(result);
 
-    Assertions.assertNull(result.getUuid());
-
+    Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals("Rua A", result.getStreet());
     Assertions.assertEquals("10", result.getNumber());
     Assertions.assertEquals("Casa", result.getComplement());

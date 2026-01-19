@@ -136,9 +136,6 @@ class RestaurantItemAppMapperTest {
 
     final var model = mockModelWithoutImages(uuid, restaurant);
 
-    final RestaurantOutput restaurantOutput = Mockito.mock(RestaurantOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantOutput);
-
     final var result = mapper.toOutput(model);
 
     Assertions.assertNotNull(result);
@@ -147,12 +144,9 @@ class RestaurantItemAppMapperTest {
     Assertions.assertEquals("DESC", result.getDescription());
     Assertions.assertEquals(BigDecimal.valueOf(10.00), result.getValue());
     Assertions.assertEquals(RestaurantItemServiceType.DELIVERY, result.getRequestType());
-    Assertions.assertEquals(restaurantOutput, result.getRestaurant());
     Assertions.assertEquals(List.of(), result.getImages());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper);
-    Mockito.verifyNoMoreInteractions(restaurantsMapper);
   }
 
   @Test
@@ -184,9 +178,6 @@ class RestaurantItemAppMapperTest {
 
     final var model = mockModelWithImages(uuid, restaurant, List.of(img1, img2));
 
-    final RestaurantOutput restaurantOutput = Mockito.mock(RestaurantOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantOutput);
-
     final RestaurantItemImageOutput outImg1 = Mockito.mock(RestaurantItemImageOutput.class);
     final RestaurantItemImageOutput outImg2 = Mockito.mock(RestaurantItemImageOutput.class);
     Mockito.when(restaurantItemsImagesMapper.toOutput(img1)).thenReturn(outImg1);
@@ -196,14 +187,12 @@ class RestaurantItemAppMapperTest {
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertEquals(restaurantOutput, result.getRestaurant());
     Assertions.assertNotNull(result.getImages());
     Assertions.assertEquals(List.of(outImg1, outImg2), result.getImages());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img1);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img2);
-    Mockito.verifyNoMoreInteractions(restaurantsMapper, restaurantItemsImagesMapper);
+    Mockito.verifyNoMoreInteractions(restaurantItemsImagesMapper);
   }
 
   @Test
@@ -226,9 +215,6 @@ class RestaurantItemAppMapperTest {
 
     final var model = mockModelWithoutImages(uuid, restaurant);
 
-    final RestaurantOutput restaurantOutput = Mockito.mock(RestaurantOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantOutput);
-
     final RestaurantItemImageOutput outImg1 = Mockito.mock(RestaurantItemImageOutput.class);
     final RestaurantItemImageOutput outImg2 = Mockito.mock(RestaurantItemImageOutput.class);
     Mockito.when(restaurantItemsImagesMapper.toOutput(img1)).thenReturn(outImg1);
@@ -238,13 +224,11 @@ class RestaurantItemAppMapperTest {
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertEquals(restaurantOutput, result.getRestaurant());
     Assertions.assertEquals(List.of(outImg1, outImg2), result.getImages());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img1);
     Mockito.verify(restaurantItemsImagesMapper, Mockito.times(1)).toOutput(img2);
-    Mockito.verifyNoMoreInteractions(restaurantsMapper, restaurantItemsImagesMapper);
+    Mockito.verifyNoMoreInteractions(restaurantItemsImagesMapper);
   }
 
   @Test
@@ -278,20 +262,14 @@ class RestaurantItemAppMapperTest {
 
     final var model = mockModelWithoutImages(uuid, restaurant);
 
-    final RestaurantOutput restaurantOutput = Mockito.mock(RestaurantOutput.class);
-    Mockito.when(restaurantsMapper.toOutput(restaurant)).thenReturn(restaurantOutput);
-
     final var result = mapper.toOutput(model, Collections.emptyList());
 
     Assertions.assertNotNull(result);
     Assertions.assertEquals(uuid, result.getUuid());
-    Assertions.assertEquals(restaurantOutput, result.getRestaurant());
     Assertions.assertNotNull(result.getImages());
     Assertions.assertTrue(result.getImages().isEmpty());
 
-    Mockito.verify(restaurantsMapper, Mockito.times(1)).toOutput(restaurant);
     Mockito.verifyNoInteractions(restaurantItemsImagesMapper);
-    Mockito.verifyNoMoreInteractions(restaurantsMapper);
   }
 
   @Test

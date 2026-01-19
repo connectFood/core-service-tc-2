@@ -1,6 +1,6 @@
 package com.connectfood.infrastructure.persistence.mappers;
 
-import com.connectfood.core.domain.model.RestaurantsAddress;
+import com.connectfood.core.domain.model.RestaurantAddress;
 
 import com.connectfood.infrastructure.persistence.entity.AddressEntity;
 import com.connectfood.infrastructure.persistence.entity.RestaurantAddressEntity;
@@ -23,12 +23,12 @@ public class RestaurantAddressInfraMapper {
     this.addressMapper = addressMapper;
   }
 
-  public RestaurantsAddress toDomain(final RestaurantAddressEntity entity) {
+  public RestaurantAddress toDomain(final RestaurantAddressEntity entity) {
     if(entity == null) {
       return null;
     }
 
-    return new RestaurantsAddress(
+    return new RestaurantAddress(
         entity.getUuid(),
         restaurantsMapper.toDomain(entity.getRestaurants()),
         addressMapper.toDomain(entity.getAddress())
