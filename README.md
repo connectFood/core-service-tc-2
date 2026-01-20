@@ -114,7 +114,7 @@ Pré-requisitos
 ### Subir o ambiente
 
 ```shell
-docker-compose up -d
+docker-compose up --build -d
 ```
 
 Isso irá:
