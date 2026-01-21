@@ -44,7 +44,7 @@ O projeto segue Clean Architecture, com dependências sempre apontando para o n�
 
 ## 🛠️ Tecnologias Utilizadas
 
-- Java 17+
+- Java 21
 - Spring Boot
 - Maven
 - Spring Data JPA
